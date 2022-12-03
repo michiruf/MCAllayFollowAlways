@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "allayfollowalways",
+  "version": "${version}",
+  "name": "AllayFollowAlways",
+  "description": "",
+  "authors": [
+    "michiruf"
+  ],
+  "contact": {
+    "website": "https://github.com/michiruf"
+  },
+  "license": "MIT",
+  "icon": "assets/allayfollowalways/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.michiruf.allayfollowalways.Main"
+    ]
+  },
+  "mixins": [
+    "allayfollowalways.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.11",
+    "fabric": "*",
+    "minecraft": "1.19.2",
+    "owo-lib": ">=0.8.5"
+  }
+}
