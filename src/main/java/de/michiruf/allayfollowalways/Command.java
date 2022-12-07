@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.command.CommandRegistryAccess;
@@ -35,14 +36,17 @@ public class Command {
                 .build();
 
         registerConfigOptionsCommand(afaNode);
-        registerConfigCommand(afaNode, "rangeFactor", Main.CONFIG::rangeFactor, Main.CONFIG::rangeFactor, DoubleArgumentType.doubleArg(), DoubleArgumentType::getDouble);
-        registerConfigCommand(afaNode, "movementSpeedFactor", Main.CONFIG::movementSpeedFactor, Main.CONFIG::movementSpeedFactor, FloatArgumentType.floatArg(), FloatArgumentType::getFloat);
-        registerConfigCommand(afaNode, "teleportEnabled", Main.CONFIG::teleportEnabled, Main.CONFIG::teleportEnabled, BoolArgumentType.bool(), BoolArgumentType::getBool);
-        registerConfigCommand(afaNode, "teleportDistance", Main.CONFIG::teleportDistance, Main.CONFIG::teleportDistance, FloatArgumentType.floatArg(), FloatArgumentType::getFloat);
-        registerConfigCommand(afaNode, "considerEntityTeleportationCooldown", Main.CONFIG::considerEntityTeleportationCooldown, Main.CONFIG::considerEntityTeleportationCooldown, BoolArgumentType.bool(), BoolArgumentType::getBool);
-        registerConfigCommand(afaNode, "avoidTeleportingIntoWater", Main.CONFIG::avoidTeleportingIntoWater, Main.CONFIG::avoidTeleportingIntoWater, BoolArgumentType.bool(), BoolArgumentType::getBool);
-        registerConfigCommand(afaNode, "avoidTeleportingIntoLava", Main.CONFIG::avoidTeleportingIntoLava, Main.CONFIG::avoidTeleportingIntoLava, BoolArgumentType.bool(), BoolArgumentType::getBool);
-        registerConfigCommand(afaNode, "avoidTeleportingIntoWalls", Main.CONFIG::avoidTeleportingIntoWalls, Main.CONFIG::avoidTeleportingIntoWalls, BoolArgumentType.bool(), BoolArgumentType::getBool);
+        registerConfigCommandDouble(afaNode, "rangeFactor", Main.CONFIG::rangeFactor, Main.CONFIG::rangeFactor);
+        registerConfigCommandFloat(afaNode, "movementSpeedFactor", Main.CONFIG::movementSpeedFactor, Main.CONFIG::movementSpeedFactor);
+        registerConfigCommandBool(afaNode, "teleportEnabled", Main.CONFIG::teleportEnabled, Main.CONFIG::teleportEnabled);
+        registerConfigCommandFloat(afaNode, "teleportDistance", Main.CONFIG::teleportDistance, Main.CONFIG::teleportDistance);
+        registerConfigCommandBool(afaNode, "considerEntityTeleportationCooldown", Main.CONFIG::considerEntityTeleportationCooldown, Main.CONFIG::considerEntityTeleportationCooldown);
+        registerConfigCommandBool(afaNode, "teleportWhenDancing", Main.CONFIG::teleportWhenDancing, Main.CONFIG::teleportWhenDancing);
+        registerConfigCommandBool(afaNode, "avoidTeleportingIntoWater", Main.CONFIG::avoidTeleportingIntoWater, Main.CONFIG::avoidTeleportingIntoWater);
+        registerConfigCommandBool(afaNode, "avoidTeleportingIntoLava", Main.CONFIG::avoidTeleportingIntoLava, Main.CONFIG::avoidTeleportingIntoLava);
+        registerConfigCommandBool(afaNode, "avoidTeleportingIntoWalls", Main.CONFIG::avoidTeleportingIntoWalls, Main.CONFIG::avoidTeleportingIntoWalls);
+        registerConfigCommandBool(afaNode, "fixLeashBreakingIn_1_19", Main.CONFIG::fixLeashBreakingIn_1_19, Main.CONFIG::fixLeashBreakingIn_1_19);
+        registerConfigCommandInt(afaNode, "fixLeashBreakingIn_1_19_delay", Main.CONFIG::fixLeashBreakingIn_1_19_delay, Main.CONFIG::fixLeashBreakingIn_1_19_delay);
         dispatcher.getRoot().addChild(afaNode);
     }
 
@@ -56,12 +60,31 @@ public class Command {
                     context.getSource().sendMessage(Text.literal("teleportEnabled [boolean]"));
                     context.getSource().sendMessage(Text.literal("teleportDistance [float]"));
                     context.getSource().sendMessage(Text.literal("considerEntityTeleportationCooldown [boolean]"));
+                    context.getSource().sendMessage(Text.literal("teleportWhenDancing [boolean]"));
                     context.getSource().sendMessage(Text.literal("avoidTeleportingIntoWater [boolean]"));
                     context.getSource().sendMessage(Text.literal("avoidTeleportingIntoLava [boolean]"));
                     context.getSource().sendMessage(Text.literal("avoidTeleportingIntoWalls [boolean]"));
+                    context.getSource().sendMessage(Text.literal("fixLeashBreakingIn_1_19 [boolean]"));
+                    context.getSource().sendMessage(Text.literal("fixLeashBreakingIn_1_19_delay [int]"));
                     return 1;
                 })
                 .build());
+    }
+
+    private static void registerConfigCommandBool(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Boolean> getter, Consumer<Boolean> setter) {
+        registerConfigCommand(node, name, getter, setter, BoolArgumentType.bool(), BoolArgumentType::getBool);
+    }
+
+    private static void registerConfigCommandInt(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Integer> getter, Consumer<Integer> setter) {
+        registerConfigCommand(node, name, getter, setter, IntegerArgumentType.integer(), IntegerArgumentType::getInteger);
+    }
+
+    private static void registerConfigCommandFloat(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Float> getter, Consumer<Float> setter) {
+        registerConfigCommand(node, name, getter, setter, FloatArgumentType.floatArg(), FloatArgumentType::getFloat);
+    }
+
+    private static void registerConfigCommandDouble(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Double> getter, Consumer<Double> setter) {
+        registerConfigCommand(node, name, getter, setter, DoubleArgumentType.doubleArg(), DoubleArgumentType::getDouble);
     }
 
     private static <T> void registerConfigCommand(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<T> getter, Consumer<T> setter, ArgumentType<T> type, BiFunction<CommandContext<ServerCommandSource>, String, T> valueExtractor) {
@@ -78,6 +101,5 @@ public class Command {
                             return 1;
                         }))
                 .build());
-
     }
 }

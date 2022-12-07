@@ -1,19 +1,31 @@
 package de.michiruf.allayfollowalways.mixin;
 
-import de.michiruf.allayfollowalways.allay.AllayTeleportBehaviour;
+import de.michiruf.allayfollowalways.Main;
 import de.michiruf.allayfollowalways.allay.AllayPlayerLookup;
 import de.michiruf.allayfollowalways.allay.AllayTeleport;
-import de.michiruf.allayfollowalways.Main;
+import de.michiruf.allayfollowalways.allay.AllayTeleportBehaviour;
+import de.michiruf.allayfollowalways.helper.DebugEntity;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
+import net.minecraft.world.event.listener.VibrationListener;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Comparator;
 
@@ -24,14 +36,45 @@ import java.util.Comparator;
 @Mixin(AllayEntity.class)
 public abstract class AllayEntityMixin {
 
+//    private boolean constructed = true;
+//
+//    @Inject(method = "<init>", at = @At("TAIL"))
+//    private void constructor_callback(@SuppressWarnings("rawtypes") EntityType entityType, World world, CallbackInfo ci) {
+//        // This flag gets set also, when the entity is deserialized
+//        constructed = false;
+//        Main.LOGGER.error("Setting constructed flag for " + DebugEntity.idString((AllayEntity) (Object) this));
+//    }
+//
+//    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
+//    public void writeCustomDataToNbt_myEvent(CallbackInfo ci) {
+//        Main.LOGGER.error("writeCustomDataToNbt for " + DebugEntity.idString((AllayEntity) (Object) this));
+//    }
+//
+//    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
+//    public void readCustomDataFromNbt_myEvent(CallbackInfo ci) {
+//        Main.LOGGER.error("readCustomDataFromNbt for " + DebugEntity.idString((AllayEntity) (Object) this));
+//    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick_addTeleport(CallbackInfo info) {
+//        // Cancel early if not initialized completely
+//        if (!constructed)
+//            return;
+//        else
+//            Main.LOGGER.error("Not constructed yet");
+
         var allay = (AllayEntity) (Object) this;
         AllayTeleport.handleTeleport(allay);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick_addChunkUnloadingDelay(CallbackInfo info) {
+//        // Cancel early if not initialized completely
+//        if (!constructed)
+//            return;
+//        else
+//            Main.LOGGER.error("Not constructed yet");
+
         var allay = (AllayEntity) (Object) this;
 
         // If allay is not in a movable state, then stop
@@ -71,5 +114,12 @@ public abstract class AllayEntityMixin {
 
         // NOTE This variant here might not be the most performant thing ever, since we queue another chunk ticket
         //      on every tick, but for now, this should at least work pretty well
+    }
+
+    @Inject(method = "shouldFollowLeash", at = @At("HEAD"), cancellable = true)
+    private void fixLeashBreakingIn_1_19(CallbackInfoReturnable<Boolean> cir) {
+        // TODO Use config flag
+        cir.setReturnValue(true);
+        cir.cancel();
     }
 }

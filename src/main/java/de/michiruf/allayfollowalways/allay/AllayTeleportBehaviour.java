@@ -1,8 +1,10 @@
 package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.Main;
+import de.michiruf.allayfollowalways.helper.DebugEntity;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -15,6 +17,8 @@ public class AllayTeleportBehaviour {
     public static boolean canFollowPlayer(AllayEntity allay) {
         if (allay.isLeashed())
             return false;
+
+        Main.LOGGER.error(DebugEntity.idString(allay) + " is not leashed");
 
         var optionalNoteblock = allay.getBrain().getOptionalMemory(MemoryModuleType.LIKED_NOTEBLOCK);
         if (optionalNoteblock.isPresent())
@@ -29,6 +33,10 @@ public class AllayTeleportBehaviour {
 
         // Never teleport to a dead player
         if (!player.isAlive())
+            return false;
+
+        // Might do not follow if dancing
+        if(!Main.CONFIG.teleportWhenDancing() && allay.isDancing())
             return false;
 
         // Avoid teleporting into water

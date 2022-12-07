@@ -16,7 +16,10 @@ public class ConfigModel {
     public boolean teleportEnabled = true;
     public float teleportDistance = 65f;
     public boolean considerEntityTeleportationCooldown = false;
+    public boolean teleportWhenDancing = true;
     public boolean avoidTeleportingIntoWater = true;
     public boolean avoidTeleportingIntoLava = true;
     public boolean avoidTeleportingIntoWalls = true;
+    public boolean fixLeashBreakingIn_1_19 = false;
+    public int fixLeashBreakingIn_1_19_delay = 100;
 }
