@@ -28,7 +28,8 @@ public class AllayTeleport {
         if (!AllayTeleportBehaviour.shouldTeleport(allay, player))
             return;
 
-        Main.LOGGER.info("Teleporting " + DebugEntity.idString(allay) + " to " + DebugEntity.idString(player));
+        // TODO Use log level
+        //Main.LOGGER.info("Teleporting " + DebugEntity.idString(allay) + " to " + DebugEntity.idString(player));
 
         if (Main.CONFIG.considerEntityTeleportationCooldown())
             allay.resetPortalCooldown();
