@@ -95,15 +95,13 @@ In 1.19 there are several reports that are about leash breakings for allays. For
 
 If that happens, enable this flag. Since this should always happen and some people might
 upgrade without reading the docs, this flag is initially set to true.
-(default: true, 100)
-```
-/allayfollowalways fixLeashBreakingIn_1_19 [boolean]
-/allayfollowalways fixLeashBreakingIn_1_19_delay [int]
-```
-**INFO:** This will not fix any allays in the spawn chunks, since this disables the movement speed,
-when the allay gets loaded. But since entities in spawn chunks are loaded at server start and kept,
-this will not do anything
 
+This flag will make allays follow a leash and by that, not try to follow the player,
+because this caused them to move to far from the post they were bound to and so broke
+the leash.
+```
+/allayfollowalways fixLeashBreakingIn_1_19_followLeash [boolean]
+```
 
 
 ## License

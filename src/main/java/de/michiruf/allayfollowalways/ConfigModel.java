@@ -10,7 +10,7 @@ import io.wispforest.owo.config.annotation.Config;
 @SuppressWarnings("unused")
 public class ConfigModel {
 
-    public int logLevel; // TODO Use this properly
+    public int logLevel; // TODO Use this
     public double rangeFactor = 1.0;
     public float movementSpeedFactor = 1f;
     public boolean teleportEnabled = true;
@@ -20,6 +20,5 @@ public class ConfigModel {
     public boolean avoidTeleportingIntoWater = true;
     public boolean avoidTeleportingIntoLava = true;
     public boolean avoidTeleportingIntoWalls = true;
-    public boolean fixLeashBreakingIn_1_19 = false;
-    public int fixLeashBreakingIn_1_19_delay = 100;
+    public boolean fixLeashBreakingIn_1_19_followLeash = true;
 }

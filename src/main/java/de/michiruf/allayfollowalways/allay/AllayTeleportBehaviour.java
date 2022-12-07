@@ -4,7 +4,6 @@ import de.michiruf.allayfollowalways.Main;
 import de.michiruf.allayfollowalways.helper.DebugEntity;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -36,7 +35,7 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Might do not follow if dancing
-        if(!Main.CONFIG.teleportWhenDancing() && allay.isDancing())
+        if (!Main.CONFIG.teleportWhenDancing() && allay.isDancing())
             return false;
 
         // Avoid teleporting into water

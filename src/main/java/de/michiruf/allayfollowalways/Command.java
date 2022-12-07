@@ -45,8 +45,7 @@ public class Command {
         registerConfigCommandBool(afaNode, "avoidTeleportingIntoWater", Main.CONFIG::avoidTeleportingIntoWater, Main.CONFIG::avoidTeleportingIntoWater);
         registerConfigCommandBool(afaNode, "avoidTeleportingIntoLava", Main.CONFIG::avoidTeleportingIntoLava, Main.CONFIG::avoidTeleportingIntoLava);
         registerConfigCommandBool(afaNode, "avoidTeleportingIntoWalls", Main.CONFIG::avoidTeleportingIntoWalls, Main.CONFIG::avoidTeleportingIntoWalls);
-        registerConfigCommandBool(afaNode, "fixLeashBreakingIn_1_19", Main.CONFIG::fixLeashBreakingIn_1_19, Main.CONFIG::fixLeashBreakingIn_1_19);
-        registerConfigCommandInt(afaNode, "fixLeashBreakingIn_1_19_delay", Main.CONFIG::fixLeashBreakingIn_1_19_delay, Main.CONFIG::fixLeashBreakingIn_1_19_delay);
+        registerConfigCommandBool(afaNode, "fixLeashBreakingIn_1_19_followLeash", Main.CONFIG::fixLeashBreakingIn_1_19_followLeash, Main.CONFIG::fixLeashBreakingIn_1_19_followLeash);
         dispatcher.getRoot().addChild(afaNode);
     }
 
@@ -64,8 +63,7 @@ public class Command {
                     context.getSource().sendMessage(Text.literal("avoidTeleportingIntoWater [boolean]"));
                     context.getSource().sendMessage(Text.literal("avoidTeleportingIntoLava [boolean]"));
                     context.getSource().sendMessage(Text.literal("avoidTeleportingIntoWalls [boolean]"));
-                    context.getSource().sendMessage(Text.literal("fixLeashBreakingIn_1_19 [boolean]"));
-                    context.getSource().sendMessage(Text.literal("fixLeashBreakingIn_1_19_delay [int]"));
+                    context.getSource().sendMessage(Text.literal("fixLeashBreakingIn_1_19_followLeash [boolean]"));
                     return 1;
                 })
                 .build());

@@ -20,8 +20,7 @@ public class Config extends ConfigWrapper<de.michiruf.allayfollowalways.ConfigMo
     private final Option<java.lang.Boolean> avoidTeleportingIntoWater = this.optionForKey(new Option.Key("avoidTeleportingIntoWater"));
     private final Option<java.lang.Boolean> avoidTeleportingIntoLava = this.optionForKey(new Option.Key("avoidTeleportingIntoLava"));
     private final Option<java.lang.Boolean> avoidTeleportingIntoWalls = this.optionForKey(new Option.Key("avoidTeleportingIntoWalls"));
-    private final Option<java.lang.Boolean> fixLeashBreakingIn_1_19 = this.optionForKey(new Option.Key("fixLeashBreakingIn_1_19"));
-    private final Option<java.lang.Integer> fixLeashBreakingIn_1_19_delay = this.optionForKey(new Option.Key("fixLeashBreakingIn_1_19_delay"));
+    private final Option<java.lang.Boolean> fixLeashBreakingIn_1_19_followLeash = this.optionForKey(new Option.Key("fixLeashBreakingIn_1_19_followLeash"));
 
     private Config() {
         super(de.michiruf.allayfollowalways.ConfigModel.class);
@@ -113,20 +112,12 @@ public class Config extends ConfigWrapper<de.michiruf.allayfollowalways.ConfigMo
         avoidTeleportingIntoWalls.set(value);
     }
 
-    public boolean fixLeashBreakingIn_1_19() {
-        return fixLeashBreakingIn_1_19.value();
+    public boolean fixLeashBreakingIn_1_19_followLeash() {
+        return fixLeashBreakingIn_1_19_followLeash.value();
     }
 
-    public void fixLeashBreakingIn_1_19(boolean value) {
-        fixLeashBreakingIn_1_19.set(value);
-    }
-
-    public int fixLeashBreakingIn_1_19_delay() {
-        return fixLeashBreakingIn_1_19_delay.value();
-    }
-
-    public void fixLeashBreakingIn_1_19_delay(int value) {
-        fixLeashBreakingIn_1_19_delay.set(value);
+    public void fixLeashBreakingIn_1_19_followLeash(boolean value) {
+        fixLeashBreakingIn_1_19_followLeash.set(value);
     }
 
 
