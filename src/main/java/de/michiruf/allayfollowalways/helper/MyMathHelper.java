@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
  */
 public class MyMathHelper {
 
+    // NOTE Can this get improved to not need to normalize? Should cost some performance like this
     public static double angleBetween(Vec3d a, Vec3d b, boolean vectorsAreNormalized) {
         if (!vectorsAreNormalized) {
             a = a.normalize();

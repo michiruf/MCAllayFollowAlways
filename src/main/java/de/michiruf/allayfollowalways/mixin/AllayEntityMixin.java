@@ -33,7 +33,7 @@ public abstract class AllayEntityMixin {
     }
 
     @Inject(method = "shouldFollowLeash", at = @At("HEAD"), cancellable = true)
-    private void shouldFollowLeash_setTrueWhenConfigured(CallbackInfoReturnable<Boolean> cir) {
+    private void shouldFollowLeash_setShouldFollow(CallbackInfoReturnable<Boolean> cir) {
         var allay = (AllayEntity) (Object) this;
         var shouldFollow = AllayLeashBehaviour.shouldFollowLeash(allay);
         cir.setReturnValue(shouldFollow);

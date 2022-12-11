@@ -1,7 +1,6 @@
 package de.michiruf.allayfollowalways.mixin;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
-import de.michiruf.allayfollowalways.allay.AllayLeashBehaviour;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AllayEntity;
 import org.objectweb.asm.Opcodes;
@@ -24,11 +23,6 @@ public class LivingEntityMixin {
     private float getMovementSpeed_applyFactor(LivingEntity entity) {
         if (!(entity instanceof AllayEntity))
             return movementSpeed;
-
-//        var allayMovementSpeed = movementSpeed * AllayFollowAlwaysMod.CONFIG.movementSpeedFactor();
-//        if(allay.isLeashed())
-//            allayMovementSpeed = AllayLeashBehaviour.calculateLeashedMovementSpeed(allay, allayMovementSpeed);
-//        return allayMovementSpeed;
         return movementSpeed * AllayFollowAlwaysMod.CONFIG.movementSpeedFactor();
     }
 }

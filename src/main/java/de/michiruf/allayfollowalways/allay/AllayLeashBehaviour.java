@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 
 /**
@@ -21,51 +20,32 @@ public class AllayLeashBehaviour {
         if (holdingEntity == null)
             return false;
 
-        if (AllayFollowAlwaysMod.CONFIG.playerLeashMode() == LeashMode.FOLLOW && holdingEntity instanceof ServerPlayerEntity)
-            return true;
-        else if (AllayFollowAlwaysMod.CONFIG.generalLeashMode() == LeashMode.FOLLOW)
-            return true;
+        if (holdingEntity instanceof ServerPlayerEntity) {
+            return AllayFollowAlwaysMod.CONFIG.playerLeashMode() == LeashMode.FOLLOW;
+        }
 
-        return false;
+        return AllayFollowAlwaysMod.CONFIG.generalLeashMode() == LeashMode.FOLLOW;
     }
-
-//    // TODO Current try: manipulate the velocity instead
-//    public static float calculateLeashedMovementSpeed(AllayEntity allay, float allayMovementSpeed) {
-//        var holdingEntity = allay.getHoldingEntity();
-//        if (holdingEntity == null)
-//            return allayMovementSpeed;
-//
-//        if (AllayFollowAlwaysMod.CONFIG.playerLeashMode() == LeashMode.DIRECTIONAL_SLOW_DOWN && holdingEntity instanceof ServerPlayerEntity) {
-//            allayMovementSpeed *= calculateDirectionalMovementFactor(allay, allay.getVelocity(), holdingEntity);
-//        }
-//        //
-//        else if (AllayFollowAlwaysMod.CONFIG.generalLeashMode() == LeashMode.DIRECTIONAL_SLOW_DOWN) {
-//            allayMovementSpeed *= calculateDirectionalMovementFactor(allay, allay.getVelocity(), holdingEntity);
-//        }
-//
-//        return allayMovementSpeed;
-//    }
 
     public static Vec3d calculateLeashedVelocity(AllayEntity allay, Vec3d velocity) {
         var holdingEntity = allay.getHoldingEntity();
         if (holdingEntity == null)
             return velocity;
 
-        if (AllayFollowAlwaysMod.CONFIG.playerLeashMode() == LeashMode.DIRECTIONAL_SLOW_DOWN && holdingEntity instanceof ServerPlayerEntity) {
-            velocity = velocity.multiply(calculateDirectionalMovementFactor(allay, velocity, holdingEntity));
-        }
-        //
-        else if (AllayFollowAlwaysMod.CONFIG.generalLeashMode() == LeashMode.DIRECTIONAL_SLOW_DOWN) {
-            velocity = velocity.multiply(calculateDirectionalMovementFactor(allay, velocity, holdingEntity));
-        }
+        if (holdingEntity instanceof ServerPlayerEntity)
+            return AllayFollowAlwaysMod.CONFIG.playerLeashMode() == LeashMode.DIRECTIONAL_SLOW_DOWN
+                    ? velocity.multiply(calculateDirectionalMovementFactor(allay, velocity, holdingEntity))
+                    : velocity;
 
-        return velocity;
+        return AllayFollowAlwaysMod.CONFIG.generalLeashMode() == LeashMode.DIRECTIONAL_SLOW_DOWN
+                ? velocity.multiply(calculateDirectionalMovementFactor(allay, velocity, holdingEntity))
+                : velocity;
     }
 
     private static double calculateDirectionalMovementFactor(AllayEntity allay, Vec3d allayVelocity, Entity holdingEntity) {
         // Cancel if the allay is not moving at all
         // Threshold got from Vec3d.normalize()
-        if(allayVelocity.lengthSquared() <= 1.0E-4)
+        if (allayVelocity.lengthSquared() <= 1.0E-4)
             return 1;
 
         var allayToEntity = holdingEntity.getPos().subtract(allay.getPos());
@@ -81,7 +61,7 @@ public class AllayLeashBehaviour {
 
         // Check if the allay is moving towards the center
         var angle = MyMathHelper.angleBetweenDeg(allayVelocity, allayToEntity, false);
-        if(angle <= AllayFollowAlwaysMod.CONFIG.leashSlowDownDegree()) {
+        if (angle <= AllayFollowAlwaysMod.CONFIG.leashSlowDownDegree()) {
             return 1;
         }
 
