@@ -1,7 +1,6 @@
 package de.michiruf.allayfollowalways.allay;
 
-import de.michiruf.allayfollowalways.Main;
-import de.michiruf.allayfollowalways.helper.DebugEntity;
+import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
@@ -28,7 +27,7 @@ public class AllayTeleportBehaviour {
     }
 
     public static boolean shouldTeleport(AllayEntity allay, ServerPlayerEntity player) {
-        if (!Main.CONFIG.teleportEnabled())
+        if (!AllayFollowAlwaysMod.CONFIG.teleportEnabled())
             return false;
 
         // Never teleport to a dead player
@@ -36,26 +35,26 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Might do not follow if dancing
-        if (!Main.CONFIG.teleportWhenDancing() && allay.isDancing())
+        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && allay.isDancing())
             return false;
 
         // Avoid teleporting into water
-        if (Main.CONFIG.avoidTeleportingIntoWater() && player.isTouchingWater())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater() && player.isTouchingWater())
             return false;
 
         // Avoid teleporting into lava
-        if (Main.CONFIG.avoidTeleportingIntoLava() && player.isInLava())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava() && player.isInLava())
             return false;
 
         // Avoid teleporting into walls
-        if (Main.CONFIG.avoidTeleportingIntoWalls() && player.isInsideWall())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls() && player.isInsideWall())
             return false;
 
         // If not in the same world, we want to teleport always
         if (!WorldComparator.equals(allay.getWorld(), player.getWorld())) {
             // To avoid teleporting entities instantly out of the nether after pushing them in,
             // do not teleport when a portal cooldown is set
-            if (Main.CONFIG.considerEntityTeleportationCooldown() && allay.hasPortalCooldown())
+            if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && allay.hasPortalCooldown())
                 return false;
 
             return true;
@@ -63,6 +62,6 @@ public class AllayTeleportBehaviour {
 
         // Check the teleportation distance
         var distance = allay.getPos().subtract(player.getPos()).length();
-        return distance > Main.CONFIG.teleportDistance();
+        return distance > AllayFollowAlwaysMod.CONFIG.teleportDistance();
     }
 }

@@ -109,6 +109,12 @@ the leash.
 [MIT License](https://github.com/michiruf/MCAllayFollowAlways/blob/master/LICENSE)
 
 
+## Next steps
+
+Implement a test runner and maybe also GitHub actions?
+https://github.com/Geometrically/fabric-test-runner
+
+
 ## Additional reading (for devs)
 
 * [Fabric wiki](https://fabricmc.net/wiki/start)

@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
  * @author Michael Ruf
  * @since 2022-11-29
  */
-public class Main implements ModInitializer {
+public class AllayFollowAlwaysMod implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("AllayFollowAlways");
-    public static final de.michiruf.allayfollowalways.Config CONFIG = de.michiruf.allayfollowalways.Config.createAndLoad();
+    public static final de.michiruf.allayfollowalways.config.Config CONFIG = de.michiruf.allayfollowalways.config.Config.createAndLoad();
 
     @Override
     public void onInitialize() {
         LOGGER.info("AllayFollowAlways is active");
-        CommandRegistrationCallback.EVENT.register(Command::registerCommands);
+        CommandRegistrationCallback.EVENT.register((dispatcher, registry, environment) -> Command.registerCommands(dispatcher));
     }
 }

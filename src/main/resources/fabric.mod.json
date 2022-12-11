@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "de.michiruf.allayfollowalways.Main"
+      "de.michiruf.allayfollowalways.AllayFollowAlwaysMod"
     ]
   },
   "mixins": [

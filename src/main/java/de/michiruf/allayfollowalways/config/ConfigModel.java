@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways;
+package de.michiruf.allayfollowalways.config;
 
 import io.wispforest.owo.config.annotation.Config;
 
@@ -13,6 +13,10 @@ public class ConfigModel {
     public int logLevel; // TODO Use this
     public double rangeFactor = 1.0;
     public float movementSpeedFactor = 1f;
+
+    /*
+     * Teleportation section
+     */
     public boolean teleportEnabled = true;
     public float teleportDistance = 65f;
     public boolean considerEntityTeleportationCooldown = false;
@@ -20,5 +24,13 @@ public class ConfigModel {
     public boolean avoidTeleportingIntoWater = true;
     public boolean avoidTeleportingIntoLava = true;
     public boolean avoidTeleportingIntoWalls = true;
-    public boolean fixLeashBreakingIn_1_19_followLeash = true;
+
+    /*
+     * Leash section
+     */
+    public LeashMode playerLeashMode = LeashMode.NONE;
+    public LeashMode generalLeashMode = LeashMode.DIRECTIONAL_SLOW_DOWN;
+    public double leashSlowDownDistanceStart = 6;
+    public double leashSlowDownDistanceEnd = 8;
+    public float leashSlowDownDegree = 90;
 }

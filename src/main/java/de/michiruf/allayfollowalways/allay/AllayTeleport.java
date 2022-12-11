@@ -1,7 +1,6 @@
 package de.michiruf.allayfollowalways.allay;
 
-import de.michiruf.allayfollowalways.Main;
-import de.michiruf.allayfollowalways.helper.DebugEntity;
+import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -31,7 +30,7 @@ public class AllayTeleport {
         // TODO Use log level
         //Main.LOGGER.info("Teleporting " + DebugEntity.idString(allay) + " to " + DebugEntity.idString(player));
 
-        if (Main.CONFIG.considerEntityTeleportationCooldown())
+        if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown())
             allay.resetPortalCooldown();
 
         // Use fabrics teleport, since it should be capable of teleporting easily through dimensions

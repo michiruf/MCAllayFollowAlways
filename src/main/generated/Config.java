@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways;
+package de.michiruf.allayfollowalways.config;
 
 import io.wispforest.owo.config.ConfigWrapper;
 import io.wispforest.owo.config.Option;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class Config extends ConfigWrapper<de.michiruf.allayfollowalways.ConfigModel> {
+public class Config extends ConfigWrapper<de.michiruf.allayfollowalways.config.ConfigModel> {
 
     private final Option<java.lang.Integer> logLevel = this.optionForKey(new Option.Key("logLevel"));
     private final Option<java.lang.Double> rangeFactor = this.optionForKey(new Option.Key("rangeFactor"));
@@ -20,10 +20,14 @@ public class Config extends ConfigWrapper<de.michiruf.allayfollowalways.ConfigMo
     private final Option<java.lang.Boolean> avoidTeleportingIntoWater = this.optionForKey(new Option.Key("avoidTeleportingIntoWater"));
     private final Option<java.lang.Boolean> avoidTeleportingIntoLava = this.optionForKey(new Option.Key("avoidTeleportingIntoLava"));
     private final Option<java.lang.Boolean> avoidTeleportingIntoWalls = this.optionForKey(new Option.Key("avoidTeleportingIntoWalls"));
-    private final Option<java.lang.Boolean> fixLeashBreakingIn_1_19_followLeash = this.optionForKey(new Option.Key("fixLeashBreakingIn_1_19_followLeash"));
+    private final Option<de.michiruf.allayfollowalways.config.LeashMode> playerLeashMode = this.optionForKey(new Option.Key("playerLeashMode"));
+    private final Option<de.michiruf.allayfollowalways.config.LeashMode> generalLeashMode = this.optionForKey(new Option.Key("generalLeashMode"));
+    private final Option<java.lang.Double> leashSlowDownDistanceStart = this.optionForKey(new Option.Key("leashSlowDownDistanceStart"));
+    private final Option<java.lang.Double> leashSlowDownDistanceEnd = this.optionForKey(new Option.Key("leashSlowDownDistanceEnd"));
+    private final Option<java.lang.Float> leashSlowDownDegree = this.optionForKey(new Option.Key("leashSlowDownDegree"));
 
     private Config() {
-        super(de.michiruf.allayfollowalways.ConfigModel.class);
+        super(de.michiruf.allayfollowalways.config.ConfigModel.class);
     }
 
     public static Config createAndLoad() {
@@ -112,12 +116,44 @@ public class Config extends ConfigWrapper<de.michiruf.allayfollowalways.ConfigMo
         avoidTeleportingIntoWalls.set(value);
     }
 
-    public boolean fixLeashBreakingIn_1_19_followLeash() {
-        return fixLeashBreakingIn_1_19_followLeash.value();
+    public de.michiruf.allayfollowalways.config.LeashMode playerLeashMode() {
+        return playerLeashMode.value();
     }
 
-    public void fixLeashBreakingIn_1_19_followLeash(boolean value) {
-        fixLeashBreakingIn_1_19_followLeash.set(value);
+    public void playerLeashMode(de.michiruf.allayfollowalways.config.LeashMode value) {
+        playerLeashMode.set(value);
+    }
+
+    public de.michiruf.allayfollowalways.config.LeashMode generalLeashMode() {
+        return generalLeashMode.value();
+    }
+
+    public void generalLeashMode(de.michiruf.allayfollowalways.config.LeashMode value) {
+        generalLeashMode.set(value);
+    }
+
+    public double leashSlowDownDistanceStart() {
+        return leashSlowDownDistanceStart.value();
+    }
+
+    public void leashSlowDownDistanceStart(double value) {
+        leashSlowDownDistanceStart.set(value);
+    }
+
+    public double leashSlowDownDistanceEnd() {
+        return leashSlowDownDistanceEnd.value();
+    }
+
+    public void leashSlowDownDistanceEnd(double value) {
+        leashSlowDownDistanceEnd.set(value);
+    }
+
+    public float leashSlowDownDegree() {
+        return leashSlowDownDegree.value();
+    }
+
+    public void leashSlowDownDegree(float value) {
+        leashSlowDownDegree.set(value);
     }
 
 

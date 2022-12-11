@@ -8,11 +8,14 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.minecraft.command.CommandRegistryAccess;
+import de.michiruf.allayfollowalways.config.LeashMode;
+import de.michiruf.allayfollowalways.helper.EnumArgumentTypeHelper;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -22,9 +25,10 @@ import java.util.function.Supplier;
  * @since 2022-12-03
  */
 public class Command {
-    public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher,
-                                        CommandRegistryAccess registry,
-                                        CommandManager.RegistrationEnvironment environment) {
+
+    private static final Map<String, Supplier<?>> commands = new HashMap<>();
+
+    public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralCommandNode<ServerCommandSource> afaNode = CommandManager
                 .literal("allayfollowalways")
                 .requires(cmd -> cmd.hasPermissionLevel(4))
@@ -35,17 +39,49 @@ public class Command {
                 })
                 .build();
 
+        registerConfigCommandDouble(afaNode, "rangeFactor",
+                AllayFollowAlwaysMod.CONFIG::rangeFactor,
+                AllayFollowAlwaysMod.CONFIG::rangeFactor);
+        registerConfigCommandFloat(afaNode, "movementSpeedFactor",
+                AllayFollowAlwaysMod.CONFIG::movementSpeedFactor,
+                AllayFollowAlwaysMod.CONFIG::movementSpeedFactor);
+        registerConfigCommandBool(afaNode, "teleportEnabled",
+                AllayFollowAlwaysMod.CONFIG::teleportEnabled,
+                AllayFollowAlwaysMod.CONFIG::teleportEnabled);
+        registerConfigCommandFloat(afaNode, "teleportDistance",
+                AllayFollowAlwaysMod.CONFIG::teleportDistance,
+                AllayFollowAlwaysMod.CONFIG::teleportDistance);
+        registerConfigCommandBool(afaNode, "considerEntityTeleportationCooldown",
+                AllayFollowAlwaysMod.CONFIG::considerEntityTeleportationCooldown,
+                AllayFollowAlwaysMod.CONFIG::considerEntityTeleportationCooldown);
+        registerConfigCommandBool(afaNode, "teleportWhenDancing",
+                AllayFollowAlwaysMod.CONFIG::teleportWhenDancing,
+                AllayFollowAlwaysMod.CONFIG::teleportWhenDancing);
+        registerConfigCommandBool(afaNode, "avoidTeleportingIntoWater",
+                AllayFollowAlwaysMod.CONFIG::avoidTeleportingIntoWater,
+                AllayFollowAlwaysMod.CONFIG::avoidTeleportingIntoWater);
+        registerConfigCommandBool(afaNode, "avoidTeleportingIntoLava",
+                AllayFollowAlwaysMod.CONFIG::avoidTeleportingIntoLava,
+                AllayFollowAlwaysMod.CONFIG::avoidTeleportingIntoLava);
+        registerConfigCommandBool(afaNode, "avoidTeleportingIntoWalls",
+                AllayFollowAlwaysMod.CONFIG::avoidTeleportingIntoWalls,
+                AllayFollowAlwaysMod.CONFIG::avoidTeleportingIntoWalls);
+        registerConfigCommandEnum(afaNode, "playerLeashMode", LeashMode.class,
+                AllayFollowAlwaysMod.CONFIG::playerLeashMode,
+                AllayFollowAlwaysMod.CONFIG::playerLeashMode);
+        registerConfigCommandEnum(afaNode, "generalLeashMode", LeashMode.class,
+                AllayFollowAlwaysMod.CONFIG::generalLeashMode,
+                AllayFollowAlwaysMod.CONFIG::generalLeashMode);
+        registerConfigCommandDouble(afaNode, "leashSlowDownDistanceStart",
+                AllayFollowAlwaysMod.CONFIG::leashSlowDownDistanceStart,
+                AllayFollowAlwaysMod.CONFIG::leashSlowDownDistanceStart);
+        registerConfigCommandDouble(afaNode, "leashSlowDownDistanceEnd",
+                AllayFollowAlwaysMod.CONFIG::leashSlowDownDistanceEnd,
+                AllayFollowAlwaysMod.CONFIG::leashSlowDownDistanceEnd);
+        registerConfigCommandFloat(afaNode, "leashSlowDownDegree",
+                AllayFollowAlwaysMod.CONFIG::leashSlowDownDegree,
+                AllayFollowAlwaysMod.CONFIG::leashSlowDownDegree);
         registerConfigOptionsCommand(afaNode);
-        registerConfigCommandDouble(afaNode, "rangeFactor", Main.CONFIG::rangeFactor, Main.CONFIG::rangeFactor);
-        registerConfigCommandFloat(afaNode, "movementSpeedFactor", Main.CONFIG::movementSpeedFactor, Main.CONFIG::movementSpeedFactor);
-        registerConfigCommandBool(afaNode, "teleportEnabled", Main.CONFIG::teleportEnabled, Main.CONFIG::teleportEnabled);
-        registerConfigCommandFloat(afaNode, "teleportDistance", Main.CONFIG::teleportDistance, Main.CONFIG::teleportDistance);
-        registerConfigCommandBool(afaNode, "considerEntityTeleportationCooldown", Main.CONFIG::considerEntityTeleportationCooldown, Main.CONFIG::considerEntityTeleportationCooldown);
-        registerConfigCommandBool(afaNode, "teleportWhenDancing", Main.CONFIG::teleportWhenDancing, Main.CONFIG::teleportWhenDancing);
-        registerConfigCommandBool(afaNode, "avoidTeleportingIntoWater", Main.CONFIG::avoidTeleportingIntoWater, Main.CONFIG::avoidTeleportingIntoWater);
-        registerConfigCommandBool(afaNode, "avoidTeleportingIntoLava", Main.CONFIG::avoidTeleportingIntoLava, Main.CONFIG::avoidTeleportingIntoLava);
-        registerConfigCommandBool(afaNode, "avoidTeleportingIntoWalls", Main.CONFIG::avoidTeleportingIntoWalls, Main.CONFIG::avoidTeleportingIntoWalls);
-        registerConfigCommandBool(afaNode, "fixLeashBreakingIn_1_19_followLeash", Main.CONFIG::fixLeashBreakingIn_1_19_followLeash, Main.CONFIG::fixLeashBreakingIn_1_19_followLeash);
         dispatcher.getRoot().addChild(afaNode);
     }
 
@@ -53,36 +89,40 @@ public class Command {
         node.addChild(CommandManager
                 .literal("options")
                 .executes(context -> {
-                    context.getSource().sendMessage(Text.literal("logLevel [int]"));
-                    context.getSource().sendMessage(Text.literal("rangeFactor [double]"));
-                    context.getSource().sendMessage(Text.literal("movementSpeedFactor [float]"));
-                    context.getSource().sendMessage(Text.literal("teleportEnabled [boolean]"));
-                    context.getSource().sendMessage(Text.literal("teleportDistance [float]"));
-                    context.getSource().sendMessage(Text.literal("considerEntityTeleportationCooldown [boolean]"));
-                    context.getSource().sendMessage(Text.literal("teleportWhenDancing [boolean]"));
-                    context.getSource().sendMessage(Text.literal("avoidTeleportingIntoWater [boolean]"));
-                    context.getSource().sendMessage(Text.literal("avoidTeleportingIntoLava [boolean]"));
-                    context.getSource().sendMessage(Text.literal("avoidTeleportingIntoWalls [boolean]"));
-                    context.getSource().sendMessage(Text.literal("fixLeashBreakingIn_1_19_followLeash [boolean]"));
+                    context.getSource().sendMessage(Text.literal("OPTIONS FOR ALLAY FOLLOW ALWAYS"));
+                    context.getSource().sendMessage(Text.literal("============================="));
+                    commands.forEach((s, supplier) -> context.getSource().sendMessage(Text.literal(s + " -> " + supplier.get())));
                     return 1;
                 })
                 .build());
     }
 
     private static void registerConfigCommandBool(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Boolean> getter, Consumer<Boolean> setter) {
+        commands.put(name + " [bool]", getter);
         registerConfigCommand(node, name, getter, setter, BoolArgumentType.bool(), BoolArgumentType::getBool);
     }
 
     private static void registerConfigCommandInt(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Integer> getter, Consumer<Integer> setter) {
+        commands.put(name + " [int]", getter);
         registerConfigCommand(node, name, getter, setter, IntegerArgumentType.integer(), IntegerArgumentType::getInteger);
     }
 
     private static void registerConfigCommandFloat(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Float> getter, Consumer<Float> setter) {
+        commands.put(name + " [float]", getter);
         registerConfigCommand(node, name, getter, setter, FloatArgumentType.floatArg(), FloatArgumentType::getFloat);
     }
 
     private static void registerConfigCommandDouble(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Double> getter, Consumer<Double> setter) {
+        commands.put(name + " [double]", getter);
         registerConfigCommand(node, name, getter, setter, DoubleArgumentType.doubleArg(), DoubleArgumentType::getDouble);
+    }
+
+    private static <T extends Enum<T>> void registerConfigCommandEnum(LiteralCommandNode<ServerCommandSource> node, String name, Class<T> clazz, Supplier<T> getter, Consumer<T> setter) {
+        commands.put(name + " [enum " + clazz.getSimpleName() + "]", getter);
+        var e = EnumArgumentTypeHelper.create(clazz);
+        // This cast should be safe, due to the fact that the enum T extends Enum<T>
+        //noinspection unchecked
+        registerConfigCommand(node, name, getter, setter, (ArgumentType<T>) e, e::get);
     }
 
     private static <T> void registerConfigCommand(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<T> getter, Consumer<T> setter, ArgumentType<T> type, BiFunction<CommandContext<ServerCommandSource>, String, T> valueExtractor) {
