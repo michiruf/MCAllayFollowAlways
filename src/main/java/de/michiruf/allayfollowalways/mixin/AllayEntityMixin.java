@@ -71,6 +71,8 @@ public abstract class AllayEntityMixin {
         keepChunkLoaded(allay);
     }
 
+    // TODO Test how much chunks are loaded, do they really get unloaded?
+
     private static void keepChunkLoaded(Entity entity) {
         // Keep the chunk loaded for 2 ticks
         var cm = (ServerChunkManager) entity.getWorld().getChunkManager();

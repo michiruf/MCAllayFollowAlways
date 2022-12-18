@@ -3,13 +3,51 @@ plugins {
     id 'com.modrinth.minotaur' version '2.+'
 }
 
-version = project.mod_version
-group = project.maven_group
+allprojects {
+    // This can get extracted into a root build.gradle if needed
+    ext {
+        getCurrentShortRevision = {
+            // Got from https://github.com/PaperMC/Velocity/blob/dev/3.0.0/build.gradle
+            new ByteArrayOutputStream().withStream { os ->
+                exec {
+                    executable = "git"
+                    args = ["rev-parse", "HEAD"]
+                    standardOutput = os
+                }
+                return os.toString().trim().substring(0, 8)
+            }
+        }
+
+        getLatestTag = {
+            new ByteArrayOutputStream().withStream { os ->
+                exec {
+                    executable = "git"
+                    args = ["describe", "--tags", "--abbrev=0"]
+                    standardOutput = os
+                }
+                return os.toString().trim()
+            }
+        }
+
+        getCurrentCommitCount = {
+            new ByteArrayOutputStream().withStream { os ->
+                exec {
+                    executable = "git"
+                    args = ["rev-list", "--all", "--count"]
+                    standardOutput = os
+                }
+                return os.toString().trim()
+            }
+        }
+    }
+
+    project.version = "${project.ext.getLatestTag()}-${project.ext.getCurrentCommitCount()}-${project.ext.getCurrentShortRevision()}"
+    project.group = 'michiruf'
+}
 
 repositories {
-    // Owo config
-    maven { url 'https://maven.wispforest.io' }
     mavenCentral()
+    maven { url 'https://maven.wispforest.io' } // Owo config
 }
 
 dependencies {
@@ -21,7 +59,7 @@ dependencies {
     // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Owo config
-    annotationProcessor modImplementation("io.wispforest:owo-lib:0.9.2+1.19")
+    annotationProcessor modImplementation('io.wispforest:owo-lib:0.9.2+1.19')
 
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
@@ -30,7 +68,7 @@ dependencies {
 modrinth {
     projectId = 'allay-follow-always'
     versionNumber = project.version
-    versionType = 'alpha'
+    versionType = project.version.contains('SNAPSHOT') ? 'alpha' : 'release'
     gameVersions = ['1.19.2']
     loaders = ['fabric']
     dependencies {
@@ -38,11 +76,12 @@ modrinth {
         required.project 'owo-lib'
     }
     uploadFile = remapJar
+    syncBodyFrom = rootProject.file("README.md").text
 
     // Use the environment variable `$MODRINTH_TOKEN` for the token
     // token = 'mySecretToken'
 }
-
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 processResources {
     inputs.property 'version', project.version

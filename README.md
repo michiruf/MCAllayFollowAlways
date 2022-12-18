@@ -3,15 +3,6 @@
 Allays will follow the player that gave them an item always, even through portals.
 
 
-## Behaviour
-
-The allay will teleport when:
-* TODO
-
-Chunks will be kept loaded when:
-* TODO
-
-
 ## Installation
 
 To install this plugin **fabric**, **[fabric API](https://modrinth.com/mod/fabric-api)** and **[owo-lib](https://modrinth.com/mod/owo-lib)** is required.
@@ -32,25 +23,30 @@ Commands require a permission level of 4.
 
 ### Configuration options
 
-Configure the follow range factor of the allay (default 1):
+Configure the follow range factor of the allay by multiplying this value with the vanilla follow range of allays.
+As of minecraft 1.19 this range is 64.
+`rangeFactor` defaults to `1`.
 ```
 /allayfollowalways rangeFactor [double]
 ```
 
 ---
-Configure the allays movement speed factor (default 1):
+Configure the allays movement speed factor, which gets multiplied by the allays vanilla movement speed.
+`movementSpeedFactor` defaults to `1`.
 ```
 /allayfollowalways movementSpeedFactor [float]
 ```
 
 ---
-Enable teleportation if further away than `teleportDistance` (default: true, vanilla nonexistent):
+Enable teleportation if further away than `teleportDistance`. This behaviour does not exist in vanilla.
+`teleportEnabled` defaults to `true`.
 ```
 /allayfollowalways teleportEnabled [boolean]
 ```
 
 ---
-Set the minimum distance for the allay to teleport to the player (default: 65): 
+Set the minimum distance for the allay to teleport to the player.
+`teleportDistance` defaults to `65`.
 ```
 /allayfollowalways teleportDistance [float]
 ```
@@ -59,49 +55,77 @@ Set the minimum distance for the allay to teleport to the player (default: 65):
 If this is set to true, the default minecraft teleportation cooldown for portals will be used also for the teleportation of the allay.
 A side effect is, that chunks may have to be loaded a little bit longer because the allay may not follow the player immediately after
 switching dimensions. 
-Reasons to set this to true might be, that it is possible to push allays through portals. If set to false, they will be teleported back immediately. (default: false)
+Reasons to set this to true might be, that it is possible to push allays through portals. If set to false, they will be teleported back immediately.
+`considerEntityTeleportationCooldown` defaults to `false`.
 ```
 /allayfollowalways considerEntityTeleportationCooldown [boolean]
 ```
 
 ---
-If set, the allay will not teleport when it is dancing (default: true):
+If set, the allay will not teleport when it is dancing.
+`teleportWhenDancing` defaults to `true`.
 ```
 /allayfollowalways teleportWhenDancing [boolean]
 ```
 
 ---
-If set, the allay will not teleport to a player that is touching water (default: true):
+If set, the allay will not teleport to a player that is touching water.
+`avoidTeleportingIntoWater` defaults to `true`.
 ```
 /allayfollowalways avoidTeleportingIntoWater [boolean]
 ```
 
 ---
-If set, the allay will not teleport to a player that is in lava (default: true):
+If set, the allay will not teleport to a player that is in lava.
+`avoidTeleportingIntoLava` defaults to `true`.
 ```
 /allayfollowalways avoidTeleportingIntoLava [boolean]
 ```
 
 ---
-If set, the allay will not teleport to a player that inside a wall (default: true):
+If set, the allay will not teleport to a player that inside a wall.
+`avoidTeleportingIntoWalls` defaults to `true`.
 ```
 /allayfollowalways avoidTeleportingIntoWalls [boolean]
 ```
 
 ---
-In 1.19 there are several reports that are about leash breakings for allays. For example:
-* https://bugs.mojang.com/browse/MC-252866
-* https://bugs.mojang.com/browse/MCPE-158955
+The player leash mode configures how the allay will behave:
 
-If that happens, enable this flag. Since this should always happen and some people might
-upgrade without reading the docs, this flag is initially set to true.
+* `NONE` - vanilla behaviour
+* `FOLLOW` - the allay will follow the player (like dogs do e.g.)
+* `DIRECTIONAL_SLOW_DOWN` - the allay will slow down if it is moving away from the player and being further away 
+  than `leashSlowDownDistanceStart`
 
-This flag will make allays follow a leash and by that, not try to follow the player,
-because this caused them to move to far from the post they were bound to and so broke
-the leash.
-```
-/allayfollowalways fixLeashBreakingIn_1_19_followLeash [boolean]
-```
+`playerLeashMode` defaults to `NONE`
+
+---
+The reason this leash mode got implemented for, is that allays sometimes move out of the range of a leash and so break
+that leash. This can be very annoying and so the `generalLeashMode` got introduced. The allay will behave like described
+for the player leash mode above.
+`generalLeashMode` defaults to `DIRECTIONAL_SLOW_DOWN`
+
+---
+The leash slow down distance start is the distance to start applying directional slow down. At exactly 6 distance, no
+slow down is applied and then the more distance until `leashSlowDownDistanceEnd` the slowness increases.
+`leashSlowDownDistanceStart` defaults to `6`
+
+---
+The leash slow down distance end is the distance where the allay will have 0 movement speed if not facing the entity 
+that it is leashed to.
+`leashSlowDownDistanceEnd` defaults to `8`
+
+
+## Changelog
+
+Changelog per release cycle can be found [here](https://github.com/michiruf/MCAllayFollowAlways/blob/master/CHANGELOG.md).
+This changelog contains information from one release to the next one.
+
+
+## Known bugs
+
+There is currently an issue, with owo config (or my usage of it) and the clientside mod `Open Parties and Claims`
+or `Forge Config API Port` (which is required for openpac)
 
 
 ## License
@@ -111,7 +135,7 @@ the leash.
 
 ## Next steps
 
-Implement a test runner and maybe also GitHub actions?
+Implement a test runner?
 https://github.com/Geometrically/fabric-test-runner
 
 
@@ -120,3 +144,4 @@ https://github.com/Geometrically/fabric-test-runner
 * [Fabric wiki](https://fabricmc.net/wiki/start)
 * [oωo configuration documentation](https://docs.wispforest.io/owo/config/)
 * [List of fabric events](https://docs.wispforest.io/fabric-events/)
+* TODO Check this out: https://github.com/jaredlll08/MultiLoader-Template
