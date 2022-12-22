@@ -122,12 +122,6 @@ Changelog per release cycle can be found [here](https://github.com/michiruf/MCAl
 This changelog contains information from one release to the next one.
 
 
-## Known bugs
-
-There is currently an issue, with owo config (or my usage of it) and the clientside mod `Open Parties and Claims`
-or `Forge Config API Port` (which is required for openpac)
-
-
 ## License
 
 [MIT License](https://github.com/michiruf/MCAllayFollowAlways/blob/master/LICENSE)

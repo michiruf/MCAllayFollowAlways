@@ -8,8 +8,8 @@
   "server": [
     "AllayBrainMixin",
     "AllayEntityMixin",
-    "LivingEntityMixin",
-    "EntityMixin"
+    "EntityMixin",
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways;
 
+import de.michiruf.allayfollowalways.command.Command;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;

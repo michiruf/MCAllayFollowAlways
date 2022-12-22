@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways;
+package de.michiruf.allayfollowalways.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -8,13 +8,13 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
-import de.michiruf.allayfollowalways.helper.EnumArgumentTypeHelper;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  */
 public class Command {
 
-    private static final Map<String, Supplier<?>> commands = new HashMap<>();
+    private static final Map<String, Supplier<?>> commands = new LinkedHashMap<>();
 
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralCommandNode<ServerCommandSource> afaNode = CommandManager
@@ -119,10 +119,7 @@ public class Command {
 
     private static <T extends Enum<T>> void registerConfigCommandEnum(LiteralCommandNode<ServerCommandSource> node, String name, Class<T> clazz, Supplier<T> getter, Consumer<T> setter) {
         commands.put(name + " [enum " + clazz.getSimpleName() + "]", getter);
-        var e = EnumArgumentTypeHelper.create(clazz);
-        // This cast should be safe, due to the fact that the enum T extends Enum<T>
-        //noinspection unchecked
-        registerConfigCommand(node, name, getter, setter, (ArgumentType<T>) e, e::get);
+        EnumSubCommand.createAndRegister(node, name, getter, setter, clazz);
     }
 
     private static <T> void registerConfigCommand(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<T> getter, Consumer<T> setter, ArgumentType<T> type, BiFunction<CommandContext<ServerCommandSource>, String, T> valueExtractor) {
