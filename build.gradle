@@ -8,7 +8,7 @@ plugins {
 apply from: 'build.allprojects.gradle'
 apply from: 'build.versions.gradle'
 
-def minecraftVersion = project.minecraftVersion as String ?: '1.20.3' // TODO: '1.20.4'
+def minecraftVersion = project.minecraftVersion as String ?: '1.20.4'
 def minecraftVersionDefinitions = ext.minecraftVersionDefinitions
 def minecraftVersionDefinition = minecraftVersionDefinitions[minecraftVersion]
 project.version = "${project.version}+${minecraftVersion}"
@@ -22,22 +22,12 @@ sourceSets {
     ]
 }
 
-repositories {
-    mavenCentral()
-    maven { url 'https://maven.wispforest.io' } // Owo config
-}
-
 dependencies {
     // Minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraftVersion}"
     mappings "net.fabricmc:yarn:${minecraftVersionDefinition['mappings']}:v2"
     modImplementation "net.fabricmc:fabric-loader:${minecraftVersionDefinition['fabric']}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${minecraftVersionDefinition['fabricApi']}"
-
-    // Jackson for config
-    modImplementation annotationProcessor("io.wispforest:owo-lib:${minecraftVersionDefinition['owo']}") { exclude group: 'net.fabricmc.fabric-api' }
-    //implementation 'com.fasterxml.jackson.core:jackson-core:2:17'
-    //implementation 'com.fasterxml.jackson.core:jackson-databind:2:17'
 
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'

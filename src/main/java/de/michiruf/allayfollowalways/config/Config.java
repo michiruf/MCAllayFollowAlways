@@ -1,16 +1,11 @@
 package de.michiruf.allayfollowalways.config;
 
-import io.wispforest.owo.config.annotation.Config;
-
 /**
  * @author Michael Ruf
  * @since 2022-12-02
  */
-@Config(name = "allayfollowalways", wrapperName = "Config")
-@SuppressWarnings("unused")
-public class ConfigModel {
+public class Config {
 
-    public int logLevel; // TODO Use this
     public double rangeFactor = 1.0;
     public float movementSpeedFactor = 1f;
 
