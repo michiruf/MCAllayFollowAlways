@@ -1,10 +1,10 @@
 package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
+import de.michiruf.allayfollowalways.versioned.VersionedAllay;
+import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.TeleportTarget;
 
 /**
  * @author Michael Ruf
@@ -31,10 +31,9 @@ public class AllayTeleport {
         //Main.LOGGER.info("Teleporting " + DebugEntity.idString(allay) + " to " + DebugEntity.idString(player));
 
         if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown())
-            allay.resetPortalCooldown();
+            VersionedAllay.resetPortalCooldown(allay);
 
         // Use fabrics teleport, since it should be capable of teleporting easily through dimensions
-        FabricDimensions.teleport(allay, player.getWorld(),
-                new TeleportTarget(player.getPos(), allay.getVelocity(), allay.getYaw(), allay.getPitch()));
+        VersionedFabricTeleport.teleport(allay, player);
     }
 }

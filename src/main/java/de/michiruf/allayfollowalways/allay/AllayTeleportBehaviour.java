@@ -2,6 +2,7 @@ package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
+import de.michiruf.allayfollowalways.versioned.VersionedAllay;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -35,7 +36,7 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Might do not follow if dancing
-        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && allay.isDancing())
+        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && VersionedAllay.isDancing(allay))
             return false;
 
         // Avoid teleporting into water
@@ -54,7 +55,7 @@ public class AllayTeleportBehaviour {
         if (!WorldComparator.equals(allay.getWorld(), player.getWorld())) {
             // To avoid teleporting entities instantly out of the nether after pushing them in,
             // do not teleport when a portal cooldown is set
-            if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && allay.hasPortalCooldown())
+            if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && VersionedAllay.hasPortalCooldown(allay))
                 return false;
 
             return true;
