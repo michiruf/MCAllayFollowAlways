@@ -108,7 +108,7 @@ jobs:
           modrinth-featured: false
           files: |
             **/libs/allay-follow-always-*.jar
-          name: Server Portals ${{ github.ref_name }}
+          name: Allay Follow Always ${{ github.ref_name }}
           version: ${{ github.ref_name }}+${{ matrix.version }}
           version-type: "${{ contains(github.ref_name, 'SNAPSHOT') && 'alpha' || 'release' }}"
           changelog-file: CHANGELOG.md
