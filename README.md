@@ -1,5 +1,7 @@
 # Allay Follow Always
 
+[![Build](https://github.com/michiruf/MCAllayFollowAlways/actions/workflows/build.yml/badge.svg)](https://github.com/michiruf/MCAllayFollowAlways/actions/workflows/build.yml)
+
 Allays will follow the player that gave them an item always, even through portals.
 
 
