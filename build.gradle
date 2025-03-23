@@ -8,9 +8,9 @@ plugins {
 apply from: 'build.allprojects.gradle'
 apply from: 'build.versions.gradle'
 
-def minecraftVersion = project.minecraftVersion as String ?: '1.21'
-def minecraftVersionDefinitions = ext.minecraftVersionDefinitions
-def minecraftVersionDefinition = minecraftVersionDefinitions[minecraftVersion]
+def minecraftVersion = project.minecraftVersion as String ?: '1.19'
+def minecraftVersionDefinition = ext.minecraftVersionDefinitions[minecraftVersion]
+int targetJavaVersion = (int) minecraftVersionDefinition['java']
 project.version = "${project.version}+${minecraftVersion}"
 
 sourceSets {
@@ -48,9 +48,12 @@ processResources {
     }
 }
 
-def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // Enforce the specified java version
+    it.sourceCompatibility = targetJavaVersion
+    it.targetCompatibility = targetJavaVersion
+
+    // Ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     // If Javadoc is generated, this must be specified in that task too.
@@ -59,10 +62,9 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+    // Enforce the specified java version
+    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.
     // If you remove this line, sources will not be generated.
