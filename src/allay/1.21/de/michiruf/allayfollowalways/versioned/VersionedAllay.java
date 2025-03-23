@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways.versioned;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AllayEntity;
 
 /**
@@ -13,8 +14,7 @@ public class VersionedAllay {
     }
 
     public static boolean hasPortalCooldown(AllayEntity allay) {
-        // Crazy typo in mappings...
-        return allay.hasPortalCooldownn();
+        return allay.hasPortalCooldown();
     }
 
     public static boolean isDancing(AllayEntity allay) {
@@ -22,6 +22,6 @@ public class VersionedAllay {
     }
 
     public static Entity getLeashHolder(AllayEntity allay) {
-        return allay.getHoldingEntity();
+        return allay.getLeashHolder();
     }
 }

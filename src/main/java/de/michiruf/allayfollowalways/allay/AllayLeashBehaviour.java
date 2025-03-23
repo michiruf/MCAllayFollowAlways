@@ -3,6 +3,7 @@ package de.michiruf.allayfollowalways.allay;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
 import de.michiruf.allayfollowalways.helper.MyMathHelper;
+import de.michiruf.allayfollowalways.versioned.VersionedAllay;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 public class AllayLeashBehaviour {
 
     public static boolean shouldFollowLeash(AllayEntity allay) {
-        var holdingEntity = allay.getHoldingEntity();
+        var holdingEntity = VersionedAllay.getLeashHolder(allay);
         if (holdingEntity == null)
             return false;
 
@@ -28,7 +29,7 @@ public class AllayLeashBehaviour {
     }
 
     public static Vec3d calculateLeashedVelocity(AllayEntity allay, Vec3d velocity) {
-        var holdingEntity = allay.getHoldingEntity();
+        var holdingEntity = VersionedAllay.getLeashHolder(allay);
         if (holdingEntity == null)
             return velocity;
 

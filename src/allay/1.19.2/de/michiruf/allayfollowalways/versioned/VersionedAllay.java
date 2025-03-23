@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways.versioned;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AllayEntity;
 
 /**
@@ -18,5 +19,9 @@ public class VersionedAllay {
 
     public static boolean isDancing(AllayEntity allay) {
         return allay.isDancing();
+    }
+
+    public static Entity getLeashHolder(AllayEntity allay) {
+        return allay.getHoldingEntity();
     }
 }
