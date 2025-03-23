@@ -5,7 +5,7 @@ Allays will follow the player that gave them an item always, even through portal
 
 ## Installation
 
-To install this plugin **fabric**, **[fabric API](https://modrinth.com/mod/fabric-api)** and **[owo-lib](https://modrinth.com/mod/owo-lib)** is required.
+To install this plugin **fabric**, **[fabric API](https://modrinth.com/mod/fabric-api)** is required.
 
 This mod is available on [modrinth](https://modrinth.com/mod/allay-follow-always) with slug `allay-follow-always`.
 The project source is available on [github/michiruf](https://github.com/michiruf/MCAllayFollowAlways) with the latest
