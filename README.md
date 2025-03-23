@@ -136,6 +136,5 @@ https://github.com/Geometrically/fabric-test-runner
 ## Additional reading (for devs)
 
 * [Fabric wiki](https://fabricmc.net/wiki/start)
-* [oωo configuration documentation](https://docs.wispforest.io/owo/config/)
 * [List of fabric events](https://docs.wispforest.io/fabric-events/)
 * TODO Check this out: https://github.com/jaredlll08/MultiLoader-Template
