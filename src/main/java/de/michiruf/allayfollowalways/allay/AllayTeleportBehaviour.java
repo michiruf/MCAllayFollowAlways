@@ -21,7 +21,7 @@ public class AllayTeleportBehaviour {
         //Main.LOGGER.error(DebugEntity.idString(allay) + " is not leashed");
 
         var optionalNoteblock = allay.getBrain().getOptionalMemory(MemoryModuleType.LIKED_NOTEBLOCK);
-        if (optionalNoteblock.isPresent())
+        if (optionalNoteblock != null && optionalNoteblock.isPresent())
             return false;
 
         return true;
