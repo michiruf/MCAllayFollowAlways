@@ -43,11 +43,12 @@ public class AllayFollowAlwaysGameTest {
     @GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
     public void testTeleport(TestContext context) {
         AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
+        AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
         createPlayerAndAllay(context);
 
-        var destinationY = player.getY() + AllayFollowAlwaysMod.CONFIG.teleportDistance() + 10;
-        player.teleport(context.getWorld(), player.getX(), destinationY, player.getZ(), Set.of(), 0.0f, 0.0f, false);
-        context.waitAndRun(10, () -> {
+        var destinationY = player.getY() + 10;
+        player.teleport(player.getX(), destinationY, player.getZ(), false);
+        context.waitAndRun(20, () -> {
             var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
             context.assertTrue(distanceToPlayer <= 2.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
 
@@ -59,11 +60,12 @@ public class AllayFollowAlwaysGameTest {
     @GameTest(templateName = "fabric-gametest-api-v1:empty")
     public void testTeleportDisabled(TestContext context) {
         AllayFollowAlwaysMod.CONFIG.teleportEnabled(false);
+        AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
         createPlayerAndAllay(context);
 
-        var destinationY = player.getY() + AllayFollowAlwaysMod.CONFIG.teleportDistance() + 10;
-        player.teleport(context.getWorld(), player.getX(), destinationY, player.getZ(), Set.of(), 0.0f, 0.0f, false);
-        context.waitAndRun(10, () -> {
+        var destinationY = player.getY() + 10;
+        player.teleport(player.getX(), destinationY, player.getZ(), false);
+        context.waitAndRun(20, () -> {
             var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
             context.assertFalse(distanceToPlayer <= 2.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
 
