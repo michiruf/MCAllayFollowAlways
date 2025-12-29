@@ -33,7 +33,7 @@ jobs:
           '1.21.10',
           '1.21.11',
         ]
-      fail-fast: true
+      fail-fast: false
     steps:
       - name: Check out project
         if: success()
