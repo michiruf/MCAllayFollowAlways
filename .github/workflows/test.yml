@@ -56,7 +56,7 @@ jobs:
 
       - name: Execute unit tests
         if: success()
-        run: gradle test -Pv=${{ matrix.version }} -x runGameTestServer -x runGameTest
+        run: gradle test -Pv=${{ matrix.version }} -x runGameTest
 
       - name: Execute game tests
         if: success()
