@@ -25,7 +25,7 @@ sourceSets {
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = "${project.name}-test"
+        modId = "${rootProject.name}-test"
         enableGameTests = true
         enableClientGameTests = false
         eula = true
