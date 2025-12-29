@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "allay-follow-always-test",
+  "version": "${version}",
+  "name": "AllayFollowAlwaysTest",
+  "icon": "assets/allayfollowalways/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "de.michiruf.allayfollowalways.ExampleGameTest",
+      "de.michiruf.allayfollowalways.AllayFollowAlwaysGameTest"
+    ]
+  }
+}
