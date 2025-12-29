@@ -32,11 +32,6 @@ fabricApi {
     }
 }
 
-configurations {
-    gametestImplementation.extendsFrom implementation
-    gametestCompileOnly.extendsFrom compileOnly
-}
-
 dependencies {
     // Minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraftVersion}"
