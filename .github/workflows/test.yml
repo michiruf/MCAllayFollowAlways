@@ -1,0 +1,63 @@
+name: Test
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [
+          '1.19',
+          '1.19.1',
+          '1.19.2',
+          '1.19.3',
+          '1.19.4',
+          '1.20',
+          '1.20.1',
+          '1.20.2',
+          '1.20.3',
+          '1.20.4',
+          '1.20.5',
+          '1.20.6',
+          '1.21',
+          '1.21.1',
+          '1.21.2',
+          '1.21.3',
+          '1.21.4',
+          '1.21.5',
+          '1.21.6',
+          '1.21.7',
+          '1.21.8',
+          '1.21.9',
+          '1.21.10',
+          '1.21.11',
+        ]
+      fail-fast: true
+    steps:
+      - name: Check out project
+        if: success()
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        if: success()
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'microsoft'
+
+      - name: Setup gradle
+        if: success()
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.2.0
+
+      - name: Execute unit tests
+        if: success()
+        run: gradle test -Pv=${{ matrix.version }}
+
+      - name: Execute game tests
+        if: success()
+        run: gradle runGameTest -Pv=${{ matrix.version }}
