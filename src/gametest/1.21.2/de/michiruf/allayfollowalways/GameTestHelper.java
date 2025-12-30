@@ -7,6 +7,6 @@ import net.minecraft.test.TestContext;
 public class GameTestHelper {
 
     public static ServerCommandSource playerCommandSource(PlayerEntity player, TestContext context) {
-        return player.getCommandSource(context.getWorld())
+        return player.getCommandSource(context.getWorld());
     }
 }
