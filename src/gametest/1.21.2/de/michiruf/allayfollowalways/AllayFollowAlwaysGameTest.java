@@ -70,7 +70,7 @@ public class AllayFollowAlwaysGameTest {
     public void testMessages(TestContext context) {
         var player = context.createMockPlayer(GameMode.CREATIVE);
         context.getWorld().getServer().getCommandManager().executeWithPrefix(
-                GameTestHelper.playerCommandSource(player, context),
+                player.getCommandSource(context.getWorld()),
                 "/allayfollowalways teleportEnabled"
         );
         context.complete();
