@@ -32,6 +32,9 @@ fabricApi {
     }
 }
 
+// Add directory to the gametest source set created by fabricApi
+sourceSets.gametest.java.srcDir "src/gametest/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/gametest'), minecraftVersion)}"
+
 dependencies {
     // Minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraftVersion}"

@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways;
 
+import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
@@ -7,9 +8,8 @@ import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
-
-import java.util.Set;
 
 @SuppressWarnings("unused")
 public class AllayFollowAlwaysGameTest {
@@ -18,6 +18,9 @@ public class AllayFollowAlwaysGameTest {
     private AllayEntity allay;
 
     private void createPlayerAndAllay(TestContext context) {
+        if (player != null && allay != null)
+            return;
+
         player = FakePlayer.get(context.getWorld());
         player.changeGameMode(GameMode.SURVIVAL);
 
@@ -27,17 +30,10 @@ public class AllayFollowAlwaysGameTest {
         allay = context.spawnEntity(EntityType.ALLAY, new BlockPos(0, 1, 0));
 
         // Teleport player to allay, because the player is not spawned in the test space
-        player.teleport(context.getWorld(), allay.getX(), allay.getY(), allay.getZ(), Set.of(), 0.0f, 0.0f, false);
+        VersionedFabricTeleport.teleport(player, allay, context.getWorld());
 
         // Fake that allay got an item from the player
         allay.getBrain().remember(MemoryModuleType.LIKED_PLAYER, player.getUuid());
-    }
-
-    private void clearPlayerAndAllay(TestContext context) {
-        context.killEntity(player);
-        context.killEntity(allay);
-        player = null;
-        allay = null;
     }
 
     @GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
@@ -47,12 +43,10 @@ public class AllayFollowAlwaysGameTest {
         createPlayerAndAllay(context);
 
         var destinationY = player.getY() + 10;
-        player.teleport(player.getX(), destinationY, player.getZ(), false);
+        VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
         context.waitAndRun(20, () -> {
             var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
             context.assertTrue(distanceToPlayer <= 2.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
-
-            clearPlayerAndAllay(context);
             context.complete();
         });
     }
@@ -64,12 +58,10 @@ public class AllayFollowAlwaysGameTest {
         createPlayerAndAllay(context);
 
         var destinationY = player.getY() + 10;
-        player.teleport(player.getX(), destinationY, player.getZ(), false);
+        VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
         context.waitAndRun(20, () -> {
             var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
             context.assertFalse(distanceToPlayer <= 2.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
-
-            clearPlayerAndAllay(context);
             context.complete();
         });
     }
@@ -77,9 +69,8 @@ public class AllayFollowAlwaysGameTest {
     @GameTest(templateName = "fabric-gametest-api-v1:empty")
     public void testMessages(TestContext context) {
         var player = context.createMockPlayer(GameMode.CREATIVE);
-        var commandSource = player.getCommandSource(context.getWorld());
         context.getWorld().getServer().getCommandManager().executeWithPrefix(
-                commandSource,
+                GameTestHelper.playerCommandSource(player, context),
                 "/allayfollowalways teleportEnabled"
         );
         context.complete();

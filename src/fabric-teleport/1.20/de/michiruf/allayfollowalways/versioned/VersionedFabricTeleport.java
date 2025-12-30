@@ -12,7 +12,19 @@ import net.minecraft.world.TeleportTarget;
 public class VersionedFabricTeleport {
 
     public static void teleport(AllayEntity allay, ServerPlayerEntity player) {
-        FabricDimensions.teleport(allay, player.getServerWorld(),
-                new TeleportTarget(player.getPos(), allay.getVelocity(), allay.getYaw(), allay.getPitch()));
+        teleport(allay, player, player.getServerWorld());
     }
-}
+
+    public static void teleport(Entity entity, Entity to, ServerWorld world) {
+        teleport(entity, to.getPos(), world);
+    }
+
+    public static void teleport(Entity entity, Vec3d to, ServerWorld world) {
+        var target = new TeleportTarget(
+                to,
+                entity.getVelocity(),
+                entity.getYaw(),
+                entity.getPitch()
+        );
+        FabricDimensions.teleport(entity, world, target);
+    }

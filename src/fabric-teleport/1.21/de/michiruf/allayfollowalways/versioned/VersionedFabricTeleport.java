@@ -1,7 +1,10 @@
 package de.michiruf.allayfollowalways.versioned;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 
 /**
@@ -11,14 +14,22 @@ import net.minecraft.world.TeleportTarget;
 public class VersionedFabricTeleport {
 
     public static void teleport(AllayEntity allay, ServerPlayerEntity player) {
+        teleport(allay, player, player.getServerWorld());
+    }
+
+    public static void teleport(Entity entity, Entity to, ServerWorld world) {
+        teleport(entity, to.getPos(), world);
+    }
+
+    public static void teleport(Entity entity, Vec3d to, ServerWorld world) {
         var target = new TeleportTarget(
-                player.getServerWorld(),
-                player.getPos(),
-                allay.getVelocity(),
-                allay.getYaw(),
-                allay.getPitch(),
+                world,
+                to,
+                entity.getVelocity(),
+                entity.getYaw(),
+                entity.getPitch(),
                 TeleportTarget.NO_OP
         );
-        allay.teleportTo(target);
+        entity.teleportTo(target);
     }
 }
