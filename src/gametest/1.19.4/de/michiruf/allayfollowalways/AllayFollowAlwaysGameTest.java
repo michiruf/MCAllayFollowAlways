@@ -41,6 +41,7 @@ public class AllayFollowAlwaysGameTest {
         AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
         AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
         AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
+        AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
         createPlayerAndAllay(context);
 
         var destinationY = player.getY() + 256;
@@ -57,6 +58,7 @@ public class AllayFollowAlwaysGameTest {
         AllayFollowAlwaysMod.CONFIG.teleportEnabled(false);
         AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
         AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
+        AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
         createPlayerAndAllay(context);
 
         var destinationY = player.getY() + 256;
