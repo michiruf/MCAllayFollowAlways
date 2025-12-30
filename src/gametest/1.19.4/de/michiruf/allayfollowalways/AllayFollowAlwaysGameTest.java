@@ -42,14 +42,16 @@ public class AllayFollowAlwaysGameTest {
         AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
         AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
         AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-        createPlayerAndAllay(context);
 
-        var destinationY = player.getY() + 256;
-        VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
+        createPlayerAndAllay(context);
         context.waitAndRun(20, () -> {
-            var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
-            context.assertTrue(distanceToPlayer <= 10.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
-            context.complete();
+            var destinationY = player.getY() + 256;
+            VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
+            context.waitAndRun(20, () -> {
+                var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
+                context.assertTrue(distanceToPlayer <= 10.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
+                context.complete();
+            });
         });
     }
 
@@ -59,14 +61,16 @@ public class AllayFollowAlwaysGameTest {
         AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
         AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
         AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-        createPlayerAndAllay(context);
 
-        var destinationY = player.getY() + 256;
-        VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
+        createPlayerAndAllay(context);
         context.waitAndRun(20, () -> {
-            var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
-            context.assertTrue(distanceToPlayer > 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
-            context.complete();
+            var destinationY = player.getY() + 256;
+            VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
+            context.waitAndRun(20, () -> {
+                var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
+                context.assertTrue(distanceToPlayer > 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
+                context.complete();
+            });
         });
     }
 
