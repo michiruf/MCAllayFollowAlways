@@ -28,3 +28,4 @@ public class VersionedFabricTeleport {
         );
         FabricDimensions.teleport(entity, world, target);
     }
+}
