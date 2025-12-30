@@ -18,8 +18,10 @@ public class AllayFollowAlwaysGameTest {
     private AllayEntity allay;
 
     private void createPlayerAndAllay(TestContext context) {
-        if (player != null && allay != null)
+        if (player != null && allay != null) {
+            VersionedFabricTeleport.teleport(player, allay, context.getWorld());
             return;
+        }
 
         player = FakePlayer.get(context.getWorld());
         player.changeGameMode(GameMode.SURVIVAL);
