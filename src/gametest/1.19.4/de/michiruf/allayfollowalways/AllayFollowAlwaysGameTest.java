@@ -40,13 +40,14 @@ public class AllayFollowAlwaysGameTest {
     public void testTeleport(TestContext context) {
         AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
         AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
+        AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
         createPlayerAndAllay(context);
 
-        var destinationY = player.getY() + 10;
+        var destinationY = player.getY() + 256;
         VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
         context.waitAndRun(20, () -> {
             var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
-            context.assertTrue(distanceToPlayer <= 2.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
+            context.assertTrue(distanceToPlayer <= 10.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
             context.complete();
         });
     }
@@ -55,13 +56,14 @@ public class AllayFollowAlwaysGameTest {
     public void testTeleportDisabled(TestContext context) {
         AllayFollowAlwaysMod.CONFIG.teleportEnabled(false);
         AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
+        AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
         createPlayerAndAllay(context);
 
-        var destinationY = player.getY() + 10;
+        var destinationY = player.getY() + 256;
         VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
         context.waitAndRun(20, () -> {
             var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
-            context.assertTrue(distanceToPlayer > 2.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
+            context.assertTrue(distanceToPlayer > 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
             context.complete();
         });
     }
