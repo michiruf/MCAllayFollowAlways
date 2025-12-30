@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "allay-follow-always-test",
-  "version": "${version}",
+  "version": "1",
   "name": "AllayFollowAlwaysTest",
   "icon": "assets/allayfollowalways/icon.png",
   "environment": "*",
