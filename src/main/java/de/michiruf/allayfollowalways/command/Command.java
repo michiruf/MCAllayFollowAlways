@@ -10,7 +10,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
+import de.michiruf.allayfollowalways.versioned.PermissionHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedMessageSender;
+import net.minecraft.command.permission.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -31,7 +33,7 @@ public class Command {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralCommandNode<ServerCommandSource> afaNode = CommandManager
                 .literal("allayfollowalways")
-                .requires(cmd -> cmd.hasPermissionLevel(4))
+                .requires(PermissionHelper::hasPermission)
                 .executes(context -> {
                     VersionedMessageSender.send(context, "Usage: /allayfollowalways OPTION [VALUE]");
                     VersionedMessageSender.send(context, "Usage: /allayfollowalways options -> list all options");
