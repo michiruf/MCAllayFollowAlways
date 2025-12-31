@@ -8,7 +8,7 @@ plugins {
 apply from: 'build.allprojects.gradle'
 apply from: 'build.versions.gradle'
 
-def minecraftVersion = project.minecraftVersion as String ?: '1.21.4'
+def minecraftVersion = project.minecraftVersion as String ?: '1.21.5'
 def minecraftVersionDefinition = ext.minecraftVersionDefinitions[minecraftVersion]
 int targetJavaVersion = (int) minecraftVersionDefinition['java']
 project.version = "${project.version}+${minecraftVersion}"
@@ -18,7 +18,8 @@ sourceSets {
             'src/main/java',
             "src/message/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/message'), minecraftVersion)}",
             "src/allay/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/allay'), minecraftVersion)}",
-            "src/fabric-teleport/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/fabric-teleport'), minecraftVersion)}"
+            "src/fabric-teleport/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/fabric-teleport'), minecraftVersion)}",
+            "src/chunkticket/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/chunkticket'), minecraftVersion)}"
     ]
 }
 

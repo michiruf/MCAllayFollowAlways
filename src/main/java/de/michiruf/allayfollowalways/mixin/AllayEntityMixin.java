@@ -6,18 +6,13 @@ import de.michiruf.allayfollowalways.allay.AllayPlayerLookup;
 import de.michiruf.allayfollowalways.allay.AllayTeleport;
 import de.michiruf.allayfollowalways.allay.AllayTeleportBehaviour;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
-import net.minecraft.entity.Entity;
+import de.michiruf.allayfollowalways.versioned.ChunkTicketHelper;
 import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.server.world.ChunkTicketType;
-import net.minecraft.server.world.ServerChunkManager;
-import net.minecraft.util.math.ChunkPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Comparator;
 
 /**
  * @author Michael Ruf
@@ -68,21 +63,6 @@ public abstract class AllayEntityMixin {
         if (!(player.interactionManager.isSurvivalLike() || player.isCreative()))
             return;
 
-        keepChunkLoaded(allay);
-    }
-
-    // TODO Test how much chunks are loaded, do they really get unloaded?
-
-    private static void keepChunkLoaded(Entity entity) {
-        // Keep the chunk loaded for 2 ticks
-        var cm = (ServerChunkManager) entity.getWorld().getChunkManager();
-        cm.addTicket(
-                ChunkTicketType.create("allayfollowalways", Comparator.comparingLong(ChunkPos::toLong), 1),
-                entity.getChunkPos(),
-                2,
-                entity.getChunkPos());
-
-        // NOTE This variant here might not be the most performant thing ever, since we queue another chunk ticket
-        //      on every tick, but for now, this should at least work pretty well
+        ChunkTicketHelper.keepChunksLoaded(allay);
     }
 }
