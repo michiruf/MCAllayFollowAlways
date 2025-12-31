@@ -20,6 +20,6 @@ public class EntityHelper {
     }
 
     public static ServerWorld getServerWorld(Entity entity) {
-        return entity.getWorld();
+        return (ServerWorld) entity.getWorld();
     }
 }
