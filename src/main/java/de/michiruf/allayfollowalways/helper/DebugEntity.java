@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways.helper;
 
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import net.minecraft.entity.Entity;
 
 /**
@@ -13,6 +14,6 @@ public class DebugEntity {
     }
 
     public static String idString(Entity entity) {
-        return entity.getType().getName().getString() + " '" + entity.getName().getString() + "' [" + entity.getWorld().getDimensionEntry().value().toString() + "]";
+        return entity.getType().getName().getString() + " '" + entity.getName().getString() + "' [" + EntityHelper.getWorld(entity).getDimensionEntry().value().toString() + "]";
     }
 }

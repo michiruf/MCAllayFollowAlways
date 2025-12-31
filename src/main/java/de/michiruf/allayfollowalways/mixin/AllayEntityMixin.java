@@ -7,6 +7,7 @@ import de.michiruf.allayfollowalways.allay.AllayTeleport;
 import de.michiruf.allayfollowalways.allay.AllayTeleportBehaviour;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.versioned.ChunkTicketHelper;
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import net.minecraft.entity.passive.AllayEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -50,13 +51,13 @@ public abstract class AllayEntityMixin {
         // is in a different world
         var playerOptional = AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown()
                 ? AllayPlayerLookup.getLikedPlayerGlobal(allay)
-                : AllayPlayerLookup.getLikedPlayerForWorld(allay, allay.getWorld());
+                : AllayPlayerLookup.getLikedPlayerForWorld(allay, EntityHelper.getWorld(allay));
         if (playerOptional.isEmpty())
             return;
         var player = playerOptional.get();
 
         // Fail safety check
-        if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && !WorldComparator.equals(player.getWorld(), allay.getWorld()))
+        if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && !WorldComparator.equals(player, allay))
             return;
 
         // If not in survival or creative mode, skip chunk loading entirely

@@ -3,6 +3,7 @@ package de.michiruf.allayfollowalways.allay;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
 import de.michiruf.allayfollowalways.helper.MyMathHelper;
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedAllay;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AllayEntity;
@@ -49,7 +50,7 @@ public class AllayLeashBehaviour {
         if (allayVelocity.lengthSquared() <= 1.0E-4)
             return 1;
 
-        var allayToEntity = holdingEntity.getPos().subtract(allay.getPos());
+        var allayToEntity = EntityHelper.getPos(holdingEntity).subtract(EntityHelper.getPos(allay));
         var distance = allayToEntity.length();
         var r = MathHelper.getLerpProgress(
                 distance,

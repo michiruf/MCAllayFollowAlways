@@ -10,7 +10,7 @@ import java.util.Comparator;
 public class ChunkTicketHelper {
 
     public static void keepChunksLoaded(Entity entity) {
-        keepChunksLoaded((ServerChunkManager) entity.getWorld().getChunkManager(), entity.getChunkPos());
+        keepChunksLoaded((ServerChunkManager) EntityHelper.getWorld(entity).getChunkManager(), entity.getChunkPos());
     }
 
     public static void keepChunksLoaded(ServerChunkManager cm, ChunkPos pos) {

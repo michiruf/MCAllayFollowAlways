@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways;
 
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -32,7 +33,7 @@ public class AllayFollowAlwaysGameTest {
                     VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
                 })
                 .then(() -> {
-                    var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
+                    var distanceToPlayer = EntityHelper.getPos(allay).distanceTo(EntityHelper.getPos(player));
                     context.assertTrue(AllayFollowAlwaysMod.CONFIG.teleportEnabled(), Text.literal("Teleport not enabled"));
                     context.assertTrue(distanceToPlayer <= 10.0, Text.literal("Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos()));
                 })
@@ -42,7 +43,7 @@ public class AllayFollowAlwaysGameTest {
                     VersionedFabricTeleport.teleport(player, new Vec3d(player.getX(), destinationY, player.getZ()), context.getWorld());
                 })
                 .then(() -> {
-                    var distanceToPlayer = allay.getPos().distanceTo(player.getPos());
+                    var distanceToPlayer = EntityHelper.getPos(allay).distanceTo(EntityHelper.getPos(player));
                     context.assertFalse(AllayFollowAlwaysMod.CONFIG.teleportEnabled(), Text.literal("Teleport enabled"));
                     context.assertFalse(distanceToPlayer <= 10.0, Text.literal("Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos()));
                 })

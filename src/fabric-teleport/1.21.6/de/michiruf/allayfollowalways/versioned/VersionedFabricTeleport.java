@@ -14,11 +14,11 @@ import net.minecraft.world.TeleportTarget;
 public class VersionedFabricTeleport {
 
     public static void teleport(AllayEntity allay, ServerPlayerEntity player) {
-        teleport(allay, player, player.getWorld());
+        teleport(allay, player, EntityHelper.getServerWorld(player));
     }
 
     public static void teleport(Entity entity, Entity to, ServerWorld world) {
-        teleport(entity, to.getPos(), world);
+        teleport(entity, EntityHelper.getPos(to), world);
     }
 
     public static void teleport(Entity entity, Vec3d to, ServerWorld world) {

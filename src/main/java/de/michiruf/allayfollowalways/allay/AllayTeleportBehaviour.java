@@ -2,6 +2,7 @@ package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedAllay;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
@@ -52,7 +53,7 @@ public class AllayTeleportBehaviour {
             return false;
 
         // If not in the same world, we want to teleport always
-        if (!WorldComparator.equals(allay.getWorld(), player.getWorld())) {
+        if (!WorldComparator.equals(allay, player)) {
             // To avoid teleporting entities instantly out of the nether after pushing them in,
             // do not teleport when a portal cooldown is set
             if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && VersionedAllay.hasPortalCooldown(allay))
@@ -62,7 +63,7 @@ public class AllayTeleportBehaviour {
         }
 
         // Check the teleportation distance
-        var distance = allay.getPos().subtract(player.getPos()).length();
+        var distance = EntityHelper.getPos(allay).subtract(EntityHelper.getPos(player)).length();
         return distance > AllayFollowAlwaysMod.CONFIG.teleportDistance();
     }
 }
