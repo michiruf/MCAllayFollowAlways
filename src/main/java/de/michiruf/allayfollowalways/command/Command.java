@@ -12,7 +12,6 @@ import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
 import de.michiruf.allayfollowalways.versioned.PermissionHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedMessageSender;
-import net.minecraft.command.permission.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
