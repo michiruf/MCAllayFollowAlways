@@ -21,7 +21,7 @@ public class ChunkTicketHelper {
         //      on every tick, but for now, this should at least work pretty well
     }
 
-    public static ChunkTicketType ticket() {
+    public static ChunkTicketType<ChunkPos> ticket() {
         return ChunkTicketType.create("allayfollowalways", Comparator.comparingLong(ChunkPos::toLong), 1);
     }
 }
