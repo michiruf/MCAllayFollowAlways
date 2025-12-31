@@ -8,10 +8,7 @@ import net.minecraft.server.command.ServerCommandSource;
  */
 public class PermissionHelper {
 
-    public class PermissionHelper {
-
-        public static boolean hasPermission(ServerCommandSource cmd) {
-            return cmd.hasPermissionLevel(4);
-        }
+    public static boolean hasPermission(ServerCommandSource cmd) {
+        return cmd.hasPermissionLevel(4);
     }
 }
