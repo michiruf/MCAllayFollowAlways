@@ -8,11 +8,10 @@ jobs:
     strategy:
       matrix:
         version: [
-          # There is no fabric test api available before 1.19.4
-          # '1.19',
-          # '1.19.1',
-          # '1.19.2',
-          # '1.19.3',
+          '1.19',
+          '1.19.1',
+          '1.19.2',
+          '1.19.3',
           '1.19.4',
           '1.20',
           '1.20.1',
@@ -57,8 +56,8 @@ jobs:
 
       - name: Execute unit tests
         if: success()
-        run: gradle test -Pv=${{ matrix.version }} -x runGameTest
+        run: gradle :${{ matrix.version }}:test -x runGameTest
 
       - name: Execute game tests
         if: success()
-        run: gradle runGameTest -Pv=${{ matrix.version }}
+        run: gradle :${{ matrix.version }}:runGameTest
