@@ -1,6 +1,8 @@
 package de.michiruf.allayfollowalways.testhelper;
 
+import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
+import net.minecraft.text.Text;
 
 public class Assert {
 
@@ -11,26 +13,14 @@ public class Assert {
     }
 
     public static void assertTrue(boolean condition, String message) {
-        context.assertTrue(condition, text(message));
+        if (!condition)
+            throw new GameTestException(Text.literal(message), (int) context.getTick());
     }
 
     public static void assertFalse(boolean condition, String message) {
-        //? if <1.21.5 {
-        /*context.assertTrue(! condition, text(message));
-        *///? } else {
-        context.assertFalse(condition, text(message));
-        //? }
+        if (condition)
+            throw new GameTestException(Text.literal(message), (int) context.getTick());
     }
-
-    //? if <=1.21.5 {
-    /*private static String text(String message) {
-        return message;
-    }
-    *///? } else {
-    private static net.minecraft.text.Text text(String message) {
-        return net.minecraft.text.Text.literal(message);
-    }
-    //? }
 
     public static void complete() {
         context.complete();
