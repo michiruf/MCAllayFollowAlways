@@ -17,9 +17,6 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
-//? if >=1.20.5 {
-import net.minecraft.world.GameMode;
-//? }
 
 @SuppressWarnings("unused")
 public class AllayFollowAlwaysGameTest {
