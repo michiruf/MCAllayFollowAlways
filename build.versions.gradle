@@ -1,29 +1,33 @@
 // Check mappings and fabricApi on: https://modmuss50.me/fabric.html
 // Check fabricApi on versions of: https://github.com/FabricMC/fabric/blob/1.20.4/gradle.properties
-ext.minecraftVersionDefinitions = [
+(binding.hasVariable('settings') ? settings.ext : ext).minecraftVersionDefinitions = [
         '1.19'  : [
                 java           : 17,
                 mappings       : '1.19+build.4',
                 fabric         : '0.14.6',
-                fabricApi      : '0.58.0+1.19'
+                fabricApi      : '0.58.0+1.19',
+                fabricTests    : '0.14.15'
         ],
         '1.19.1': [
                 java           : 17,
                 mappings       : '1.19.1+build.6',
                 fabric         : '0.14.8',
-                fabricApi      : '0.58.5+1.19.1'
+                fabricApi      : '0.58.5+1.19.1',
+                fabricTests    : '0.14.15'
         ],
         '1.19.2': [
                 java           : 17,
                 mappings       : '1.19.2+build.28',
                 fabric         : '0.14.9',
-                fabricApi      : '0.77.0+1.19.2'
+                fabricApi      : '0.77.0+1.19.2',
+                fabricTests    : '0.14.15'
         ],
         '1.19.3': [
                 java           : 17,
                 mappings       : '1.19.3+build.5',
                 fabric         : '0.14.10',
-                fabricApi      : '0.76.1+1.19.3'
+                fabricApi      : '0.76.1+1.19.3',
+                fabricTests    : '0.14.15'
         ],
         '1.19.4': [
                 java           : 17,
@@ -146,13 +150,3 @@ ext.minecraftVersionDefinitions = [
                 fabricApi      : '0.140.2+1.21.11'
         ],
 ]
-
-// Predefine as null to retrieve without checks in build.gradle
-ext.minecraftVersion = null
-
-if (project.hasProperty('v'))
-    ext.minecraftVersion = project.property('v')
-
-def minecraftVersionEnv = System.getenv('minecraft_version') ?: ""
-if (!minecraftVersionEnv.isEmpty())
-    ext.minecraftVersion = minecraftVersionEnv

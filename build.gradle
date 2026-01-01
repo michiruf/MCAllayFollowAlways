@@ -1,29 +1,16 @@
-import de.michiruf.gradle.findversion.FindVersion
-
 plugins {
     id 'java'
     id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
 }
 
-apply from: 'build.allprojects.gradle'
-apply from: 'build.versions.gradle'
+apply from: rootProject.file('build.allprojects.gradle')
+apply from: rootProject.file('build.versions.gradle')
 
-def minecraftVersion = project.minecraftVersion as String ?: '1.21.11'
+// Get version from Stonecutter instead of project property
+def minecraftVersion = stonecutter.current.version
 def minecraftVersionDefinition = ext.minecraftVersionDefinitions[minecraftVersion]
 int targetJavaVersion = (int) minecraftVersionDefinition['java']
 project.version = "${project.version}+${minecraftVersion}"
-
-sourceSets {
-    main.java.srcDirs = [
-            'src/main/java',
-            "src/message/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/message'), minecraftVersion)}",
-            "src/allay/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/allay'), minecraftVersion)}",
-            "src/fabric-teleport/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/fabric-teleport'), minecraftVersion)}",
-            "src/chunkticket/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/chunkticket'), minecraftVersion)}",
-            "src/entity-helper/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/entity-helper'), minecraftVersion)}",
-            "src/permission-helper/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/permission-helper'), minecraftVersion)}"
-    ]
-}
 
 fabricApi {
     configureTests {
@@ -35,9 +22,6 @@ fabricApi {
     }
 }
 
-// Add directory to the gametest source set created by fabricApi
-sourceSets.gametest.java.srcDir "src/gametest/${FindVersion.findClosestLowerOrEqualVersionInDirectory(file('src/gametest'), minecraftVersion)}"
-
 dependencies {
     // Minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraftVersion}"
@@ -47,7 +31,7 @@ dependencies {
 
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-    testImplementation "net.fabricmc:fabric-loader-junit:${minecraftVersionDefinition['fabric']}"
+    testImplementation "net.fabricmc:fabric-loader-junit:${minecraftVersionDefinition['fabricTests'] ?: minecraftVersionDefinition['fabric']}"
 }
 
 processResources {
