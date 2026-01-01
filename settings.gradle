@@ -9,7 +9,7 @@ pluginManagement {
             name = 'KikuGie Snapshots'
             url = 'https://maven.kikugie.dev/snapshots'
         }
-        // TODO
+        // NOTE Multi-Loader URLs
         //maven {url =  "https://maven.architectury.dev" }
         //maven {url =  "https://maven.minecraftforge.net" }
         //maven {url =  "https://maven.neoforged.net/releases/" }
@@ -22,9 +22,6 @@ plugins {
 
     // Stonecutter (code version branching)
     id 'dev.kikugie.stonecutter' version '0.8.1'
-
-    // Stonecraft (multi-loader)
-    //id("gg.meza.stonecraft") version "1.9.+"
 }
 
 // Load version definitions
@@ -38,7 +35,7 @@ stonecutter {
     shared {
         // Dynamically get all versions from definitions map map
         versions(settings.ext.minecraftVersionDefinitions.keySet() as String[])
-        // TODO Multi-Loader variant
+        // NOTE Multi-Loader variant
         // for (v in settings.ext.minecraftVersionDefinitions.keySet()) {
         //     version("$v-fabric", v)
         //     version("$v-fabric", v)
