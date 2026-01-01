@@ -7,6 +7,7 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
+      "de.michiruf.allayfollowalways.ExampleGameTest",
       "de.michiruf.allayfollowalways.AllayFollowAlwaysGameTest"
     ]
   }
