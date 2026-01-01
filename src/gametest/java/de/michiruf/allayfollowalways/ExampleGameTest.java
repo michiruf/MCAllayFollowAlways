@@ -4,7 +4,7 @@ package de.michiruf.allayfollowalways;
 /*import net.minecraft.test.GameTest;
  *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-//?}
+//? }
 import net.minecraft.test.TestContext;
 
 @SuppressWarnings("unused")

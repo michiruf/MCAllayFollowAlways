@@ -14,17 +14,17 @@ public class EntityHelper {
     public static Vec3d getPos(Entity entity) {
         //? if <1.21.9 {
         /*return entity.getPos();
-        *///?} else {
+        *///? } else {
         return entity.getEntityPos();
-        //?}
+        //? }
     }
 
     public static World getWorld(Entity entity) {
         //? if <1.21.9 {
         /*return entity.getWorld();
-        *///?} else {
+        *///? } else {
         return entity.getEntityWorld();
-        //?}
+        //? }
     }
 
     public static ServerWorld getServerWorld(Entity entity) {

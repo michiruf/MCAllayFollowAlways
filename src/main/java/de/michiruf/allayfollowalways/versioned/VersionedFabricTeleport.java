@@ -30,7 +30,7 @@ public class VersionedFabricTeleport {
                 entity.getPitch()
         );
         net.fabricmc.fabric.api.dimension.v1.FabricDimensions.teleport(entity, world, target);
-        *///?} else {
+        *///? } else {
         var target = new TeleportTarget(
                 world,
                 to,
@@ -40,6 +40,6 @@ public class VersionedFabricTeleport {
                 TeleportTarget.NO_OP
         );
         entity.teleportTo(target);
-        //?}
+        //? }
     }
 }

@@ -11,12 +11,12 @@ import de.michiruf.allayfollowalways.versioned.EntityHelper;
 /*import net.minecraft.test.GameTest;
 *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-//?}
+//? }
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.Vec3d;
 //? if >=1.20.5 {
 import net.minecraft.world.GameMode;
-//?}
+//? }
 
 @SuppressWarnings("unused")
 public class AllayFollowAlwaysGameTest {
@@ -75,20 +75,20 @@ public class AllayFollowAlwaysGameTest {
     public void messages(TestContext context) {
         //? if <1.20.5 {
         /*var player = context.createMockCreativePlayer();
-        *///?} else {
+        *///? } else {
         var player = context.createMockPlayer(GameMode.CREATIVE);
-        //?}
+        //? }
 
         //? if <1.21.10 {
         /*context.getWorld().getServer().getCommandManager().executeWithPrefix(
-        *///?} else {
+        *///? } else {
         context.getWorld().getServer().getCommandManager().parseAndExecute(
-        //?}
+        //? }
                 //? if <1.21.2 {
                 /*player.getCommandSource(),
-                *///?} else {
+                *///? } else {
                 player.getCommandSource(context.getWorld()),
-                //?}
+                //? }
                 "/allayfollowalways teleportEnabled"
         );
 

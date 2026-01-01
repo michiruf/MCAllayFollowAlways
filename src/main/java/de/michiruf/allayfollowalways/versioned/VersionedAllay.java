@@ -12,19 +12,19 @@ public class VersionedAllay {
     public static void resetPortalCooldown(AllayEntity allay) {
         //? if <1.19.1 {
         /*allay.resetNetherPortalCooldown();
-        *///?} else {
+        *///? } else {
         allay.resetPortalCooldown();
-        //?}
+        //? }
     }
 
     public static boolean hasPortalCooldown(AllayEntity allay) {
         //? if <1.19.1 {
         /*return allay.hasNetherPortalCooldown();
-        *///?} elif =1.19.1 {
+        *///? } elif =1.19.1 {
         /*return allay.hasPortalCooldownn(); // typo
-        *///?} else {
+        *///? } else {
         return allay.hasPortalCooldown();
-        //?}
+        //? }
     }
 
     public static boolean isDancing(AllayEntity allay) {
@@ -32,16 +32,16 @@ public class VersionedAllay {
 
         //? if <1.19.1 {
         /*return false;
-        *///?} else {
+        *///? } else {
         return allay.isDancing();
-        //?}
+        //? }
     }
 
     public static Entity getLeashHolder(AllayEntity allay) {
         //? if <1.21 {
         /*return allay.getHoldingEntity();
-        *///?} else {
+        *///? } else {
         return allay.getLeashHolder();
-        //?}
+        //? }
     }
 }

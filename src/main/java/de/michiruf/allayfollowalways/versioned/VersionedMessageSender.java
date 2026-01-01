@@ -13,15 +13,15 @@ public class VersionedMessageSender {
     public static void send(CommandContext<ServerCommandSource> context, String text) {
         //? if <1.19.1 {
         /*var source = context.getSource();
-        /*var serverPlayerEntity = source.getPlayer();
-        /*if (serverPlayerEntity != null) {
-        /*    serverPlayerEntity.sendMessage(Text.literal(text));
-        /*} else {
-        /*    // MRU: I am not entirely sure, if sendFeedback or sendError should be the option to go here
-        /*    source.sendFeedback(Text.literal(text), false);
-        /*}
-        *///?} else {
-        context.getSource().sendMessage(Text.literal(text));
-        //?}
+        /^var serverPlayerEntity = source.getPlayer();
+        /^if (serverPlayerEntity != null) {
+        /^    serverPlayerEntity.sendMessage(Text.literal(text));
+        /^} else {
+        /^    // MRU: I am not entirely sure, if sendFeedback or sendError should be the option to go here
+        /^    source.sendFeedback(Text.literal(text), false);
+        /^}
+        //? } else {
+        /^context.getSource().sendMessage(Text.literal(text));
+        ^/*///? }
     }
 }

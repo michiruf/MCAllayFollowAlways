@@ -7,7 +7,7 @@ import net.minecraft.util.math.ChunkPos;
 
 //? if <1.21.5 {
 /*import java.util.Comparator;
-*///?}
+*///? }
 
 public class ChunkTicketHelper {
 
@@ -21,19 +21,13 @@ public class ChunkTicketHelper {
         //      on every tick, but for now, this should at least work pretty well
 
         //? if <1.21.5 {
-        /*cm.addTicket(ticket(), pos, 2, pos);
-        *///?} else {
-        cm.addTicket(ticket(), pos, 2);
-        //?}
+        /*cm.addTicket(
+                ChunkTicketType.create("allayfollowalways", Comparator.comparingLong(ChunkPos::toLong), 1),
+                pos,
+                2,
+                pos);
+        *///? } else {
+        cm.addTicket(ChunkTicketType.UNKNOWN, pos, 2);
+        //? }
     }
-
-    //? if <1.21.5 {
-    /*public static ChunkTicketType ticket() {
-        return ChunkTicketType.create("allayfollowalways", Comparator.comparingLong(ChunkPos::toLong), 1);
-    }
-    *///?} else {
-    public static ChunkTicketType<ChunkPos> ticket() {
-        return ChunkTicketType.UNKNOWN;
-    }
-    //?}
 }

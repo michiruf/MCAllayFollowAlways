@@ -17,19 +17,20 @@ public class Assert {
     public static void assertFalse(boolean condition, String message) {
         //? if <1.21.5 {
         /*context.assertTrue(! condition, text(message));
-        *///?}
-        /*context.assertFalse(condition, text(message));*/
+        *///? } else {
+        context.assertFalse(condition, text(message));
+        //? }
     }
 
     //? if <=1.21.5 {
     /*private static String text(String message) {
         return message;
     }
-    *//*?} else { */
+    *///? } else {
     private static net.minecraft.text.Text text(String message) {
         return net.minecraft.text.Text.literal(message);
     }
-    //?}
+    //? }
 
     public static void complete() {
         context.complete();
