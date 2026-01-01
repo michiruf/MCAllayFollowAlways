@@ -2,9 +2,10 @@ package de.michiruf.allayfollowalways;
 
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
-import de.michiruf.allayfollowalways.testhelper.TestSetup;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 //? if <=1.21.5 {
@@ -13,7 +14,9 @@ import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 //? }
 import net.minecraft.test.TestContext;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 //? if >=1.20.5 {
 import net.minecraft.world.GameMode;
 //? }
@@ -23,6 +26,22 @@ public class AllayFollowAlwaysGameTest {
 
     private FakePlayer player;
     private AllayEntity allay;
+
+    private void createPlayerAndAllay(TestContext context) {
+        player = FakePlayer.get(context.getWorld());
+        player.changeGameMode(GameMode.SURVIVAL);
+
+        // Register player in the entity registry, necessary for lookups with uuid
+        context.getWorld().onPlayerConnected(player);
+
+        allay = context.spawnEntity(EntityType.ALLAY, new BlockPos(0, 1, 0));
+
+        // Teleport player to allay, because the player is not spawned in the test space
+        VersionedFabricTeleport.teleport(player, allay, context.getWorld());
+
+        // Fake that allay got an item from the player
+        allay.getBrain().remember(MemoryModuleType.LIKED_PLAYER, player.getUuid());
+    }
 
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
@@ -40,9 +59,7 @@ public class AllayFollowAlwaysGameTest {
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    var setup = TestSetup.createPlayerAndAllay(context);
-                    player = setup.getLeft();
-                    allay = setup.getRight();
+                    createPlayerAndAllay(context);
                 })
                 .then(() -> {
                     var destinationY = player.getY() + 256;
@@ -65,33 +82,5 @@ public class AllayFollowAlwaysGameTest {
                 })
                 .immediate(Assert::complete)
                 .run();
-    }
-
-    /*? if <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*?} else { */
-    @GameTest
-    /*?} */
-    public void messages(TestContext context) {
-        //? if <1.20.5 {
-        /*var player = context.createMockCreativePlayer();
-        *///? } else {
-        var player = context.createMockPlayer(GameMode.CREATIVE);
-        //? }
-
-        //? if <1.21.10 {
-        /*context.getWorld().getServer().getCommandManager().executeWithPrefix(
-        *///? } else {
-        context.getWorld().getServer().getCommandManager().parseAndExecute(
-        //? }
-                //? if <1.21.2 {
-                /*player.getCommandSource(),
-                *///? } else {
-                player.getCommandSource(context.getWorld()),
-                //? }
-                "/allayfollowalways teleportEnabled"
-        );
-
-        context.complete();
     }
 }

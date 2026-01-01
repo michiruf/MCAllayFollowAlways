@@ -1,3 +1,5 @@
+import de.michiruf.gradle.findversion.FindVersion
+
 plugins {
     id 'java'
     id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
@@ -21,6 +23,9 @@ fabricApi {
         eula = true
     }
 }
+
+// Add directory to the gametest source set created by fabricApi
+sourceSets.gametest.java.srcDir rootProject.file("src/gametest/${FindVersion.findClosestLowerOrEqualVersionInDirectory(rootProject.file('src/gametest'), minecraftVersion)}")
 
 dependencies {
     // Minecraft and fabric
