@@ -78,6 +78,7 @@ public class AllayFollowAlwaysGameTest {
         *///?} else {
         var player = context.createMockPlayer(GameMode.CREATIVE);
         //?}
+
         //? if <1.21.10 {
         /*context.getWorld().getServer().getCommandManager().executeWithPrefix(
         *///?} else {
@@ -90,6 +91,7 @@ public class AllayFollowAlwaysGameTest {
                 //?}
                 "/allayfollowalways teleportEnabled"
         );
+
         context.complete();
     }
 }
