@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways;
+package de.michiruf.allayfollowalways.testhelper;
 
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;

@@ -1,5 +1,8 @@
 package de.michiruf.allayfollowalways;
 
+import de.michiruf.allayfollowalways.testhelper.Assert;
+import de.michiruf.allayfollowalways.testhelper.TestExecutor;
+import de.michiruf.allayfollowalways.testhelper.TestSetup;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.entity.passive.AllayEntity;

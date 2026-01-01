@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways;
+package de.michiruf.allayfollowalways.testhelper;
 
 import net.minecraft.test.TestContext;
 
