@@ -1,5 +1,3 @@
-import de.michiruf.gradle.findversion.FindVersion
-
 plugins {
     id 'java'
     id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
@@ -22,19 +20,6 @@ fabricApi {
         enableClientGameTests = false
         eula = true
     }
-}
-
-// Add directory to the gametest source set created by fabricApi
-// Stonecutter will process these sources and output to build/generated/stonecutter/gametest
-// So to ensure everything will be processed properly, we need to manually trigger the generation and use these sources
-// In theory we should not need to do that, but it seems that otherwise the version directory is not processed
-def gametestVersionDir = FindVersion.findClosestLowerOrEqualVersionInDirectory(rootProject.file('src/gametest'), minecraftVersion)
-sourceSets.gametest.java.srcDirs = [
-    file("build/generated/stonecutter/gametest/java"),
-    file("build/generated/stonecutter/gametest/${gametestVersionDir}")
-]
-tasks.named('compileGametestJava').configure {
-    dependsOn tasks.named('stonecutterGenerateGametest')
 }
 
 dependencies {
