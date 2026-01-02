@@ -10,6 +10,7 @@ apply from: rootProject.file('build.versions.gradle')
 def minecraftVersion = stonecutter.current.version
 def minecraftVersionDefinition = ext.minecraftVersionDefinitions[minecraftVersion]
 int targetJavaVersion = (int) minecraftVersionDefinition['java']
+base.archivesName = rootProject.name
 project.version = "${project.version}+${minecraftVersion}"
 
 fabricApi {
