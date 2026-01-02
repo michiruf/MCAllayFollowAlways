@@ -31,7 +31,7 @@ dependencies {
 
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-    testImplementation "net.fabricmc:fabric-loader-junit:${minecraftVersionDefinition['fabricTests'] ?: minecraftVersionDefinition['fabric']}"
+    testImplementation "net.fabricmc:fabric-loader-junit:${minecraftVersionDefinition['fabric']}"
 }
 
 processResources {
