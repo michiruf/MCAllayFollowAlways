@@ -9,10 +9,6 @@ pluginManagement {
             name = 'KikuGie Snapshots'
             url = 'https://maven.kikugie.dev/snapshots'
         }
-        // NOTE Multi-Loader URLs
-        //maven {url =  "https://maven.architectury.dev" }
-        //maven {url =  "https://maven.minecraftforge.net" }
-        //maven {url =  "https://maven.neoforged.net/releases/" }
     }
 }
 
@@ -35,11 +31,6 @@ stonecutter {
     shared {
         // Dynamically get all versions from definitions map map
         versions(settings.ext.minecraftVersionDefinitions.keySet() as String[])
-        // NOTE Multi-Loader variant
-        // for (v in settings.ext.minecraftVersionDefinitions.keySet()) {
-        //     version("$v-fabric", v)
-        //     version("$v-fabric", v)
-        // }
 
         vcsVersion = "1.21.11"
     }
