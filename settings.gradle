@@ -29,7 +29,7 @@ stonecutter {
     centralScript = "build.gradle"
 
     shared {
-        // Dynamically get all versions from definitions map map
+        // Dynamically get all versions from definitions map
         versions(settings.ext.minecraftVersionDefinitions.keySet() as String[])
 
         vcsVersion = "1.21.11"
