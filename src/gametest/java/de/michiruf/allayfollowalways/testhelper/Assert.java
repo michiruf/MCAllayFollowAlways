@@ -14,12 +14,20 @@ public class Assert {
 
     public static void assertTrue(boolean condition, String message) {
         if (!condition)
-            throw new GameTestException(Text.literal(message), (int) context.getTick());
+            throw createException(message);
     }
 
     public static void assertFalse(boolean condition, String message) {
         if (condition)
-            throw new GameTestException(Text.literal(message), (int) context.getTick());
+            throw createException(message);
+    }
+
+    public static GameTestException createException(String message) {
+        //? if <=1.21.4 {
+        /*return new GameTestException(message);
+        *///? } else {
+        return new GameTestException(Text.literal(message), (int) context.getTick());
+        //? }
     }
 
     public static void complete() {

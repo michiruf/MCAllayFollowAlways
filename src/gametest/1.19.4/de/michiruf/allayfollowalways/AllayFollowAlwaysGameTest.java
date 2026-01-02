@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
-//? if <=1.21.5 {
+//? if <=1.21.4 {
 /*import net.minecraft.test.GameTest;
 *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
