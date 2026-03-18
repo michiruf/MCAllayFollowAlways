@@ -6,6 +6,13 @@ plugins {
 apply from: rootProject.file('build.allprojects.gradle')
 apply from: rootProject.file('build.versions.gradle')
 
+loom {
+    runConfigs.configureEach {
+        ideConfigGenerated = true
+        runDir = "../../run"
+    }
+}
+
 // Get version from Stonecutter instead of project property
 def minecraftVersion = stonecutter.current.version
 def minecraftVersionDefinition = ext.minecraftVersionDefinitions[minecraftVersion]
