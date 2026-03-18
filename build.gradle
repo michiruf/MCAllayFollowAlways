@@ -8,7 +8,7 @@ apply from: rootProject.file('build.versions.gradle')
 
 loom {
     runConfigs.configureEach {
-        ideConfigGenerated = true
+        ideConfigGenerated = stonecutter.current.isActive
         runDir = "../../run"
     }
 }
