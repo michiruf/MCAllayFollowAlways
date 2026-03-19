@@ -1,17 +1,13 @@
 package de.michiruf.allayfollowalways;
 
 //? if >= 1.19.4 {
-import com.mojang.authlib.GameProfile;
+import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.test.GameTestException;
-import net.minecraft.text.Text;
 //? if <=1.21.4 {
 /*import net.minecraft.test.GameTest;
 *///? } else {
@@ -20,40 +16,12 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
-
-import java.util.UUID;
 //? }
 
 @SuppressWarnings("unused")
 public class BehaviourGameTest {
 
     //? if >= 1.19.4 {
-
-    private static void check(TestContext context, boolean condition, String message) {
-        if (!condition) {
-            //? if <=1.21.4 {
-            /*throw new GameTestException(message);
-             *///? } else {
-            throw new GameTestException(Text.literal(message), (int) context.getTick());
-            //? }
-        }
-    }
-
-    private FakePlayer createUniquePlayer(TestContext context) {
-        var profile = new GameProfile(UUID.randomUUID(), "TestPlayer");
-        var player = FakePlayer.get(context.getWorld(), profile);
-        player.changeGameMode(GameMode.SURVIVAL);
-        context.getWorld().onPlayerConnected(player);
-        return player;
-    }
-
-    private AllayEntity createAllayLinkedTo(TestContext context, FakePlayer player) {
-        var allay = context.spawnEntity(EntityType.ALLAY, new BlockPos(0, 1, 0));
-        VersionedFabricTeleport.teleport(player, allay, context.getWorld());
-        allay.getBrain().remember(MemoryModuleType.LIKED_PLAYER, player.getUuid());
-        return allay;
-    }
 
     /**
      * Places a 5x4x5 pool of the given block at the target Y, with a stone floor.
@@ -90,6 +58,7 @@ public class BehaviourGameTest {
     @GameTest(skyAccess = true, maxTicks = 100)
             /*?} */
     public void leashedAllayDoesNotTeleport(TestContext context) {
+        var check = new Assert(context);
         final var holder = new Object() {
             FakePlayer player;
             AllayEntity allay;
@@ -100,12 +69,12 @@ public class BehaviourGameTest {
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = createUniquePlayer(context);
-                    holder.allay = createAllayLinkedTo(context, holder.player);
+                    holder.player = check.createUniquePlayer();
+                    holder.allay = check.createAllayLinkedTo( holder.player);
                 })
                 .then(() -> {
                     holder.allay.attachLeash(holder.player, true);
-                    check(context, holder.allay.isLeashed(), "Allay should be leashed");
+                    check.assertTrue(holder.allay.isLeashed(), "Allay should be leashed");
                 })
                 .then(() -> {
                     // Move player 5 blocks up — above teleportDistance(1) but within leash range(~10)
@@ -114,12 +83,12 @@ public class BehaviourGameTest {
                             context.getWorld());
                 })
                 .then(() -> {
-                    check(context, holder.allay.isLeashed(), "Allay should still be leashed");
+                    check.assertTrue(holder.allay.isLeashed(), "Allay should still be leashed");
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
-                    check(context, distance > 1.0,
+                    check.assertTrue(distance > 1.0,
                             "Leashed allay should NOT teleport despite exceeding teleport distance. Distance: " + distance);
                 })
-                .immediate(context::complete)
+                .immediate(check::complete)
                 .run();
     }
 
@@ -135,6 +104,7 @@ public class BehaviourGameTest {
     @GameTest(skyAccess = true, maxTicks = 100)
             /*?} */
     public void avoidTeleportIntoWater(TestContext context) {
+        var check = new Assert(context);
         final var holder = new Object() {
             FakePlayer player;
             AllayEntity allay;
@@ -146,8 +116,8 @@ public class BehaviourGameTest {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater(true);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = createUniquePlayer(context);
-                    holder.allay = createAllayLinkedTo(context, holder.player);
+                    holder.player = check.createUniquePlayer();
+                    holder.allay = check.createAllayLinkedTo( holder.player);
                 })
                 .then(() -> {
                     var dest = placePool(context, holder.player, 15, Blocks.WATER);
@@ -158,13 +128,13 @@ public class BehaviourGameTest {
                 })
                 .then(() -> {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater(true);
-                    check(context, holder.player.isTouchingWater(),
+                    check.assertTrue(holder.player.isTouchingWater(),
                             "Player should be touching water at " + holder.player.getBlockPos());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
-                    check(context, distance > 10.0,
+                    check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in water. Distance: " + distance);
                 })
-                .immediate(context::complete)
+                .immediate(check::complete)
                 .run();
     }
 
@@ -180,6 +150,7 @@ public class BehaviourGameTest {
     @GameTest(skyAccess = true, maxTicks = 100)
             /*?} */
     public void avoidTeleportIntoLava(TestContext context) {
+        var check = new Assert(context);
         final var holder = new Object() {
             FakePlayer player;
             AllayEntity allay;
@@ -191,8 +162,8 @@ public class BehaviourGameTest {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(true);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = createUniquePlayer(context);
-                    holder.allay = createAllayLinkedTo(context, holder.player);
+                    holder.player = check.createUniquePlayer();
+                    holder.allay = check.createAllayLinkedTo( holder.player);
                 })
                 .then(() -> {
                     var dest = placePool(context, holder.player, 15, Blocks.LAVA);
@@ -202,13 +173,13 @@ public class BehaviourGameTest {
                 })
                 .then(() -> {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(true);
-                    check(context, holder.player.isInLava(),
+                    check.assertTrue(holder.player.isInLava(),
                             "Player should be in lava at " + holder.player.getBlockPos());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
-                    check(context, distance > 10.0,
+                    check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in lava. Distance: " + distance);
                 })
-                .immediate(context::complete)
+                .immediate(check::complete)
                 .run();
     }
 
@@ -224,6 +195,7 @@ public class BehaviourGameTest {
     @GameTest(skyAccess = true, maxTicks = 100)
             /*?} */
     public void avoidTeleportIntoWalls(TestContext context) {
+        var check = new Assert(context);
         final var holder = new Object() {
             FakePlayer player;
             AllayEntity allay;
@@ -234,8 +206,8 @@ public class BehaviourGameTest {
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(true);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = createUniquePlayer(context);
-                    holder.allay = createAllayLinkedTo(context, holder.player);
+                    holder.player = check.createUniquePlayer();
+                    holder.allay = check.createAllayLinkedTo( holder.player);
                 })
                 .then(() -> {
                     // Encase the destination in solid blocks
@@ -260,13 +232,13 @@ public class BehaviourGameTest {
                 .then(() -> {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(true);
                     // isInsideWall() checks the world live — no baseTick() needed
-                    check(context, holder.player.isInsideWall(),
+                    check.assertTrue(holder.player.isInsideWall(),
                             "Player should be inside a wall at " + holder.player.getBlockPos());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
-                    check(context, distance > 10.0,
+                    check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in wall. Distance: " + distance);
                 })
-                .immediate(context::complete)
+                .immediate(check::complete)
                 .run();
     }
 
