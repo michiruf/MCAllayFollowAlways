@@ -4,6 +4,7 @@ package de.michiruf.allayfollowalways;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
+import de.michiruf.allayfollowalways.testhelper.VersionedPlayerTeleport;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.entity.passive.AllayEntity;
@@ -98,7 +99,7 @@ public class AllayFollowAlwaysGameTest {
                 .then(() -> {
                     // Teleport player to the Nether
                     var netherWorld = context.getWorld().getServer().getWorld(World.NETHER);
-                    VersionedFabricTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld);
+                    VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld);
                 })
                 .then(() -> {
                     // Assert allay followed player to the Nether
