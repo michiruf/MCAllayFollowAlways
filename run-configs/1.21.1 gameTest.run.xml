@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":1.21.1:runServer" />
+          <option value=":1.21.1:runGameTest" />
         </list>
       </option>
       <option name="vmOptions" />
