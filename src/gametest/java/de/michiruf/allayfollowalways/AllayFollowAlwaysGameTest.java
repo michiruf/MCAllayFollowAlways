@@ -12,7 +12,7 @@ import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import net.minecraft.world.World;
 //? if <=1.21.4 {
 /*import net.minecraft.test.GameTest;
-*///? } else {
+ *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 //? }
 import net.minecraft.test.TestContext;
@@ -28,11 +28,11 @@ public class AllayFollowAlwaysGameTest {
 
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*? } elif <1.21.5 { */
+     *//*? } elif <1.21.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
-    *//*?} else { */
+     *//*?} else { */
     @GameTest(skyAccess = true)
-    /*?} */
+            /*?} */
     public void teleport(TestContext context) {
         var check = new Assert(context);
         final var holder = new Object() {
@@ -74,11 +74,11 @@ public class AllayFollowAlwaysGameTest {
 
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*? } elif <1.21.5 { */
+     *//*? } elif <1.21.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
-    *//*?} else { */
+     *//*?} else { */
     @GameTest(skyAccess = true)
-    /*?} */
+            /*?} */
     public void teleportCrossDimension(TestContext context) {
         var check = new Assert(context);
         final var holder = new Object() {
@@ -100,6 +100,7 @@ public class AllayFollowAlwaysGameTest {
                     // Teleport player to the Nether
                     var netherWorld = context.getWorld().getServer().getWorld(World.NETHER);
                     VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld);
+                    check.assertTrue(WorldComparator.equals(netherWorld, holder.player), "Player is not in the Nether");
                 })
                 .then(() -> {
                     // Assert allay followed player to the Nether
