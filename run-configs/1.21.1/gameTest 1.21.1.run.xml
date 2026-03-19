@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="1.21.1 server" type="GradleRunConfiguration" factoryName="Gradle" folderName="My Gradle">
+  <configuration default="false" name="gameTest 1.21.1" type="GradleRunConfiguration" factoryName="Gradle" folderName="gameTest">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":1.21.1:runServer" />
+          <option value=":1.21.1:runGameTest" />
         </list>
       </option>
       <option name="vmOptions" />
