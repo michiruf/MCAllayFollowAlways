@@ -1,6 +1,7 @@
 package de.michiruf.allayfollowalways;
 
 //? if >= 1.19.4 {
+import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
@@ -9,6 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
+import net.minecraft.world.World;
 //? if <=1.21.4 {
 /*import net.minecraft.test.GameTest;
 *///? } else {
@@ -82,6 +84,44 @@ public class AllayFollowAlwaysGameTest {
                     var distanceToPlayer = EntityHelper.getPos(allay).distanceTo(EntityHelper.getPos(player));
                     Assert.assertFalse(AllayFollowAlwaysMod.CONFIG.teleportEnabled(), "Teleport enabled");
                     Assert.assertFalse(distanceToPlayer <= 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
+                })
+                .immediate(Assert::complete)
+                .run();
+    }
+
+    /*? if <1.20.5 { */
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
+    *//*? } elif <1.21.5 { */
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
+    *//*?} else { */
+    @GameTest(skyAccess = true)
+    /*?} */
+    public void teleportCrossDimension(TestContext context) {
+        Assert.init(context);
+
+        new TestExecutor(context, 5)
+                .immediate(() -> {
+                    AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
+                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
+                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(false);
+                    AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
+                    AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown(false);
+                    createPlayerAndAllay(context);
+                })
+                .then(() -> {
+                    // Teleport player to the Nether
+                    var netherWorld = context.getWorld().getServer().getWorld(World.NETHER);
+                    VersionedFabricTeleport.teleport(player, new Vec3d(0, 64, 0), netherWorld);
+                })
+                .then(() -> {
+                    // Assert allay followed player to the Nether
+                    Assert.assertTrue(
+                            WorldComparator.equals(allay, player),
+                            "Allay did not follow player to the Nether. Player world: " + EntityHelper.getWorld(player) + ", Allay world: " + EntityHelper.getWorld(allay));
+                    var distanceToPlayer = EntityHelper.getPos(allay).distanceTo(EntityHelper.getPos(player));
+                    Assert.assertTrue(
+                            distanceToPlayer <= 10.0,
+                            "Allay is not close to player in Nether. Distance: " + distanceToPlayer + ", Player: " + player.getBlockPos() + ", Allay: " + allay.getBlockPos());
                 })
                 .immediate(Assert::complete)
                 .run();
