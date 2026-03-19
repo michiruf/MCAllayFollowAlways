@@ -34,7 +34,7 @@ public class BehaviourGameTest {
         if (!condition) {
             //? if <=1.21.4 {
             /*throw new GameTestException(message);
-            *///? } else {
+             *///? } else {
             throw new GameTestException(Text.literal(message), (int) context.getTick());
             //? }
         }
@@ -84,11 +84,11 @@ public class BehaviourGameTest {
      */
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*? } elif <1.21.5 { */
+     *//*? } elif <1.21.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
-    *//*?} else { */
+     *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-    /*?} */
+            /*?} */
     public void leashedAllayDoesNotTeleport(TestContext context) {
         final var holder = new Object() {
             FakePlayer player;
@@ -119,7 +119,7 @@ public class BehaviourGameTest {
                     check(context, distance > 1.0,
                             "Leashed allay should NOT teleport despite exceeding teleport distance. Distance: " + distance);
                 })
-                .immediate(() -> context.complete())
+                .immediate(context::complete)
                 .run();
     }
 
@@ -129,11 +129,11 @@ public class BehaviourGameTest {
      */
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*? } elif <1.21.5 { */
+     *//*? } elif <1.21.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
-    *//*?} else { */
+     *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-    /*?} */
+            /*?} */
     public void avoidTeleportIntoWater(TestContext context) {
         final var holder = new Object() {
             FakePlayer player;
@@ -164,7 +164,7 @@ public class BehaviourGameTest {
                     check(context, distance > 10.0,
                             "Allay should NOT teleport to player in water. Distance: " + distance);
                 })
-                .immediate(() -> context.complete())
+                .immediate(context::complete)
                 .run();
     }
 
@@ -174,11 +174,11 @@ public class BehaviourGameTest {
      */
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*? } elif <1.21.5 { */
+     *//*? } elif <1.21.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
-    *//*?} else { */
+     *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-    /*?} */
+            /*?} */
     public void avoidTeleportIntoLava(TestContext context) {
         final var holder = new Object() {
             FakePlayer player;
@@ -208,7 +208,7 @@ public class BehaviourGameTest {
                     check(context, distance > 10.0,
                             "Allay should NOT teleport to player in lava. Distance: " + distance);
                 })
-                .immediate(() -> context.complete())
+                .immediate(context::complete)
                 .run();
     }
 
@@ -218,11 +218,11 @@ public class BehaviourGameTest {
      */
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
-    *//*? } elif <1.21.5 { */
+     *//*? } elif <1.21.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
-    *//*?} else { */
+     *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-    /*?} */
+            /*?} */
     public void avoidTeleportIntoWalls(TestContext context) {
         final var holder = new Object() {
             FakePlayer player;
@@ -266,7 +266,7 @@ public class BehaviourGameTest {
                     check(context, distance > 10.0,
                             "Allay should NOT teleport to player in wall. Distance: " + distance);
                 })
-                .immediate(() -> context.complete())
+                .immediate(context::complete)
                 .run();
     }
 
