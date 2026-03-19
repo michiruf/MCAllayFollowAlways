@@ -9,7 +9,8 @@
     "fabric-gametest": [
       "de.michiruf.allayfollowalways.ExampleGameTest",
       "de.michiruf.allayfollowalways.AllayFollowAlwaysGameTest",
-      "de.michiruf.allayfollowalways.MessagesGameTest"
+      "de.michiruf.allayfollowalways.MessagesGameTest",
+      "de.michiruf.allayfollowalways.BehaviourGameTest"
     ]
   }
 }
