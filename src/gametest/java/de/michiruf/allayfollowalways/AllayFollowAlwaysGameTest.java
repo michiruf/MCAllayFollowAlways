@@ -69,7 +69,7 @@ public class AllayFollowAlwaysGameTest {
                     check.assertFalse(distanceToPlayer <= 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + holder.player.getBlockPos() + ", Allay: " + holder.allay.getBlockPos());
                 })
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
 
     /*? if <1.20.5 { */
@@ -112,7 +112,7 @@ public class AllayFollowAlwaysGameTest {
                             "Allay is not close to player in Nether. Distance: " + distanceToPlayer + ", Player: " + holder.player.getBlockPos() + ", Allay: " + holder.allay.getBlockPos());
                 })
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
     //? }
 }

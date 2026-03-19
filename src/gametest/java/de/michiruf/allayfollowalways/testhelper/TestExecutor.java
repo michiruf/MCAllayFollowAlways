@@ -49,6 +49,12 @@ public class TestExecutor {
         });
     }
 
+    public void runSync() {
+        synchronized (TestExecutor.class) {
+            this.run();
+        }
+    }
+
     private record Entry(Runnable runnable, int delay) {
     }
 }
