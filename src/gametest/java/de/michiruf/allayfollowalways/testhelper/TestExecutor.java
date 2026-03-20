@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 public class TestExecutor {
 
+    private static boolean isLocked = false;
+    private boolean ownsLock = false;
+
     private final TestContext context;
     private int defaultTickDelay;
     private final ArrayList<Entry> entries = new ArrayList<>();
@@ -43,8 +46,14 @@ public class TestExecutor {
     }
 
     public void run() {
-        if (entries.isEmpty())
+        if (entries.isEmpty()) {
+            if (ownsLock) {
+                ownsLock = false;
+                isLocked = false;
+            }
+
             return;
+        }
 
         var entry = entries.remove(0);
 
@@ -56,6 +65,13 @@ public class TestExecutor {
 
     public void runSync() {
         synchronized (TestExecutor.class) {
+            if (isLocked) {
+                context.waitAndRun(1, this::runSync);
+                return;
+            }
+
+            isLocked = true;
+            ownsLock = true;
             this.run();
         }
     }
