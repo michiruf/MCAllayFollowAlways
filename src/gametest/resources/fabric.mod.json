@@ -8,9 +8,10 @@
   "entrypoints": {
     "fabric-gametest": [
       "de.michiruf.allayfollowalways.ExampleGameTest",
-      "de.michiruf.allayfollowalways.AllayFollowAlwaysGameTest",
       "de.michiruf.allayfollowalways.MessagesGameTest",
-      "de.michiruf.allayfollowalways.BehaviourGameTest"
+      "de.michiruf.allayfollowalways.BehaviourGameTest",
+      "de.michiruf.allayfollowalways.TeleportCrossDimensionsTest",
+      "de.michiruf.allayfollowalways.AllayFollowAlwaysGameTest"
     ]
   }
 }

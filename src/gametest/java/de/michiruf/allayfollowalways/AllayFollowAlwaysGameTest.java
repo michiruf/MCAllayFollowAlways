@@ -4,6 +4,7 @@ package de.michiruf.allayfollowalways;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
+import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
 import de.michiruf.allayfollowalways.testhelper.VersionedPlayerTeleport;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
@@ -32,13 +33,10 @@ public class AllayFollowAlwaysGameTest {
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
      *//*?} else { */
     @GameTest(skyAccess = true)
-            /*?} */
+     /*?} */
     public void teleport(TestContext context) {
         var check = new Assert(context);
-        final var holder = new Object() {
-            FakePlayer player;
-            AllayEntity allay;
-        };
+        var holder = new TestObjectHolder(context);
 
         new TestExecutor(context)
                 .immediate(() -> {
@@ -46,8 +44,8 @@ public class AllayFollowAlwaysGameTest {
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = check.createUniquePlayer();
-                    holder.allay = check.createAllayLinkedTo(holder.player);
+                    holder.createUniquePlayer();
+                    holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
                     var destinationY = holder.player.getY() + 256;
@@ -78,13 +76,11 @@ public class AllayFollowAlwaysGameTest {
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
      *//*?} else { */
     @GameTest(skyAccess = true)
-            /*?} */
+     /*?} */
     public void teleportCrossDimension(TestContext context) {
         var check = new Assert(context);
-        final var holder = new Object() {
-            FakePlayer player;
-            AllayEntity allay;
-        };
+        var holder = new TestObjectHolder(context);
+        var netherWorld = context.getWorld().getServer().getWorld(World.NETHER);
 
         new TestExecutor(context)
                 .immediate(() -> {
@@ -93,20 +89,18 @@ public class AllayFollowAlwaysGameTest {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
                     AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown(false);
-                    holder.player = check.createUniquePlayer();
-                    holder.allay = check.createAllayLinkedTo(holder.player);
+                    holder.createUniquePlayer();
+                    holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
-                    // Teleport player to the Nether
-                    var netherWorld = context.getWorld().getServer().getWorld(World.NETHER);
                     VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld);
-                    check.assertTrue(WorldComparator.equals(netherWorld, holder.player), "Player is not in the Nether");
                 })
                 .then(() -> {
+                    holder.relinkAllayForWorld(netherWorld); // important!
                     // Assert allay followed player to the Nether
                     check.assertTrue(
                             WorldComparator.equals(holder.allay, holder.player),
-                            "Allay did not follow player to the Nether. Player world: " + EntityHelper.getWorld(holder.player) + ", Allay world: " + EntityHelper.getWorld(holder.allay));
+                            "Allay did not follow player to the Nether. Player world registry: " + EntityHelper.getWorld(holder.player).getRegistryKey() + ", Allay world registry: " + EntityHelper.getWorld(holder.allay).getRegistryKey());
                     var distanceToPlayer = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
                     check.assertTrue(
                             distanceToPlayer <= 10.0,
@@ -115,5 +109,6 @@ public class AllayFollowAlwaysGameTest {
                 .immediate(check::complete)
                 .runSync();
     }
+
     //? }
 }

@@ -3,6 +3,7 @@ package de.michiruf.allayfollowalways;
 //? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
+import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
@@ -56,21 +57,18 @@ public class BehaviourGameTest {
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-            /*?} */
+     /*?} */
     public void leashedAllayDoesNotTeleport(TestContext context) {
         var check = new Assert(context);
-        final var holder = new Object() {
-            FakePlayer player;
-            AllayEntity allay;
-        };
+        var holder = new TestObjectHolder(context);
 
         new TestExecutor(context, 3)
                 .immediate(() -> {
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = check.createUniquePlayer();
-                    holder.allay = check.createAllayLinkedTo( holder.player);
+                    holder.createUniquePlayer();
+                    holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
                     holder.allay.attachLeash(holder.player, true);
@@ -102,13 +100,10 @@ public class BehaviourGameTest {
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-            /*?} */
+     /*?} */
     public void avoidTeleportIntoWater(TestContext context) {
         var check = new Assert(context);
-        final var holder = new Object() {
-            FakePlayer player;
-            AllayEntity allay;
-        };
+        var holder = new TestObjectHolder(context);
 
         new TestExecutor(context, 5)
                 .immediate(() -> {
@@ -116,8 +111,8 @@ public class BehaviourGameTest {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater(true);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = check.createUniquePlayer();
-                    holder.allay = check.createAllayLinkedTo( holder.player);
+                    holder.createUniquePlayer();
+                    holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
                     var dest = placePool(context, holder.player, 15, Blocks.WATER);
@@ -151,10 +146,7 @@ public class BehaviourGameTest {
             /*?} */
     public void avoidTeleportIntoLava(TestContext context) {
         var check = new Assert(context);
-        final var holder = new Object() {
-            FakePlayer player;
-            AllayEntity allay;
-        };
+        var holder = new TestObjectHolder(context);
 
         new TestExecutor(context, 5)
                 .immediate(() -> {
@@ -162,8 +154,8 @@ public class BehaviourGameTest {
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(true);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = check.createUniquePlayer();
-                    holder.allay = check.createAllayLinkedTo( holder.player);
+                    holder.createUniquePlayer();
+                    holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
                     var dest = placePool(context, holder.player, 15, Blocks.LAVA);
@@ -180,7 +172,7 @@ public class BehaviourGameTest {
                             "Allay should NOT teleport to player in lava. Distance: " + distance);
                 })
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
 
     /**
@@ -193,21 +185,19 @@ public class BehaviourGameTest {
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100)
-            /*?} */
+     /*?} */
     public void avoidTeleportIntoWalls(TestContext context) {
         var check = new Assert(context);
-        final var holder = new Object() {
-            FakePlayer player;
-            AllayEntity allay;
-        };
+        var holder = new TestObjectHolder(context);
 
         new TestExecutor(context, 5)
                 .immediate(() -> {
+                    AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(true);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    holder.player = check.createUniquePlayer();
-                    holder.allay = check.createAllayLinkedTo( holder.player);
+                    holder.createUniquePlayer();
+                    holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
                     // Encase the destination in solid blocks
@@ -239,7 +229,7 @@ public class BehaviourGameTest {
                             "Allay should NOT teleport to player in wall. Distance: " + distance);
                 })
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
 
     //? }

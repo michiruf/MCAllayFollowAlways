@@ -24,17 +24,22 @@ public class TestExecutor {
         return this;
     }
 
-    public TestExecutor then(Runnable runnable, int delay) {
+    public TestExecutor then(int delay, Runnable runnable) {
         entries.add(new Entry(runnable, delay));
         return this;
     }
 
     public TestExecutor then(Runnable runnable) {
-        return then(runnable, defaultTickDelay);
+        return then(defaultTickDelay, runnable);
     }
 
     public TestExecutor immediate(Runnable runnable) {
-        return then(runnable, 0);
+        return then(0, runnable);
+    }
+
+    public TestExecutor wait(int ticks) {
+        return then(ticks, () -> {
+        });
     }
 
     public void run() {
