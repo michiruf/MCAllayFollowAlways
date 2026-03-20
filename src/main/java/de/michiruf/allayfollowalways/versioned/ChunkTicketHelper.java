@@ -27,6 +27,8 @@ public class ChunkTicketHelper {
                 pos,
                 2,
                 pos);
+        *///? } elif <1.21.9 {
+        /*cm.addTicket(new ChunkTicketType(2L, true, ChunkTicketType.Use.LOADING_AND_SIMULATION), pos, 2);
         *///? } else {
         var flags = ChunkTicketType.SERIALIZE
                 | ChunkTicketType.FOR_LOADING
