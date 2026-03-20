@@ -2,10 +2,7 @@ package de.michiruf.allayfollowalways;
 
 //? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.helper.WorldComparator;
-import de.michiruf.allayfollowalways.testhelper.Assert;
-import de.michiruf.allayfollowalways.testhelper.TestExecutor;
-import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
-import de.michiruf.allayfollowalways.testhelper.VersionedPlayerTeleport;
+import de.michiruf.allayfollowalways.testhelper.*;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.entity.passive.AllayEntity;
@@ -82,7 +79,7 @@ public class AllayFollowAlwaysGameTest {
     public void teleportCrossDimension(TestContext context) {
         var check = new Assert(context);
         var holder = new TestObjectHolder(context);
-        var netherWorld = context.getWorld().getServer().getWorld(World.NETHER);
+        var nether = new TestWorldHandler(context, World.NETHER);
 
         new TestExecutor(context)
                 .immediate(() -> {
@@ -94,10 +91,14 @@ public class AllayFollowAlwaysGameTest {
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
                 })
-                .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld))
-                .then(() -> holder.relinkAllayForWorld(netherWorld)) // important!
+                // Force-load nether chunk so non-player entities get tracked in EntityIndex
+                .then(() -> nether.forceLoadChunk(0, 0))
+                // Teleport player
+                .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), nether.getWorld()))
+                // Relink
+                .then(() -> holder.relinkAllayForWorld(nether.getWorld()))
+                // Assert allay followed player to the Nether
                 .then(() -> {
-                    // Assert allay followed player to the Nether
                     check.assertTrue(
                             WorldComparator.equals(holder.allay, holder.player),
                             "Allay did not follow player to the Nether. Player world registry: " + EntityHelper.getWorld(holder.player).getRegistryKey() + ", Allay world registry: " + EntityHelper.getWorld(holder.allay).getRegistryKey());
