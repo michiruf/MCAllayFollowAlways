@@ -51,8 +51,8 @@ public class TeleportCrossDimensionsTest {
                 // Allay
                 .then(() -> {
                     VersionedFabricTeleport.teleport(holder.allay, new Vec3d(0, 0, 0), netherWorld);
-                    holder.relinkAllayForWorld(netherWorld);
                 })
+                .then(() -> holder.relinkAllayForWorld(netherWorld)) // important!
                 .then(() -> check.assertTrue(
                         EntityHelper.getWorld(holder.allay).getRegistryKey() == World.NETHER,
                         "Allay is not in the Nether. Allay world: " + EntityHelper.getWorld(holder.allay).getRegistryKey()))

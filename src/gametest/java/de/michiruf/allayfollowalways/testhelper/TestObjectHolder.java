@@ -1,5 +1,6 @@
 package de.michiruf.allayfollowalways.testhelper;
 
+//? if >= 1.19.4 {
 import com.mojang.authlib.GameProfile;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 import java.util.UUID;
+//? }
 
 public class TestObjectHolder {
 
@@ -48,6 +50,7 @@ public class TestObjectHolder {
      * After cross-dimension teleport, the original entity is removed and a new one is created
      */
     public void relinkAllayForWorld(ServerWorld world) {
+        new Assert(context).assertTrue(allay.isRemoved(), "Tried to relink a still existing allay");
         allay = (AllayEntity) world.getEntity(allayUuid);
     }
 

@@ -95,8 +95,8 @@ public class AllayFollowAlwaysGameTest {
                 .then(() -> {
                     VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld);
                 })
+                .then(() -> holder.relinkAllayForWorld(netherWorld)) // important!
                 .then(() -> {
-                    holder.relinkAllayForWorld(netherWorld); // important!
                     // Assert allay followed player to the Nether
                     check.assertTrue(
                             WorldComparator.equals(holder.allay, holder.player),
