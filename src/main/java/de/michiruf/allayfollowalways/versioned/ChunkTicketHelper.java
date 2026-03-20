@@ -33,8 +33,7 @@ public class ChunkTicketHelper {
         var flags = ChunkTicketType.SERIALIZE
                 | ChunkTicketType.FOR_LOADING
                 | ChunkTicketType.FOR_SIMULATION
-                | ChunkTicketType.RESETS_IDLE_TIMEOUT
-                | ChunkTicketType.CAN_EXPIRE_BEFORE_LOAD;
+                | ChunkTicketType.RESETS_IDLE_TIMEOUT;
         cm.addTicket(new ChunkTicketType(2L, flags), pos, 2);
         //? }
     }
