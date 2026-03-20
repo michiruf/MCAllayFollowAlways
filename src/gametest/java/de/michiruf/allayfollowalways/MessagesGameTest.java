@@ -1,11 +1,18 @@
 package de.michiruf.allayfollowalways;
 
+import de.michiruf.allayfollowalways.testhelper.TestExecutor;
+
 //? if <=1.21.4 {
 /*import net.minecraft.test.GameTest;
 *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
  //? }
 import net.minecraft.entity.Entity;
+//? if <1.19.3 {
+/*import net.minecraft.server.network.ServerPlayerEntity;
+*///? } else {
+import net.minecraft.server.network.ServerPlayerEntity;
+//? }
 import net.minecraft.test.TestContext;
 //? if >=1.20.5 {
 import net.minecraft.world.GameMode;
@@ -20,31 +27,37 @@ public class MessagesGameTest {
     @GameTest
     /*?} */
     public void messages(TestContext context) {
-        context.killAllEntities();
+        var holder = new Object() {
+            Entity player;
+        };
 
-        //? if <1.19.3 {
-        /*var player = context.createMockPlayer();
-        *///? } elif <1.20.5 {
-        /*var player = context.createMockCreativePlayer();
-        *///? } else {
-        var player = context.createMockPlayer(GameMode.CREATIVE);
-        //? }
-
-        //? if <1.21.10 {
-        /*context.getWorld().getServer().getCommandManager().executeWithPrefix(
-        *///? } else {
-        context.getWorld().getServer().getCommandManager().parseAndExecute(
-        //? }
-                //? if <1.21.2 {
-                /*player.getCommandSource(),
-                *///? } else {
-                player.getCommandSource(context.getWorld()),
-                //? }
-                "/allayfollowalways teleportEnabled"
-        );
-
-        player.remove(Entity.RemovalReason.DISCARDED);
-
-        context.complete();
+        new TestExecutor(context)
+                .immediate(context::killAllEntities)
+                .immediate(() -> {
+                    //? if <1.19.3 {
+                    /*holder.player = context.createMockPlayer();
+                    *///? } elif <1.20.5 {
+                    /*holder.player = context.createMockCreativePlayer();
+                    *///? } else {
+                    holder.player = context.createMockPlayer(GameMode.CREATIVE);
+                    //? }
+                })
+                .then(() -> {
+                    //? if <1.21.10 {
+                    /*context.getWorld().getServer().getCommandManager().executeWithPrefix(
+                    *///? } else {
+                    context.getWorld().getServer().getCommandManager().parseAndExecute(
+                    //? }
+                            //? if <1.21.2 {
+                            /*holder.player.getCommandSource(),
+                            *///? } else {
+                            holder.player.getCommandSource(context.getWorld()),
+                            //? }
+                            "/allayfollowalways teleportEnabled"
+                    );
+                })
+                .immediate(() -> holder.player.remove(Entity.RemovalReason.DISCARDED))
+                .immediate(context::complete)
+                .runSync();
     }
 }

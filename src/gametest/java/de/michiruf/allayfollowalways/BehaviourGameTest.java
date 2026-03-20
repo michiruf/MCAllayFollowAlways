@@ -87,7 +87,7 @@ public class BehaviourGameTest {
                             "Leashed allay should NOT teleport despite exceeding teleport distance. Distance: " + distance);
                 })
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
 
     /**
@@ -130,7 +130,7 @@ public class BehaviourGameTest {
                             "Allay should NOT teleport to player in water. Distance: " + distance);
                 })
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
 
     /**
