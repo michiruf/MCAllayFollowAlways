@@ -25,11 +25,11 @@ public class AllayFollowAlwaysGameTest {
     //? if >= 1.19.4 {
 
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
      *//*?} else { */
-    @GameTest(skyAccess = true)
+    @GameTest(skyAccess = true, maxTicks = 1000)
      /*?} */
     public void teleport(TestContext context) {
         var check = new Assert(context);
@@ -70,11 +70,11 @@ public class AllayFollowAlwaysGameTest {
     }
 
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty")
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
      *//*?} else { */
-    @GameTest(skyAccess = true)
+    @GameTest(skyAccess = true, maxTicks = 1000)
      /*?} */
     public void teleportCrossDimension(TestContext context) {
         var check = new Assert(context);
