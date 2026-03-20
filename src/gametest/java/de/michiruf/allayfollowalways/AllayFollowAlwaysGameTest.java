@@ -66,6 +66,7 @@ public class AllayFollowAlwaysGameTest {
                     check.assertFalse(AllayFollowAlwaysMod.CONFIG.teleportEnabled(), "Teleport enabled");
                     check.assertFalse(distanceToPlayer <= 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + holder.player.getBlockPos() + ", Allay: " + holder.allay.getBlockPos());
                 })
+                .then(holder::cleanup)
                 .immediate(check::complete)
                 .runSync();
     }
@@ -92,9 +93,7 @@ public class AllayFollowAlwaysGameTest {
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
                 })
-                .then(() -> {
-                    VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld);
-                })
+                .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), netherWorld))
                 .then(() -> holder.relinkAllayForWorld(netherWorld)) // important!
                 .then(() -> {
                     // Assert allay followed player to the Nether
@@ -106,6 +105,7 @@ public class AllayFollowAlwaysGameTest {
                             distanceToPlayer <= 10.0,
                             "Allay is not close to player in Nether. Distance: " + distanceToPlayer + ", Player: " + holder.player.getBlockPos() + ", Allay: " + holder.allay.getBlockPos());
                 })
+                .then(holder::cleanup)
                 .immediate(check::complete)
                 .runSync();
     }

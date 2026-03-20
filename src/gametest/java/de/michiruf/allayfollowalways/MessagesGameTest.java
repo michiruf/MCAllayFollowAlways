@@ -5,6 +5,7 @@ package de.michiruf.allayfollowalways;
 *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
  //? }
+import net.minecraft.entity.Entity;
 import net.minecraft.test.TestContext;
 //? if >=1.20.5 {
 import net.minecraft.world.GameMode;
@@ -39,6 +40,8 @@ public class MessagesGameTest {
                 //? }
                 "/allayfollowalways teleportEnabled"
         );
+
+        player.remove(Entity.RemovalReason.DISCARDED);
 
         context.complete();
     }

@@ -171,6 +171,7 @@ public class BehaviourGameTest {
                     check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in lava. Distance: " + distance);
                 })
+                .then(holder::cleanup)
                 .immediate(check::complete)
                 .runSync();
     }

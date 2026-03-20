@@ -49,13 +49,12 @@ public class TeleportCrossDimensionsTest {
                         EntityHelper.getWorld(holder.player).getRegistryKey() == World.NETHER,
                         "Player is not in the Nether. Player world: " + EntityHelper.getWorld(holder.player).getRegistryKey()))
                 // Allay
-                .then(() -> {
-                    VersionedFabricTeleport.teleport(holder.allay, new Vec3d(0, 0, 0), netherWorld);
-                })
+                .then(() -> VersionedFabricTeleport.teleport(holder.allay, new Vec3d(0, 0, 0), netherWorld))
                 .then(() -> holder.relinkAllayForWorld(netherWorld)) // important!
                 .then(() -> check.assertTrue(
                         EntityHelper.getWorld(holder.allay).getRegistryKey() == World.NETHER,
                         "Allay is not in the Nether. Allay world: " + EntityHelper.getWorld(holder.allay).getRegistryKey()))
+                .then(holder::cleanup)
                 .immediate(check::complete)
                 .run();
     }

@@ -46,6 +46,11 @@ public class TestObjectHolder {
         allay.getBrain().remember(MemoryModuleType.LIKED_PLAYER, player.getUuid());
     }
 
+    public void cleanup() {
+//        player.remove(Entity.RemovalReason.DISCARDED);
+//        allay.remove(Entity.RemovalReason.DISCARDED);
+    }
+
     /**
      * After cross-dimension teleport, the original entity is removed and a new one is created
      */
