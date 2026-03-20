@@ -4,6 +4,7 @@ package de.michiruf.allayfollowalways.testhelper;
 import com.mojang.authlib.GameProfile;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
@@ -23,6 +24,7 @@ public class TestObjectHolder {
     public FakePlayer player;
     public AllayEntity allay;
     public UUID allayUuid;
+    private int allayId;
 
     public TestObjectHolder(TestContext context) {
         this.context = context;
@@ -38,6 +40,7 @@ public class TestObjectHolder {
     public void createAllay() {
         allay = context.spawnEntity(EntityType.ALLAY, new BlockPos(0, 1, 0));
         allayUuid = allay.getUuid();
+        allayId = allay.getId();
     }
 
     public void createAllayLinkedToPlayer() {
@@ -47,16 +50,23 @@ public class TestObjectHolder {
     }
 
     public void cleanup() {
-//        player.remove(Entity.RemovalReason.DISCARDED);
-//        allay.remove(Entity.RemovalReason.DISCARDED);
+        player.remove(Entity.RemovalReason.DISCARDED);
+        allay.remove(Entity.RemovalReason.DISCARDED);
     }
 
     /**
      * After cross-dimension teleport, the original entity is removed and a new one is created
      */
     public void relinkAllayForWorld(ServerWorld world) {
-        new Assert(context).assertTrue(allay.isRemoved(), "Tried to relink a still existing allay");
+        var check = new Assert(context);
+        check.assertTrue(allay.isRemoved(), "Tried to relink a still existing allay");
+
         allay = (AllayEntity) world.getEntity(allayUuid);
+
+        if (allay == null)
+            allay = (AllayEntity) world.getEntityById(allayId);
+
+        check.assertTrue(allay != null, "Could not find allay after cross-dimension teleport");
     }
 
     //? }
