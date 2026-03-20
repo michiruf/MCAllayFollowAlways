@@ -38,9 +38,8 @@ public class AllayFollowAlwaysGameTest {
         new TestExecutor(context)
                 .immediate(() -> {
                     context.killAllEntities();
-                    AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
@@ -83,16 +82,14 @@ public class AllayFollowAlwaysGameTest {
 
         new TestExecutor(context)
                 .immediate(() -> {
-                    AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(false);
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
-                    AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown(false);
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
                 })
                 // Force-load nether chunk so non-player entities get tracked in EntityIndex
                 .then(() -> nether.forceLoadChunk(0, 0))
+                .wait(100)
                 // Teleport player
                 .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), nether.getWorld()))
                 // Relink

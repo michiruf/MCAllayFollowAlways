@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.chunk.Chunk;
 
 //? if <1.21.5 {
 /*import java.util.Comparator;
@@ -27,7 +28,12 @@ public class ChunkTicketHelper {
                 2,
                 pos);
         *///? } else {
-        cm.addTicket(ChunkTicketType.UNKNOWN, pos, 2);
+        var flags = ChunkTicketType.SERIALIZE
+                | ChunkTicketType.FOR_LOADING
+                | ChunkTicketType.FOR_SIMULATION
+                | ChunkTicketType.RESETS_IDLE_TIMEOUT
+                | ChunkTicketType.CAN_EXPIRE_BEFORE_LOAD;
+        cm.addTicket(new ChunkTicketType(2L, flags), pos, 2);
         //? }
     }
 }

@@ -2,6 +2,7 @@ package de.michiruf.allayfollowalways;
 
 //? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.testhelper.Assert;
+import de.michiruf.allayfollowalways.testhelper.TestConfigHelper;
 import de.michiruf.allayfollowalways.testhelper.TestWorldHandler;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
@@ -37,6 +38,7 @@ public class TeleportCrossDimensionsTest {
         new TestExecutor(context)
                 .immediate(() -> {
                     context.killAllEntities();
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.teleportEnabled(false);
                     holder.createUniquePlayer();
                     holder.createAllay(); // not linked in this test

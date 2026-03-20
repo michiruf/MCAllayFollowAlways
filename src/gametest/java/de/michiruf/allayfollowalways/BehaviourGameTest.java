@@ -2,6 +2,7 @@ package de.michiruf.allayfollowalways;
 
 //? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.testhelper.Assert;
+import de.michiruf.allayfollowalways.testhelper.TestConfigHelper;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
@@ -64,8 +65,9 @@ public class BehaviourGameTest {
 
         new TestExecutor(context, 3)
                 .immediate(() -> {
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
+
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
@@ -107,9 +109,9 @@ public class BehaviourGameTest {
 
         new TestExecutor(context, 5)
                 .immediate(() -> {
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater(true);
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
@@ -122,7 +124,6 @@ public class BehaviourGameTest {
                     holder.player.baseTick();
                 })
                 .then(() -> {
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater(true);
                     check.assertTrue(holder.player.isTouchingWater(),
                             "Player should be touching water at " + holder.player.getBlockPos());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
@@ -150,9 +151,9 @@ public class BehaviourGameTest {
 
         new TestExecutor(context, 5)
                 .immediate(() -> {
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(true);
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
@@ -164,7 +165,6 @@ public class BehaviourGameTest {
                     holder.player.baseTick();
                 })
                 .then(() -> {
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava(true);
                     check.assertTrue(holder.player.isInLava(),
                             "Player should be in lava at " + holder.player.getBlockPos());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
@@ -194,7 +194,7 @@ public class BehaviourGameTest {
         new TestExecutor(context, 5)
                 .immediate(() -> {
                     context.killAllEntities();
-                    AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
+                    TestConfigHelper.resetToDefaults();
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(true);
                     AllayFollowAlwaysMod.CONFIG.movementSpeedFactor(0);
@@ -222,7 +222,6 @@ public class BehaviourGameTest {
                             context.getWorld());
                 })
                 .then(() -> {
-                    AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(true);
                     // isInsideWall() checks the world live — no baseTick() needed
                     check.assertTrue(holder.player.isInsideWall(),
                             "Player should be inside a wall at " + holder.player.getBlockPos());
