@@ -27,7 +27,7 @@ public class TestWorldHandler {
         var server = context.getWorld().getServer();
         assert server != null;
         world = server.getWorld(worldKey);
-        context.assertTrue(world != null, "World " + worldKey + " not found");
+        new Assert(context).assertTrue(world != null, "World " + worldKey + " not found");
     }
 
     public ServerWorld getWorld() {
