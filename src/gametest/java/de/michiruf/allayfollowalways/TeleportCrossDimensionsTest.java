@@ -39,6 +39,7 @@ public class TeleportCrossDimensionsTest {
 
         new TestExecutor(context)
                 .immediate(() -> {
+                    context.killAllEntities();
                     AllayFollowAlwaysMod.CONFIG.teleportEnabled(false);
                     holder.createUniquePlayer();
                     holder.createAllay(); // not linked in this test

@@ -20,6 +20,8 @@ public class MessagesGameTest {
     @GameTest
     /*?} */
     public void messages(TestContext context) {
+        context.killAllEntities();
+
         //? if <1.19.3 {
         /*var player = context.createMockPlayer();
         *///? } elif <1.20.5 {

@@ -40,6 +40,7 @@ public class AllayFollowAlwaysGameTest {
 
         new TestExecutor(context)
                 .immediate(() -> {
+                    context.killAllEntities();
                     AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(false);

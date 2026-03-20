@@ -193,6 +193,7 @@ public class BehaviourGameTest {
 
         new TestExecutor(context, 5)
                 .immediate(() -> {
+                    context.killAllEntities();
                     AllayFollowAlwaysMod.CONFIG.teleportEnabled(true);
                     AllayFollowAlwaysMod.CONFIG.teleportDistance(1f);
                     AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls(true);
