@@ -3,8 +3,8 @@ package de.michiruf.allayfollowalways.allay;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.versioned.VersionedAllay;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.animal.allay.Allay;
 
 /**
  * @author Michael Ruf
@@ -12,7 +12,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
  */
 public class AllayTeleport {
 
-    public static void handleTeleport(AllayEntity allay) {
+    public static void handleTeleport(Allay allay) {
         // Maybe see FollowOwnerGoal.tryTeleport()
         var o = AllayPlayerLookup.getLikedPlayer(allay);
         if (o.isEmpty())
@@ -21,7 +21,7 @@ public class AllayTeleport {
         handleTeleport(allay, player);
     }
 
-    public static void handleTeleport(AllayEntity allay, ServerPlayerEntity player) {
+    public static void handleTeleport(Allay allay, ServerPlayer player) {
         if (!AllayTeleportBehaviour.canFollowPlayer(allay))
             return;
         if (!AllayTeleportBehaviour.shouldTeleport(allay, player))

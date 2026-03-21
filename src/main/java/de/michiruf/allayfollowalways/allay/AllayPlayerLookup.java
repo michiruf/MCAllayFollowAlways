@@ -2,20 +2,19 @@ package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
-
 import java.util.Optional;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.level.Level;
 
 /**
  * @author Michael Ruf
  * @since 2022-12-01
  */
 public class AllayPlayerLookup {
-    public static Optional<ServerPlayerEntity> getLikedPlayer(AllayEntity allay) {
+    public static Optional<ServerPlayer> getLikedPlayer(Allay allay) {
         // See original functionality in AllayBrain.getLikedPlayer(allay)
         var player = getLikedPlayerForWorld(allay, EntityHelper.getWorld(allay));
         if (player.isEmpty())
@@ -23,25 +22,25 @@ public class AllayPlayerLookup {
         return player;
     }
 
-    public static Optional<ServerPlayerEntity> getLikedPlayerForWorld(AllayEntity allay, World world) {
-        if (world instanceof ServerWorld serverWorld) {
-            var optional = allay.getBrain().getOptionalMemory(MemoryModuleType.LIKED_PLAYER);
+    public static Optional<ServerPlayer> getLikedPlayerForWorld(Allay allay, Level world) {
+        if (world instanceof ServerLevel serverWorld) {
+            var optional = allay.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
             if (optional.isPresent()) {
-                var player = (ServerPlayerEntity) serverWorld.getEntity(optional.get());
-                if (player != null && (player.interactionManager.isSurvivalLike() || player.interactionManager.isCreative()))
+                var player = (ServerPlayer) serverWorld.getEntity(optional.get());
+                if (player != null && (player.gameMode.isSurvival() || player.gameMode.isCreative()))
                     return Optional.of(player);
             }
         }
         return Optional.empty();
     }
 
-    public static Optional<ServerPlayerEntity> getLikedPlayerGlobal(AllayEntity allay) {
+    public static Optional<ServerPlayer> getLikedPlayerGlobal(Allay allay) {
         var server = EntityHelper.getWorld(allay).getServer();
         if (server == null) {
             AllayFollowAlwaysMod.LOGGER.error("Could not get server from allay entity");
             return Optional.empty();
         }
-        var worlds = server.getWorlds();
+        var worlds = server.getAllLevels();
         if (worlds == null) {
             AllayFollowAlwaysMod.LOGGER.error("Could not get worlds from allay entity");
             return Optional.empty();

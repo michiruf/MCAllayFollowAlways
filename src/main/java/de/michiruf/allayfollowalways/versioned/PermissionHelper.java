@@ -1,10 +1,10 @@
 package de.michiruf.allayfollowalways.versioned;
 
 //? if >=1.21.11 {
-import net.minecraft.command.permission.Permission;
-import net.minecraft.command.permission.PermissionLevel;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
 //? }
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
 /**
  * @author Michael Ruf
@@ -12,11 +12,11 @@ import net.minecraft.server.command.ServerCommandSource;
  */
 public class PermissionHelper {
 
-    public static boolean hasPermission(ServerCommandSource cmd) {
+    public static boolean hasPermission(CommandSourceStack cmd) {
         //? if <1.21.11 {
-        /*return cmd.hasPermissionLevel(4);
+        /*return cmd.hasPermission(4);
         *///? } else {
-        return cmd.getPermissions().hasPermission(new Permission.Level(PermissionLevel.OWNERS));
+        return cmd.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.OWNERS));
         //? }
     }
 }

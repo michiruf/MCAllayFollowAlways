@@ -1,9 +1,9 @@
 package de.michiruf.allayfollowalways.mixin;
 
 import de.michiruf.allayfollowalways.allay.AllayLeashBehaviour;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.phys.Vec3;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class EntityMixin {
 
     @Shadow
-    private Vec3d velocity;
+    private Vec3 deltaMovement;
 
-    @Redirect(method = "getVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;velocity:Lnet/minecraft/util/math/Vec3d;", opcode = Opcodes.GETFIELD))
-    private Vec3d getVelocity_applyLeashedFactor(Entity entity) {
-        if (!(entity instanceof AllayEntity allay))
-            return velocity;
+    @Redirect(method = "getDeltaMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/Entity;deltaMovement:Lnet/minecraft/world/phys/Vec3;", opcode = Opcodes.GETFIELD))
+    private Vec3 getVelocity_applyLeashedFactor(Entity entity) {
+        if (!(entity instanceof Allay allay))
+            return deltaMovement;
 
         if (!allay.isLeashed())
-            return velocity;
+            return deltaMovement;
 
-        allay.velocityDirty = true;
-        return AllayLeashBehaviour.calculateLeashedVelocity(allay, velocity);
+        allay.hurtMarked = true;
+        return AllayLeashBehaviour.calculateLeashedVelocity(allay, deltaMovement);
     }
 }

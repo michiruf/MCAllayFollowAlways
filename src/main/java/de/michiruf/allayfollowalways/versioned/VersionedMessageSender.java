@@ -1,8 +1,8 @@
 package de.michiruf.allayfollowalways.versioned;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author Michael Ruf
@@ -10,18 +10,18 @@ import net.minecraft.text.Text;
  */
 public class VersionedMessageSender {
 
-    public static void send(CommandContext<ServerCommandSource> context, String text) {
+    public static void send(CommandContext<CommandSourceStack> context, String text) {
         //? if <1.19.1 {
         /*var source = context.getSource();
         var serverPlayerEntity = source.getPlayer();
         if (serverPlayerEntity != null) {
-            serverPlayerEntity.sendMessage(Text.literal(text));
+            serverPlayerEntity.sendSystemMessage(Component.literal(text));
         } else {
             // MRU: I am not entirely sure, if sendFeedback or sendError should be the option to go here
-            source.sendFeedback(Text.literal(text), false);
+            source.sendSuccess(Component.literal(text), false);
         }
         *///? } else {
-        context.getSource().sendMessage(Text.literal(text));
+        context.getSource().sendSystemMessage(Component.literal(text));
         //? }
     }
 }

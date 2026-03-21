@@ -4,9 +4,9 @@ import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedAllay;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.animal.allay.Allay;
 
 /**
  * @author Michael Ruf
@@ -14,21 +14,21 @@ import net.minecraft.server.network.ServerPlayerEntity;
  */
 public class AllayTeleportBehaviour {
 
-    public static boolean canFollowPlayer(AllayEntity allay) {
+    public static boolean canFollowPlayer(Allay allay) {
         if (allay.isLeashed())
             return false;
 
         // TODO Use log level
         //Main.LOGGER.error(DebugEntity.idString(allay) + " is not leashed");
 
-        var optionalNoteblock = allay.getBrain().getOptionalMemory(MemoryModuleType.LIKED_NOTEBLOCK);
+        var optionalNoteblock = allay.getBrain().getMemory(MemoryModuleType.LIKED_NOTEBLOCK_POSITION);
         if (optionalNoteblock != null && optionalNoteblock.isPresent())
             return false;
 
         return true;
     }
 
-    public static boolean shouldTeleport(AllayEntity allay, ServerPlayerEntity player) {
+    public static boolean shouldTeleport(Allay allay, ServerPlayer player) {
         if (!AllayFollowAlwaysMod.CONFIG.teleportEnabled())
             return false;
 
@@ -41,7 +41,7 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Avoid teleporting into water
-        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater() && player.isTouchingWater())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater() && player.isInWater())
             return false;
 
         // Avoid teleporting into lava
@@ -49,7 +49,7 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Avoid teleporting into walls
-        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls() && player.isInsideWall())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls() && player.isInWall())
             return false;
 
         // If not in the same world, we want to teleport always

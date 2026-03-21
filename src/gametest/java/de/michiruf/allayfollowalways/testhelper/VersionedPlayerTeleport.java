@@ -1,32 +1,32 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 public class VersionedPlayerTeleport {
 
-    public static void teleport(ServerPlayerEntity player, Vec3d to, ServerWorld world) {
+    public static void teleport(ServerPlayer player, Vec3 to, ServerLevel world) {
         //? if <1.21 {
-        /*var target = new net.minecraft.world.TeleportTarget(
+        /*var target = new net.minecraft.world.level.portal.PortalInfo(
                 to,
-                player.getVelocity(),
-                player.getYaw(),
-                player.getPitch()
+                player.getDeltaMovement(),
+                player.getYRot(),
+                player.getXRot()
         );
         net.fabricmc.fabric.api.dimension.v1.FabricDimensions.teleport(player, world, target);
         *///? } elif <1.21.2 {
-        /*var target = new net.minecraft.world.TeleportTarget(
+        /*var target = new net.minecraft.world.level.portal.DimensionTransition(
                 world,
                 to,
-                player.getVelocity(),
-                player.getYaw(),
-                player.getPitch(),
-                net.minecraft.world.TeleportTarget.NO_OP
+                player.getDeltaMovement(),
+                player.getYRot(),
+                player.getXRot(),
+                net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING
         );
-        player.teleportTo(target);
+        player.changeDimension(target);
         *///? } else {
-        player.teleport(world, to.x, to.y, to.z, java.util.Set.of(), player.getYaw(), player.getPitch(), false);
+        player.teleportTo(world, to.x, to.y, to.z, java.util.Set.of(), player.getYRot(), player.getXRot(), false);
         //? }
     }
 }

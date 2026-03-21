@@ -7,30 +7,30 @@ import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
 import de.michiruf.allayfollowalways.testhelper.VersionedPlayerTeleport;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import net.minecraft.world.World;
 //? if <=1.21.4 {
-/*import net.minecraft.test.GameTest;
- *///? } else {
+/*import net.minecraft.gametest.framework.GameTest;
+*///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 //? }
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 
 @SuppressWarnings("unused")
 public class TeleportCrossDimensionsTest {
 
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", timeoutTicks = 100000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", skyAccess = true, timeoutTicks = 100000)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100000)
      /*?} */
-    public void manualTeleportCrossDimension(TestContext context) {
+    public void manualTeleportCrossDimension(GameTestHelper context) {
         var check = new Assert(context);
         var holder = new TestObjectHolder(context);
-        var nether = new TestWorldHandler(context, World.NETHER);
+        var nether = new TestWorldHandler(context, Level.NETHER);
 
         new TestExecutor(context)
                 .immediate(() -> {
@@ -41,19 +41,19 @@ public class TeleportCrossDimensionsTest {
                     holder.createAllay(); // not linked in this test
                 })
                 // Player
-                .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 0, 0), nether.getWorld()))
+                .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3(0, 0, 0), nether.getWorld()))
                 .then(() -> check.assertTrue(
-                        EntityHelper.getWorld(holder.player).getRegistryKey() == World.NETHER,
-                        "Player is not in the Nether. Player world: " + EntityHelper.getWorld(holder.player).getRegistryKey()))
+                        EntityHelper.getWorld(holder.player).dimension() == Level.NETHER,
+                        "Player is not in the Nether. Player world: " + EntityHelper.getWorld(holder.player).dimension()))
                 // Force-load nether chunk so non-player entities get tracked in EntityIndex
                 .then(() -> nether.forceLoadChunk(0, 0))
                 .waitUntil(nether::areAllForcedChunksLoaded)
                 // Allay
-                .then(() -> VersionedFabricTeleport.teleport(holder.allay, new Vec3d(0, 0, 0), nether.getWorld()))
+                .then(() -> VersionedFabricTeleport.teleport(holder.allay, new Vec3(0, 0, 0), nether.getWorld()))
                 .waitUntil(() -> holder.allayRelinked(nether.getWorld()))
                 .then(() -> check.assertTrue(
-                        EntityHelper.getWorld(holder.allay).getRegistryKey() == World.NETHER,
-                        "Allay is not in the Nether. Allay world: " + EntityHelper.getWorld(holder.allay).getRegistryKey()))
+                        EntityHelper.getWorld(holder.allay).dimension() == Level.NETHER,
+                        "Allay is not in the Nether. Allay world: " + EntityHelper.getWorld(holder.allay).dimension()))
                 // Finalize
                 .immediate(nether::cleanup)
                 .immediate(holder::cleanup)

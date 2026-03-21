@@ -1,8 +1,8 @@
 package de.michiruf.allayfollowalways.mixin;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.allay.Allay;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,12 +17,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class LivingEntityMixin {
 
     @Shadow
-    private float movementSpeed;
+    private float speed;
 
-    @Redirect(method = "getMovementSpeed()F", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;movementSpeed:F", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "getSpeed()F", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;speed:F", opcode = Opcodes.GETFIELD))
     private float getMovementSpeed_applyFactor(LivingEntity entity) {
-        if (!(entity instanceof AllayEntity))
-            return movementSpeed;
-        return movementSpeed * AllayFollowAlwaysMod.CONFIG.movementSpeedFactor();
+        if (!(entity instanceof Allay))
+            return speed;
+        return speed * AllayFollowAlwaysMod.CONFIG.movementSpeedFactor();
     }
 }

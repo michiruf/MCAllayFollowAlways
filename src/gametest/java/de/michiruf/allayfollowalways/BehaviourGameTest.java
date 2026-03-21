@@ -6,17 +6,16 @@ import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.core.BlockPos;
 //? if <=1.21.4 {
-/*import net.minecraft.test.GameTest;
+/*import net.minecraft.gametest.framework.GameTest;
 *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 //? }
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
 public class BehaviourGameTest {
@@ -25,22 +24,22 @@ public class BehaviourGameTest {
      * Places a 5x4x5 pool of the given block at the target Y, with a stone floor.
      * Returns the center position inside the pool (for teleporting into).
      */
-    private Vec3d placePool(TestContext context, ServerPlayerEntity player, int yOffset,
-                            net.minecraft.block.Block fluidBlock) {
-        var world = context.getWorld();
+    private Vec3 placePool(GameTestHelper context, ServerPlayer player, int yOffset,
+                            net.minecraft.world.level.block.Block fluidBlock) {
+        var world = context.getLevel();
         var px = (int) player.getX();
         var py = (int) player.getY();
         var pz = (int) player.getZ();
         var poolY = py + yOffset;
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
-                world.setBlockState(new BlockPos(px + dx, poolY - 1, pz + dz), Blocks.STONE.getDefaultState());
-                world.setBlockState(new BlockPos(px + dx, poolY, pz + dz), fluidBlock.getDefaultState());
-                world.setBlockState(new BlockPos(px + dx, poolY + 1, pz + dz), fluidBlock.getDefaultState());
-                world.setBlockState(new BlockPos(px + dx, poolY + 2, pz + dz), fluidBlock.getDefaultState());
+                world.setBlockAndUpdate(new BlockPos(px + dx, poolY - 1, pz + dz), Blocks.STONE.defaultBlockState());
+                world.setBlockAndUpdate(new BlockPos(px + dx, poolY, pz + dz), fluidBlock.defaultBlockState());
+                world.setBlockAndUpdate(new BlockPos(px + dx, poolY + 1, pz + dz), fluidBlock.defaultBlockState());
+                world.setBlockAndUpdate(new BlockPos(px + dx, poolY + 2, pz + dz), fluidBlock.defaultBlockState());
             }
         }
-        return new Vec3d(px + 0.5, poolY + 0.5, pz + 0.5);
+        return new Vec3(px + 0.5, poolY + 0.5, pz + 0.5);
     }
 
     /**
@@ -49,13 +48,13 @@ public class BehaviourGameTest {
      * Player is kept within leash range (~10 blocks) so the leash doesn't break.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", timeoutTicks = 100000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", skyAccess = true, timeoutTicks = 100000)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100000)
      /*?} */
-    public void leashedAllayDoesNotTeleport(TestContext context) {
+    public void leashedAllayDoesNotTeleport(GameTestHelper context) {
         var check = new Assert(context);
         var holder = new TestObjectHolder(context);
 
@@ -69,14 +68,14 @@ public class BehaviourGameTest {
                     holder.createAllayLinkedToPlayer();
                 })
                 .then(() -> {
-                    holder.allay.attachLeash(holder.player, true);
+                    holder.allay.setLeashedTo(holder.player, true);
                     check.assertTrue(holder.allay.isLeashed(), "Allay should be leashed");
                 })
                 .then(() -> {
                     // Move player 5 blocks up — above teleportDistance(1) but within leash range(~10)
                     VersionedFabricTeleport.teleport(holder.player,
-                            new Vec3d(holder.player.getX(), holder.player.getY() + 5, holder.player.getZ()),
-                            context.getWorld());
+                            new Vec3(holder.player.getX(), holder.player.getY() + 5, holder.player.getZ()),
+                            context.getLevel());
                 })
                 .then(() -> {
                     check.assertTrue(holder.allay.isLeashed(), "Allay should still be leashed");
@@ -93,13 +92,13 @@ public class BehaviourGameTest {
      * FakePlayer.tick() is a no-op, so we call baseTick() to update the fluid state.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", timeoutTicks = 100000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", skyAccess = true, timeoutTicks = 100000)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100000)
      /*?} */
-    public void avoidTeleportIntoWater(TestContext context) {
+    public void avoidTeleportIntoWater(GameTestHelper context) {
         var check = new Assert(context);
         var holder = new TestObjectHolder(context);
 
@@ -114,14 +113,14 @@ public class BehaviourGameTest {
                 })
                 .then(() -> {
                     var dest = placePool(context, holder.player, 15, Blocks.WATER);
-                    VersionedFabricTeleport.teleport(holder.player, dest, context.getWorld());
+                    VersionedFabricTeleport.teleport(holder.player, dest, context.getLevel());
                     // FakePlayer.tick() is empty, so baseTick() is never called and fluid state
                     // is never updated. Call it explicitly to update isTouchingWater().
                     holder.player.baseTick();
                 })
                 .then(() -> {
-                    check.assertTrue(holder.player.isTouchingWater(),
-                            "Player should be touching water at " + holder.player.getBlockPos());
+                    check.assertTrue(holder.player.isInWater(),
+                            "Player should be touching water at " + holder.player.blockPosition());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
                     check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in water. Distance: " + distance);
@@ -135,13 +134,13 @@ public class BehaviourGameTest {
      * FakePlayer.tick() is a no-op, so we call baseTick() to update the fluid state.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", timeoutTicks = 100000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", skyAccess = true, timeoutTicks = 100000)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100000)
             /*?} */
-    public void avoidTeleportIntoLava(TestContext context) {
+    public void avoidTeleportIntoLava(GameTestHelper context) {
         var check = new Assert(context);
         var holder = new TestObjectHolder(context);
 
@@ -156,13 +155,13 @@ public class BehaviourGameTest {
                 })
                 .then(() -> {
                     var dest = placePool(context, holder.player, 15, Blocks.LAVA);
-                    VersionedFabricTeleport.teleport(holder.player, dest, context.getWorld());
+                    VersionedFabricTeleport.teleport(holder.player, dest, context.getLevel());
                     // FakePlayer.tick() is empty — call baseTick() to update isInLava()
                     holder.player.baseTick();
                 })
                 .then(() -> {
                     check.assertTrue(holder.player.isInLava(),
-                            "Player should be in lava at " + holder.player.getBlockPos());
+                            "Player should be in lava at " + holder.player.blockPosition());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
                     check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in lava. Distance: " + distance);
@@ -177,13 +176,13 @@ public class BehaviourGameTest {
      * isInsideWall() is a live world check — no baseTick() needed.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", timeoutTicks = 100000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", skyAccess = true, timeoutTicks = 100000)
      *//*?} else { */
     @GameTest(skyAccess = true, maxTicks = 100000)
      /*?} */
-    public void avoidTeleportIntoWalls(TestContext context) {
+    public void avoidTeleportIntoWalls(GameTestHelper context) {
         var check = new Assert(context);
         var holder = new TestObjectHolder(context);
 
@@ -199,7 +198,7 @@ public class BehaviourGameTest {
                 })
                 .then(() -> {
                     // Encase the destination in solid blocks
-                    var world = context.getWorld();
+                    var world = context.getLevel();
                     var px = (int) holder.player.getX();
                     var py = (int) holder.player.getY();
                     var pz = (int) holder.player.getZ();
@@ -207,20 +206,20 @@ public class BehaviourGameTest {
                     for (int dx = -1; dx <= 1; dx++) {
                         for (int dy = 0; dy <= 2; dy++) {
                             for (int dz = -1; dz <= 1; dz++) {
-                                world.setBlockState(new BlockPos(px + dx, wallY + dy, pz + dz),
-                                        Blocks.STONE.getDefaultState());
+                                world.setBlockAndUpdate(new BlockPos(px + dx, wallY + dy, pz + dz),
+                                        Blocks.STONE.defaultBlockState());
                             }
                         }
                     }
                     // Teleport player into the wall
                     VersionedFabricTeleport.teleport(holder.player,
-                            new Vec3d(px + 0.5, wallY, pz + 0.5),
-                            context.getWorld());
+                            new Vec3(px + 0.5, wallY, pz + 0.5),
+                            context.getLevel());
                 })
                 .then(() -> {
                     // isInsideWall() checks the world live — no baseTick() needed
-                    check.assertTrue(holder.player.isInsideWall(),
-                            "Player should be inside a wall at " + holder.player.getBlockPos());
+                    check.assertTrue(holder.player.isInWall(),
+                            "Player should be inside a wall at " + holder.player.blockPosition());
                     var distance = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
                     check.assertTrue(distance > 10.0,
                             "Allay should NOT teleport to player in wall. Distance: " + distance);

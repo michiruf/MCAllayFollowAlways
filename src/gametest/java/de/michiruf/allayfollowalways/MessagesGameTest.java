@@ -3,30 +3,25 @@ package de.michiruf.allayfollowalways;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 
 //? if <=1.21.4 {
-/*import net.minecraft.test.GameTest;
+/*import net.minecraft.gametest.framework.GameTest;
 *///? } else {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
- //? }
-import net.minecraft.entity.Entity;
-//? if <1.19.3 {
-/*import net.minecraft.server.network.ServerPlayerEntity;
-*///? } else {
-import net.minecraft.server.network.ServerPlayerEntity;
 //? }
-import net.minecraft.test.TestContext;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.Entity;
 //? if >=1.20.5 {
-import net.minecraft.world.GameMode;
+import net.minecraft.world.level.GameType;
 //? }
 
 @SuppressWarnings("unused")
 public class MessagesGameTest {
 
     /*? if <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
+    /*@GameTest(template = "fabric-gametest-api-v1:empty", timeoutTicks = 100000)
     *//*?} else { */
     @GameTest(maxTicks = 100000)
     /*?} */
-    public void messages(TestContext context) {
+    public void messages(GameTestHelper context) {
         var holder = new Object() {
             Entity player;
         };
@@ -35,29 +30,29 @@ public class MessagesGameTest {
                 .immediate(context::killAllEntities)
                 .immediate(() -> {
                     //? if <1.19.3 {
-                    /*holder.player = context.createMockPlayer();
+                    /*holder.player = context.makeMockPlayer();
                     *///? } elif <1.20.5 {
-                    /*holder.player = context.createMockCreativePlayer();
+                    /*holder.player = context.makeMockPlayer();
                     *///? } else {
-                    holder.player = context.createMockPlayer(GameMode.CREATIVE);
+                    holder.player = context.makeMockPlayer(GameType.CREATIVE);
                     //? }
                 })
                 .then(() -> {
                     //? if <1.21.10 {
-                    /*context.getWorld().getServer().getCommandManager().executeWithPrefix(
+                    /*context.getLevel().getServer().getCommands().performPrefixedCommand(
                     *///? } else {
-                    context.getWorld().getServer().getCommandManager().parseAndExecute(
+                    context.getLevel().getServer().getCommands().performPrefixedCommand(
                     //? }
                             //? if <1.21.2 {
-                            /*holder.player.getCommandSource(),
+                            /*holder.player.createCommandSourceStack(),
                             *///? } else {
-                            holder.player.getCommandSource(context.getWorld()),
+                            holder.player.createCommandSourceStackForNameResolution(context.getLevel()),
                             //? }
                             "/allayfollowalways teleportEnabled"
                     );
                 })
                 .immediate(() -> holder.player.remove(Entity.RemovalReason.DISCARDED))
-                .immediate(context::complete)
+                .immediate(context::succeed)
                 .runSync();
     }
 }

@@ -1,7 +1,7 @@
 package de.michiruf.allayfollowalways.helper;
 
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 /**
  * @author Michael Ruf
@@ -14,6 +14,6 @@ public class DebugEntity {
     }
 
     public static String idString(Entity entity) {
-        return entity.getType().getName().getString() + " '" + entity.getName().getString() + "' [" + EntityHelper.getWorld(entity).getDimensionEntry().value().toString() + "]";
+        return entity.getType().getDescription().getString() + " '" + entity.getName().getString() + "' [" + EntityHelper.getWorld(entity).dimensionTypeRegistration().value() + "]";
     }
 }

@@ -1,7 +1,7 @@
 package de.michiruf.allayfollowalways.versioned;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.allay.Allay;
 
 /**
  * @author Michael Ruf
@@ -9,25 +9,15 @@ import net.minecraft.entity.passive.AllayEntity;
  */
 public class VersionedAllay {
 
-    public static void resetPortalCooldown(AllayEntity allay) {
-        //? if <1.19.1 {
-        /*allay.resetNetherPortalCooldown();
-        *///? } else {
-        allay.resetPortalCooldown();
-        //? }
+    public static void resetPortalCooldown(Allay allay) {
+        allay.setPortalCooldown();
     }
 
-    public static boolean hasPortalCooldown(AllayEntity allay) {
-        //? if <1.19.1 {
-        /*return allay.hasNetherPortalCooldown();
-        *///? } elif =1.19.1 {
-        /*return allay.hasPortalCooldownn(); // typo
-        *///? } else {
-        return allay.hasPortalCooldown();
-        //? }
+    public static boolean hasPortalCooldown(Allay allay) {
+        return allay.isOnPortalCooldown();
     }
 
-    public static boolean isDancing(AllayEntity allay) {
+    public static boolean isDancing(Allay allay) {
         // In MC 1.19, allays cannot yet dance nor being duplicated
 
         //? if <1.19.1 {
@@ -37,11 +27,7 @@ public class VersionedAllay {
         //? }
     }
 
-    public static Entity getLeashHolder(AllayEntity allay) {
-        //? if <1.21 {
-        /*return allay.getHoldingEntity();
-        *///? } else {
+    public static Entity getLeashHolder(Allay allay) {
         return allay.getLeashHolder();
-        //? }
     }
 }

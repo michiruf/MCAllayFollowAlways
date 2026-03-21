@@ -1,11 +1,10 @@
 package de.michiruf.allayfollowalways.versioned;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.TeleportTarget;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * @author Michael Ruf
@@ -13,33 +12,43 @@ import net.minecraft.world.TeleportTarget;
  */
 public class VersionedFabricTeleport {
 
-    public static void teleport(AllayEntity allay, ServerPlayerEntity player) {
+    public static void teleport(Allay allay, ServerPlayer player) {
         teleport(allay, player, EntityHelper.getServerWorld(player));
     }
 
-    public static void teleport(Entity entity, Entity to, ServerWorld world) {
+    public static void teleport(Entity entity, Entity to, ServerLevel world) {
         teleport(entity, EntityHelper.getPos(to), world);
     }
 
-    public static void teleport(Entity entity, Vec3d to, ServerWorld world) {
+    public static void teleport(Entity entity, Vec3 to, ServerLevel world) {
         //? if <1.21 {
-        /*var target = new TeleportTarget(
+        /*var target = new net.minecraft.world.level.portal.PortalInfo(
                 to,
-                entity.getVelocity(),
-                entity.getYaw(),
-                entity.getPitch()
+                entity.getDeltaMovement(),
+                entity.getYRot(),
+                entity.getXRot()
         );
         net.fabricmc.fabric.api.dimension.v1.FabricDimensions.teleport(entity, world, target);
-        *///? } else {
-        var target = new TeleportTarget(
+        *///? } elif <1.21.2 {
+        /*var target = new net.minecraft.world.level.portal.DimensionTransition(
                 world,
                 to,
-                entity.getVelocity(),
-                entity.getYaw(),
-                entity.getPitch(),
-                TeleportTarget.NO_OP
+                entity.getDeltaMovement(),
+                entity.getYRot(),
+                entity.getXRot(),
+                net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING
         );
-        entity.teleportTo(target);
+        entity.changeDimension(target);
+        *///? } else {
+        var target = new net.minecraft.world.level.portal.TeleportTransition(
+                world,
+                to,
+                entity.getDeltaMovement(),
+                entity.getYRot(),
+                entity.getXRot(),
+                net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING
+        );
+        entity.teleport(target);
         //? }
     }
 }

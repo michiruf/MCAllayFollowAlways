@@ -1,41 +1,36 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-//? if <1.19.3 {
-/*import net.minecraft.util.registry.RegistryKey;
-*///? } else {
-import net.minecraft.registry.RegistryKey;
-//? }
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 
 public class TestWorldHandler {
 
-    private final ServerWorld world;
+    private final ServerLevel world;
     private final List<ChunkPos> forcedChunks = new ArrayList<>();
 
     /**
-     * @see World#OVERWORLD
-     * @see World#NETHER
-     * @see World#END
+     * @see Level#OVERWORLD
+     * @see Level#NETHER
+     * @see Level#END
      */
-    public TestWorldHandler(TestContext context, RegistryKey<World> worldKey) {
-        var server = context.getWorld().getServer();
+    public TestWorldHandler(GameTestHelper context, ResourceKey<Level> worldKey) {
+        var server = context.getLevel().getServer();
 
         if (server == null)
             throw new RuntimeException("Server is null");
 
-        world = server.getWorld(worldKey);
+        world = server.getLevel(worldKey);
 
         new Assert(context).assertTrue(world != null, "World " + worldKey + " not found");
     }
 
-    public ServerWorld getWorld() {
+    public ServerLevel getWorld() {
         // This cannot happen, but helps the IDE
         if(world == null)
             throw new RuntimeException("World is null");
@@ -59,14 +54,14 @@ public class TestWorldHandler {
      */
     public boolean areAllForcedChunksLoaded() {
         for (var pos : forcedChunks) {
-            if (!world.getChunkManager().isChunkLoaded(pos.x, pos.z)) {
+            if (!world.getChunkSource().hasChunk(pos.x, pos.z)) {
                 return false;
             }
 
             //? if <1.21.5 {
-            /*if (!world.shouldTick(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            /*if (!world.isNaturalSpawningAllowed(new BlockPos(pos.getMinBlockX(), 0, pos.getMinBlockZ()))) {
             *///? } else {
-            if (!world.canSpawnEntitiesAt(pos)) {
+            if (!world.canSpawnEntitiesInChunk(pos)) {
             //? }
                 return false;
             }
@@ -75,9 +70,9 @@ public class TestWorldHandler {
             // sufficient in theory, without this second check entity lookups rarely fail on CI due
             // to a timing gap between the chunk becoming ticking and entity registration completing.
             //? if <1.21.5 {
-            /*if (!world.shouldTickEntity(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            /*if (!world.isPositionEntityTicking(new BlockPos(pos.getMinBlockX(), 0, pos.getMinBlockZ()))) {
             *///? } else {
-            if (!world.shouldTickEntityAt(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            if (!world.isPositionEntityTicking(new BlockPos(pos.getMinBlockX(), 0, pos.getMinBlockZ()))) {
             //? }
                 return false;
             }
