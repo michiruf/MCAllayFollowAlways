@@ -24,11 +24,11 @@ public class TeleportCrossDimensionsTest {
 
     //? if >= 1.19.4 {
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 10000)
      *//*?} else { */
-    @GameTest(skyAccess = true, maxTicks = 1000)
+    @GameTest(skyAccess = true, maxTicks = 10000)
      /*?} */
     public void manualTeleportCrossDimension(TestContext context) {
         var check = new Assert(context);

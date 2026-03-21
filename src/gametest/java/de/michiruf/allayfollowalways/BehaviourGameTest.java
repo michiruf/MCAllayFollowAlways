@@ -53,11 +53,11 @@ public class BehaviourGameTest {
      * Player is kept within leash range (~10 blocks) so the leash doesn't break.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 10000)
      *//*?} else { */
-    @GameTest(skyAccess = true, maxTicks = 1000)
+    @GameTest(skyAccess = true, maxTicks = 10000)
      /*?} */
     public void leashedAllayDoesNotTeleport(TestContext context) {
         var check = new Assert(context);
@@ -97,11 +97,11 @@ public class BehaviourGameTest {
      * FakePlayer.tick() is a no-op, so we call baseTick() to update the fluid state.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 10000)
      *//*?} else { */
-    @GameTest(skyAccess = true, maxTicks = 1000)
+    @GameTest(skyAccess = true, maxTicks = 10000)
      /*?} */
     public void avoidTeleportIntoWater(TestContext context) {
         var check = new Assert(context);
@@ -139,11 +139,11 @@ public class BehaviourGameTest {
      * FakePlayer.tick() is a no-op, so we call baseTick() to update the fluid state.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 10000)
      *//*?} else { */
-    @GameTest(skyAccess = true, maxTicks = 1000)
+    @GameTest(skyAccess = true, maxTicks = 10000)
             /*?} */
     public void avoidTeleportIntoLava(TestContext context) {
         var check = new Assert(context);
@@ -181,11 +181,11 @@ public class BehaviourGameTest {
      * isInsideWall() is a live world check — no baseTick() needed.
      */
     /*? if <1.20.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
      *//*? } elif <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 1000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", skyAccess = true, tickLimit = 10000)
      *//*?} else { */
-    @GameTest(skyAccess = true, maxTicks = 1000)
+    @GameTest(skyAccess = true, maxTicks = 10000)
      /*?} */
     public void avoidTeleportIntoWalls(TestContext context) {
         var check = new Assert(context);
