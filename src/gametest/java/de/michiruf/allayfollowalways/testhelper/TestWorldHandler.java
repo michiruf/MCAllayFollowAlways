@@ -71,6 +71,9 @@ public class TestWorldHandler {
                 return false;
             }
 
+            // Additionally checks simulation distance tracking. While the above check should be
+            // sufficient in theory, without this second check entity lookups rarely fail on CI due
+            // to a timing gap between the chunk becoming ticking and entity registration completing.
             //? if <1.21.5 {
             /*if (!world.shouldTickEntity(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
             *///? } else {
