@@ -1,10 +1,8 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.test.TestContext;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class TestExecutor {
@@ -14,7 +12,7 @@ public class TestExecutor {
 
     private final TestContext context;
     private int defaultTickDelay;
-    private final ArrayList<Entry> entries = new ArrayList<>();
+    private final ArrayList<Step> entries = new ArrayList<>();
 
     public TestExecutor(TestContext context) {
         this(context, 1);
@@ -31,7 +29,7 @@ public class TestExecutor {
     }
 
     public TestExecutor then(int delay, Runnable runnable) {
-        entries.add(new Entry(runnable, delay));
+        entries.add(new DelayedStep(runnable, delay));
         return this;
     }
 
@@ -49,22 +47,12 @@ public class TestExecutor {
     }
 
     public TestExecutor waitUntil(int delay, Supplier<Boolean> condition) {
-        return then(delay, () -> {
-            var holder = new Object() {
-                boolean condition;
-            };
-
-            do {
-                new TestExecutor(context)
-                        .wait(1)
-                        .immediate((() -> holder.condition = condition.get()))
-                        .run();
-            } while (holder.condition);
-        });
+        return wait(delay).waitUntil(condition);
     }
 
     public TestExecutor waitUntil(Supplier<Boolean> condition) {
-        return waitUntil(0, condition);
+        entries.add(new WaitUntilStep(condition));
+        return this;
     }
 
     public void run() {
@@ -73,16 +61,11 @@ public class TestExecutor {
                 ownsLock = false;
                 isLocked = false;
             }
-
             return;
         }
 
         var entry = entries.remove(0);
-
-        context.waitAndRun(entry.delay, () -> {
-            entry.runnable.run();
-            run();
-        });
+        entry.schedule(context, this::run);
     }
 
     public void runSync() {
@@ -98,6 +81,30 @@ public class TestExecutor {
         }
     }
 
-    private record Entry(Runnable runnable, int delay) {
+    private interface Step {
+        void schedule(TestContext context, Runnable next);
+    }
+
+    private record DelayedStep(Runnable runnable, int delay) implements Step {
+        @Override
+        public void schedule(TestContext context, Runnable next) {
+            context.waitAndRun(delay, () -> {
+                runnable.run();
+                next.run();
+            });
+        }
+    }
+
+    private record WaitUntilStep(Supplier<Boolean> condition) implements Step {
+        @Override
+        public void schedule(TestContext context, Runnable next) {
+            context.waitAndRun(1, () -> {
+                if (condition.get()) {
+                    next.run();
+                } else {
+                    schedule(context, next);
+                }
+            });
+        }
     }
 }
