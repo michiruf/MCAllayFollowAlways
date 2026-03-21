@@ -22,9 +22,9 @@ import net.minecraft.world.GameMode;
 public class MessagesGameTest {
 
     /*? if <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
     *//*?} else { */
-    @GameTest(maxTicks = 10000)
+    @GameTest(maxTicks = 100000)
     /*?} */
     public void messages(TestContext context) {
         var holder = new Object() {

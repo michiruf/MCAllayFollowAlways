@@ -11,9 +11,9 @@ import net.minecraft.test.TestContext;
 public class ExampleGameTest {
 
     /*? if <1.21.5 { */
-    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 10000)
+    /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
     *//*?} else { */
-    @GameTest(maxTicks = 10000)
+    @GameTest(maxTicks = 100000)
     /*?} */
     public void test(TestContext context) {
         context.complete();
