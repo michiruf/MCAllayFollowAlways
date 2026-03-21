@@ -50,6 +50,7 @@ public class TeleportCrossDimensionsTest {
                         "Player is not in the Nether. Player world: " + EntityHelper.getWorld(holder.player).getRegistryKey()))
                 // Force-load nether chunk so non-player entities get tracked in EntityIndex
                 .then(() -> nether.forceLoadChunk(0, 0))
+                .wait(200) // necessary only for some version
                 // Allay
                 .then(() -> VersionedFabricTeleport.teleport(holder.allay, new Vec3d(0, 0, 0), nether.getWorld()))
                 .then(() -> holder.relinkAllayForWorld(nether.getWorld()))
