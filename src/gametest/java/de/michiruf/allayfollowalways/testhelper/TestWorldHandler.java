@@ -4,6 +4,7 @@ package de.michiruf.allayfollowalways.testhelper;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
@@ -48,13 +49,24 @@ public class TestWorldHandler {
         forcedChunks.add(new ChunkPos(chunkX, chunkZ));
     }
 
+    /**
+     * Checks that all forced chunks have reached entity-ticking level,
+     * meaning non-player entities in them will be tracked in the EntityIndex.
+     */
     public boolean areAllForcedChunksLoaded() {
         for (var pos : forcedChunks) {
             if (!world.getChunkManager().isChunkLoaded(pos.x, pos.z)) {
                 return false;
             }
+            //? if <1.21.5 {
+            /*if (!world.shouldTickEntity(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            *///? } else {
+            if (!world.shouldTickEntityAt(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            //? }
+                return false;
+            }
         }
-        return !forcedChunks.isEmpty();
+        return true;
     }
 
     public void cleanup() {

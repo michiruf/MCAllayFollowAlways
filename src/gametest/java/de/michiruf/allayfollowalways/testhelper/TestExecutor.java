@@ -57,15 +57,19 @@ public class TestExecutor {
 
     public void run() {
         if (entries.isEmpty()) {
-            if (ownsLock) {
-                ownsLock = false;
-                isLocked = false;
-            }
+            releaseLock();
             return;
         }
 
         var entry = entries.remove(0);
-        entry.schedule(context, this::run);
+        entry.schedule(context, this::run, this::releaseLock);
+    }
+
+    private void releaseLock() {
+        if (ownsLock) {
+            ownsLock = false;
+            isLocked = false;
+        }
     }
 
     public void runSync() {
@@ -82,14 +86,19 @@ public class TestExecutor {
     }
 
     private interface Step {
-        void schedule(TestContext context, Runnable next);
+        void schedule(TestContext context, Runnable next, Runnable onError);
     }
 
     private record DelayedStep(Runnable runnable, int delay) implements Step {
         @Override
-        public void schedule(TestContext context, Runnable next) {
+        public void schedule(TestContext context, Runnable next, Runnable onError) {
             context.waitAndRun(delay, () -> {
-                runnable.run();
+                try {
+                    runnable.run();
+                } catch (Throwable t) {
+                    onError.run();
+                    throw t;
+                }
                 next.run();
             });
         }
@@ -97,12 +106,17 @@ public class TestExecutor {
 
     private record WaitUntilStep(Supplier<Boolean> condition) implements Step {
         @Override
-        public void schedule(TestContext context, Runnable next) {
+        public void schedule(TestContext context, Runnable next, Runnable onError) {
             context.waitAndRun(1, () -> {
-                if (condition.get()) {
-                    next.run();
-                } else {
-                    schedule(context, next);
+                try {
+                    if (condition.get()) {
+                        next.run();
+                    } else {
+                        schedule(context, next, onError);
+                    }
+                } catch (Throwable t) {
+                    onError.run();
+                    throw t;
                 }
             });
         }
