@@ -60,7 +60,7 @@ public class TeleportCrossDimensionsTest {
                 .immediate(nether::cleanup)
                 .immediate(holder::cleanup)
                 .immediate(check::complete)
-                .run();
+                .runSync();
     }
 
     //? }
