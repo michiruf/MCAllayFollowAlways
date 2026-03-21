@@ -2,9 +2,8 @@ package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
-import de.michiruf.allayfollowalways.helper.MyMathHelper;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import de.michiruf.allayfollowalways.versioned.VersionedAllay;
+import de.michiruf.allayfollowalways.helper.MathHelper;
+import de.michiruf.allayfollowalways.helper.EntityHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 public class AllayLeashBehaviour {
 
     public static boolean shouldFollowLeash(Allay allay) {
-        var holdingEntity = VersionedAllay.getLeashHolder(allay);
+        var holdingEntity = allay.getLeashHolder();
         if (holdingEntity == null)
             return false;
 
@@ -30,7 +29,7 @@ public class AllayLeashBehaviour {
     }
 
     public static Vec3 calculateLeashedVelocity(Allay allay, Vec3 velocity) {
-        var holdingEntity = VersionedAllay.getLeashHolder(allay);
+        var holdingEntity = allay.getLeashHolder();
         if (holdingEntity == null)
             return velocity;
 
@@ -50,7 +49,7 @@ public class AllayLeashBehaviour {
         if (allayVelocity.lengthSqr() <= 1.0E-4)
             return 1;
 
-        var allayToEntity = EntityHelper.getPos(holdingEntity).subtract(EntityHelper.getPos(allay));
+        var allayToEntity = holdingEntity.position().subtract(allay.position());
         var distance = allayToEntity.length();
         var r = Mth.inverseLerp(
                 distance,
@@ -62,7 +61,7 @@ public class AllayLeashBehaviour {
             return 1;
 
         // Check if the allay is moving towards the center
-        var angle = MyMathHelper.angleBetweenDeg(allayVelocity, allayToEntity, false);
+        var angle = MathHelper.angleBetweenDeg(allayVelocity, allayToEntity, false);
         if (angle <= AllayFollowAlwaysMod.CONFIG.leashSlowDownDegree()) {
             return 1;
         }

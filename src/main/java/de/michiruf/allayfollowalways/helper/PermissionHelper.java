@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways.versioned;
+package de.michiruf.allayfollowalways.helper;
 
 //? if >=1.21.11 {
 import net.minecraft.server.permissions.Permission;

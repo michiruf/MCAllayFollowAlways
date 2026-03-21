@@ -1,8 +1,8 @@
 package de.michiruf.allayfollowalways.testhelper;
 
 import com.mojang.authlib.GameProfile;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
+import de.michiruf.allayfollowalways.helper.EntityHelper;
+import de.michiruf.allayfollowalways.helper.Teleport;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -40,7 +40,7 @@ public class TestObjectHolder {
 
     public void createAllayLinkedToPlayer() {
         createAllay();
-        VersionedFabricTeleport.teleport(player, allay, context.getLevel());
+        Teleport.teleport(player, allay, context.getLevel());
         allay.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, player.getUUID());
     }
 
@@ -58,7 +58,7 @@ public class TestObjectHolder {
         // Old allay first must have been removed
         // In some versions, the entity is moved directly without being recreated,
         // so we also check if the allay is already in the target world
-        if (!allay.isRemoved() && EntityHelper.getWorld(allay) != world) {
+        if (!allay.isRemoved() && EntityHelper.getLevel(allay) != world) {
             return false;
         }
 

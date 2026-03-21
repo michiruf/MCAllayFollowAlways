@@ -1,9 +1,8 @@
-package de.michiruf.allayfollowalways.versioned;
+package de.michiruf.allayfollowalways.helper;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * @author Michael Ruf
@@ -11,11 +10,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public class EntityHelper {
 
-    public static Vec3 getPos(Entity entity) {
-        return entity.position();
-    }
-
-    public static Level getWorld(Entity entity) {
+    public static Level getLevel(Entity entity) {
         //? if <1.20 {
         /*return entity.getLevel();
         *///? } else {
@@ -23,7 +18,7 @@ public class EntityHelper {
         //? }
     }
 
-    public static ServerLevel getServerWorld(Entity entity) {
-        return (ServerLevel) getWorld(entity);
+    public static ServerLevel getServerLevel(Entity entity) {
+        return (ServerLevel) getLevel(entity);
     }
 }

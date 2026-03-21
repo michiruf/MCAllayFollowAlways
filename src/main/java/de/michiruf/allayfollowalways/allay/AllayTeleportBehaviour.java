@@ -2,8 +2,8 @@ package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import de.michiruf.allayfollowalways.versioned.VersionedAllay;
+import de.michiruf.allayfollowalways.helper.EntityHelper;
+import de.michiruf.allayfollowalways.helper.Teleport;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.allay.Allay;
@@ -14,15 +14,34 @@ import net.minecraft.world.entity.animal.allay.Allay;
  */
 public class AllayTeleportBehaviour {
 
+    public static void handleTeleport(Allay allay) {
+        var o = AllayPlayerLookup.getLikedPlayer(allay);
+
+        if (o.isEmpty())
+            return;
+
+        handleTeleport(allay, o.get());
+    }
+
+    public static void handleTeleport(Allay allay, ServerPlayer player) {
+        if (!AllayTeleportBehaviour.canFollowPlayer(allay))
+            return;
+        if (!AllayTeleportBehaviour.shouldTeleport(allay, player))
+            return;
+
+        if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown())
+            allay.setPortalCooldown();
+
+        // Use fabrics teleport, since it should be capable of teleporting easily through dimensions
+        Teleport.teleport(allay, player);
+    }
+
     public static boolean canFollowPlayer(Allay allay) {
         if (allay.isLeashed())
             return false;
 
-        // TODO Use log level
-        //Main.LOGGER.error(DebugEntity.idString(allay) + " is not leashed");
-
         var optionalNoteblock = allay.getBrain().getMemory(MemoryModuleType.LIKED_NOTEBLOCK_POSITION);
-        if (optionalNoteblock != null && optionalNoteblock.isPresent())
+        if (optionalNoteblock.isPresent())
             return false;
 
         return true;
@@ -37,7 +56,7 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Might do not follow if dancing
-        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && VersionedAllay.isDancing(allay))
+        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && AllayCompatibility.isDancing(allay))
             return false;
 
         // Avoid teleporting into water
@@ -56,14 +75,12 @@ public class AllayTeleportBehaviour {
         if (!WorldComparator.equals(allay, player)) {
             // To avoid teleporting entities instantly out of the nether after pushing them in,
             // do not teleport when a portal cooldown is set
-            if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && VersionedAllay.hasPortalCooldown(allay))
-                return false;
-
-            return true;
+            return !AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown()
+                    || !allay.isOnPortalCooldown();
         }
 
         // Check the teleportation distance
-        var distance = EntityHelper.getPos(allay).subtract(EntityHelper.getPos(player)).length();
-        return distance > AllayFollowAlwaysMod.CONFIG.teleportDistance();
+        var distanceSqrt = allay.position().subtract(player.position()).lengthSqr();
+        return distanceSqrt > AllayFollowAlwaysMod.CONFIG.teleportDistanceSqrt();
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.world.phys.Vec3;
  * @author Michael Ruf
  * @since 2022-12-11
  */
-public class MyMathHelper {
+public class MathHelper {
 
     // NOTE Can this get improved to not need to normalize? Should cost some performance like this
     public static double angleBetween(Vec3 a, Vec3 b, boolean vectorsAreNormalized) {

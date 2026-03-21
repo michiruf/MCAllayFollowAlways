@@ -3,11 +3,10 @@ package de.michiruf.allayfollowalways.mixin;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.allay.AllayLeashBehaviour;
 import de.michiruf.allayfollowalways.allay.AllayPlayerLookup;
-import de.michiruf.allayfollowalways.allay.AllayTeleport;
 import de.michiruf.allayfollowalways.allay.AllayTeleportBehaviour;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
-import de.michiruf.allayfollowalways.versioned.ChunkTicketHelper;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
+import de.michiruf.allayfollowalways.helper.ChunkTicketHelper;
+import de.michiruf.allayfollowalways.helper.EntityHelper;
 import net.minecraft.world.entity.animal.allay.Allay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +24,7 @@ public abstract class AllayEntityMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick_addTeleport(CallbackInfo info) {
         var allay = (Allay) (Object) this;
-        AllayTeleport.handleTeleport(allay);
+        AllayTeleportBehaviour.handleTeleport(allay);
     }
 
     @Inject(method = "shouldStayCloseToLeashHolder", at = @At("HEAD"), cancellable = true)
@@ -51,7 +50,7 @@ public abstract class AllayEntityMixin {
         // is in a different world
         var playerOptional = AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown()
                 ? AllayPlayerLookup.getLikedPlayerGlobal(allay)
-                : AllayPlayerLookup.getLikedPlayerForWorld(allay, EntityHelper.getWorld(allay));
+                : AllayPlayerLookup.getLikedPlayerForWorld(allay, EntityHelper.getLevel(allay));
         if (playerOptional.isEmpty())
             return;
         var player = playerOptional.get();

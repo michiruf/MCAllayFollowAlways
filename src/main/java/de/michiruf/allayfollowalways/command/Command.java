@@ -10,8 +10,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
-import de.michiruf.allayfollowalways.versioned.PermissionHelper;
-import de.michiruf.allayfollowalways.versioned.VersionedMessageSender;
+import de.michiruf.allayfollowalways.helper.PermissionHelper;
+import de.michiruf.allayfollowalways.helper.MessageSender;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -33,8 +33,8 @@ public class Command {
                 .literal("allayfollowalways")
                 .requires(PermissionHelper::hasPermission)
                 .executes(context -> {
-                    VersionedMessageSender.send(context, "Usage: /allayfollowalways OPTION [VALUE]");
-                    VersionedMessageSender.send(context, "Usage: /allayfollowalways options -> list all options");
+                    MessageSender.send(context, "Usage: /allayfollowalways OPTION [VALUE]");
+                    MessageSender.send(context, "Usage: /allayfollowalways options -> list all options");
                     return 1;
                 })
                 .build();
@@ -89,9 +89,9 @@ public class Command {
         node.addChild(Commands
                 .literal("options")
                 .executes(context -> {
-                    VersionedMessageSender.send(context, "OPTIONS FOR ALLAY FOLLOW ALWAYS");
-                    VersionedMessageSender.send(context, "=============================");
-                    commands.forEach((s, supplier) -> VersionedMessageSender.send(context, s + " -> " + supplier.get()));
+                    MessageSender.send(context, "OPTIONS FOR ALLAY FOLLOW ALWAYS");
+                    MessageSender.send(context, "=============================");
+                    commands.forEach((s, supplier) -> MessageSender.send(context, s + " -> " + supplier.get()));
                     return 1;
                 })
                 .build());
@@ -126,13 +126,13 @@ public class Command {
         node.addChild(Commands
                 .literal(name)
                 .executes(context -> {
-                    VersionedMessageSender.send(context, name + " is currently set to " + getter.get());
+                    MessageSender.send(context, name + " is currently set to " + getter.get());
                     return 1;
                 })
                 .then(Commands.argument(name, type)
                         .executes(context -> {
                             setter.accept(valueExtractor.apply(context, name));
-                            VersionedMessageSender.send(context, name + " was set to " + getter.get());
+                            MessageSender.send(context, name + " was set to " + getter.get());
                             return 1;
                         }))
                 .build());

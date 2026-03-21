@@ -1,7 +1,7 @@
 package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
+import de.michiruf.allayfollowalways.helper.EntityHelper;
 import java.util.Optional;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 public class AllayPlayerLookup {
     public static Optional<ServerPlayer> getLikedPlayer(Allay allay) {
         // See original functionality in AllayBrain.getLikedPlayer(allay)
-        var player = getLikedPlayerForWorld(allay, EntityHelper.getWorld(allay));
+        var player = getLikedPlayerForWorld(allay, EntityHelper.getLevel(allay));
         if (player.isEmpty())
             player = getLikedPlayerGlobal(allay);
         return player;
@@ -35,7 +35,7 @@ public class AllayPlayerLookup {
     }
 
     public static Optional<ServerPlayer> getLikedPlayerGlobal(Allay allay) {
-        var server = EntityHelper.getWorld(allay).getServer();
+        var server = EntityHelper.getLevel(allay).getServer();
         if (server == null) {
             AllayFollowAlwaysMod.LOGGER.error("Could not get server from allay entity");
             return Optional.empty();

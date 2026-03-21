@@ -2,7 +2,7 @@ package de.michiruf.allayfollowalways;
 
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.testhelper.*;
-import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
+import de.michiruf.allayfollowalways.helper.Teleport;
 //? if <=1.21.4 {
 /*import net.minecraft.gametest.framework.GameTest;
 *///? } else {
@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
+import de.michiruf.allayfollowalways.helper.EntityHelper;
 
 @SuppressWarnings("unused")
 public class AllayFollowAlwaysGameTest {
@@ -38,20 +38,20 @@ public class AllayFollowAlwaysGameTest {
                 })
                 .then(() -> {
                     var destinationY = holder.player.getY() + 256;
-                    VersionedFabricTeleport.teleport(holder.player, new Vec3(holder.player.getX(), destinationY, holder.player.getZ()), context.getLevel());
+                    Teleport.teleport(holder.player, new Vec3(holder.player.getX(), destinationY, holder.player.getZ()), context.getLevel());
                 })
                 .then(() -> {
-                    var distanceToPlayer = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
+                    var distanceToPlayer = holder.allay.position().distanceTo(holder.player.position());
                     check.assertTrue(AllayFollowAlwaysMod.CONFIG.teleportEnabled(), "Teleport not enabled");
                     check.assertTrue(distanceToPlayer <= 10.0, "Allay is not close to player after teleport. Distance: " + distanceToPlayer + ", Player: " + holder.player.blockPosition() + ", Allay: " + holder.allay.blockPosition());
                 })
                 .then(() -> {
                     AllayFollowAlwaysMod.CONFIG.teleportEnabled(false);
                     var destinationY = holder.player.getY() + 256;
-                    VersionedFabricTeleport.teleport(holder.player, new Vec3(holder.player.getX(), destinationY, holder.player.getZ()), context.getLevel());
+                    Teleport.teleport(holder.player, new Vec3(holder.player.getX(), destinationY, holder.player.getZ()), context.getLevel());
                 })
                 .then(() -> {
-                    var distanceToPlayer = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
+                    var distanceToPlayer = holder.allay.position().distanceTo(holder.player.position());
                     check.assertFalse(AllayFollowAlwaysMod.CONFIG.teleportEnabled(), "Teleport enabled");
                     check.assertFalse(distanceToPlayer <= 10.0, "Allay is too close to player and did teleport. Distance: " + distanceToPlayer + ", Player: " + holder.player.blockPosition() + ", Allay: " + holder.allay.blockPosition());
                 })
@@ -90,8 +90,8 @@ public class AllayFollowAlwaysGameTest {
                 .then(() -> {
                     check.assertTrue(
                             WorldComparator.equals(holder.allay, holder.player),
-                            "Allay did not follow player to the Nether. Player world registry: " + EntityHelper.getWorld(holder.player).dimension() + ", Allay world registry: " + EntityHelper.getWorld(holder.allay).dimension());
-                    var distanceToPlayer = EntityHelper.getPos(holder.allay).distanceTo(EntityHelper.getPos(holder.player));
+                            "Allay did not follow player to the Nether. Player world registry: " + EntityHelper.getLevel(holder.player).dimension() + ", Allay world registry: " + EntityHelper.getLevel(holder.allay).dimension());
+                    var distanceToPlayer = holder.allay.position().distanceTo(holder.player.position());
                     check.assertTrue(
                             distanceToPlayer <= 10.0,
                             "Allay is not close to player in Nether. Distance: " + distanceToPlayer + ", Player: " + holder.player.blockPosition() + ", Allay: " + holder.allay.blockPosition());

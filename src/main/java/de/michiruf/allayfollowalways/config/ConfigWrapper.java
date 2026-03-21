@@ -84,6 +84,10 @@ public class ConfigWrapper {
         return config.teleportDistance;
     }
 
+    public float teleportDistanceSqrt() {
+        return teleportDistance() * teleportDistance();
+    }
+
     public void teleportDistance(float teleportDistance) {
         config.teleportDistance = teleportDistance;
         save();

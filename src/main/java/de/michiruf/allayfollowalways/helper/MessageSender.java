@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways.versioned;
+package de.michiruf.allayfollowalways.helper;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
  * @author Michael Ruf
  * @since 2023-12-13
  */
-public class VersionedMessageSender {
+public class MessageSender {
 
     public static void send(CommandContext<CommandSourceStack> context, String text) {
         //? if <1.19.1 {

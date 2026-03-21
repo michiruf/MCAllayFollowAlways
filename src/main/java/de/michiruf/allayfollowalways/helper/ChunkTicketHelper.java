@@ -1,4 +1,4 @@
-package de.michiruf.allayfollowalways.versioned;
+package de.michiruf.allayfollowalways.helper;
 
 //? if <1.21.5 {
 /*import java.util.Comparator;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.ChunkPos;
 public class ChunkTicketHelper {
 
     public static void keepChunksLoaded(Entity entity) {
-        keepChunksLoaded((ServerChunkCache) EntityHelper.getWorld(entity).getChunkSource(), entity.chunkPosition());
+        keepChunksLoaded((ServerChunkCache) EntityHelper.getLevel(entity).getChunkSource(), entity.chunkPosition());
     }
 
     public static void keepChunksLoaded(ServerChunkCache cm, ChunkPos pos) {

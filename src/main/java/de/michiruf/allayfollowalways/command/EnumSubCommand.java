@@ -1,7 +1,7 @@
 package de.michiruf.allayfollowalways.command;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import de.michiruf.allayfollowalways.versioned.VersionedMessageSender;
+import de.michiruf.allayfollowalways.helper.MessageSender;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.commands.CommandSourceStack;
@@ -23,7 +23,7 @@ public class EnumSubCommand {
         var parameterCommand = Commands
                 .literal(name)
                 .executes(context -> {
-                    VersionedMessageSender.send(context, name + " is currently set to " + getter.get());
+                    MessageSender.send(context, name + " is currently set to " + getter.get());
                     return 1;
                 });
 
@@ -33,7 +33,7 @@ public class EnumSubCommand {
             var enumCommand = Commands.literal(enumValue.name())
                     .executes(context -> {
                         setter.accept(Enum.valueOf(enumClass, enumValue.name()));
-                        VersionedMessageSender.send(context, name + " was set to " + getter.get());
+                        MessageSender.send(context, name + " was set to " + getter.get());
                         return 1;
                     });
             parameterCommand.then(enumCommand);
