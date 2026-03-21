@@ -1,8 +1,11 @@
 package de.michiruf.allayfollowalways.testhelper;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.test.TestContext;
 
 import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class TestExecutor {
 
@@ -43,6 +46,25 @@ public class TestExecutor {
     public TestExecutor wait(int ticks) {
         return then(ticks, () -> {
         });
+    }
+
+    public TestExecutor waitUntil(int delay, Supplier<Boolean> condition) {
+        return then(delay, () -> {
+            var holder = new Object() {
+                boolean condition;
+            };
+
+            do {
+                new TestExecutor(context)
+                        .wait(1)
+                        .immediate((() -> holder.condition = condition.get()))
+                        .run();
+            } while (holder.condition);
+        });
+    }
+
+    public TestExecutor waitUntil(Supplier<Boolean> condition) {
+        return waitUntil(0, condition);
     }
 
     public void run() {

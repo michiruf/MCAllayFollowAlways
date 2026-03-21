@@ -48,6 +48,15 @@ public class TestWorldHandler {
         forcedChunks.add(new ChunkPos(chunkX, chunkZ));
     }
 
+    public boolean areAllForcedChunksLoaded() {
+        for (var pos : forcedChunks) {
+            if (!world.getChunkManager().isChunkLoaded(pos.x, pos.z)) {
+                return false;
+            }
+        }
+        return !forcedChunks.isEmpty();
+    }
+
     public void cleanup() {
         for (var pos : forcedChunks) {
             world.setChunkForced(pos.x, pos.z, false);
