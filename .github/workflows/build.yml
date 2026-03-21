@@ -53,21 +53,21 @@ jobs:
 
       - name: Setup gradle
         if: success()
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: 9.2.0
 
       - name: Execute unit tests
         if: success()
-        run: gradle test -Pv=${{ matrix.version }}
+        run: gradle :${{ matrix.version }}:test -x runGameTest --configure-on-demand --configuration-cache
 
       - name: Execute game tests
         if: success()
-        run: gradle runGameTest -Pv=${{ matrix.version }}
+        run: gradle :${{ matrix.version }}:runGameTest --configure-on-demand --configuration-cache
 
       - name: Build
         if: success()
-        run: gradle remapJar -Pv=${{ matrix.version }}
+        run: gradle :${{ matrix.version }}:remapJar --configure-on-demand --configuration-cache
 
       - name: Upload artifact
         if: success()

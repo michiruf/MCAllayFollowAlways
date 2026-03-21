@@ -1,16 +1,40 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
-        gradlePluginPortal()
+        maven {
+            name = 'KikuGie Snapshots'
+            url = 'https://maven.kikugie.dev/snapshots'
+        }
     }
 }
 
 plugins {
     // Discovers java automatically without the requirement for paths
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+
+    // Stonecutter (code version branching)
+    id 'dev.kikugie.stonecutter' version '0.8.1'
 }
+
+// Load version definitions
+apply from: 'build.versions.gradle'
+
+stonecutter {
+    // Enable Groovy DSL, as Stonecutter uses Kotlin by default
+    kotlinController = false
+    centralScript = "build.gradle"
+
+    shared {
+        // Dynamically get all versions from definitions map
+        versions(settings.ext.minecraftVersionDefinitions.keySet() as String[])
+
+        vcsVersion = "1.21.11"
+    }
+}
+stonecutter.create(rootProject)
 
 rootProject.name = 'allay-follow-always'

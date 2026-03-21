@@ -1,5 +1,7 @@
 # User-specific stuff
 .idea/
+versions/
+/.claude/settings.local.json
 
 *.iml
 *.ipr

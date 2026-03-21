@@ -140,3 +140,4 @@ https://github.com/Geometrically/fabric-test-runner
 * [Fabric wiki](https://fabricmc.net/wiki/start)
 * [List of fabric events](https://docs.wispforest.io/fabric-events/)
 * TODO Check this out: https://github.com/jaredlll08/MultiLoader-Template
+* Set up your IDE using `gradle ideaSyncTask` to generate IDEA run configs

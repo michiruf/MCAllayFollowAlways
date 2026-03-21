@@ -14,6 +14,14 @@ public class WorldComparator {
         return equals(EntityHelper.getWorld(one), EntityHelper.getWorld(two));
     }
 
+    public static boolean equals(Entity one, World two) {
+        return equals(EntityHelper.getWorld(one), two);
+    }
+
+    public static boolean equals(World one, Entity two) {
+        return equals(one, EntityHelper.getWorld(two));
+    }
+
     public static boolean equals(World one, World two) {
         return one == two && one.getDimension().equals(two.getDimension());
     }
