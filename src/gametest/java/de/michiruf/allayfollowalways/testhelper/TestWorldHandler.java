@@ -26,8 +26,12 @@ public class TestWorldHandler {
      */
     public TestWorldHandler(TestContext context, RegistryKey<World> worldKey) {
         var server = context.getWorld().getServer();
-        assert server != null;
+
+        if (server == null)
+            throw new RuntimeException("Server is null");
+
         world = server.getWorld(worldKey);
+
         new Assert(context).assertTrue(world != null, "World " + worldKey + " not found");
     }
 
@@ -58,6 +62,7 @@ public class TestWorldHandler {
             if (!world.getChunkManager().isChunkLoaded(pos.x, pos.z)) {
                 return false;
             }
+
             //? if <1.21.5 {
             /*if (!world.shouldTick(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
             *///? } else {
@@ -65,7 +70,16 @@ public class TestWorldHandler {
             //? }
                 return false;
             }
+
+            //? if <1.21.5 {
+            /*if (!world.shouldTickEntity(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            *///? } else {
+            if (!world.shouldTickEntityAt(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            //? }
+                return false;
+            }
         }
+
         return true;
     }
 
