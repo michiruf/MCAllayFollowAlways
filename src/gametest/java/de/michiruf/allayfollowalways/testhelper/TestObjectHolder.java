@@ -50,17 +50,26 @@ public class TestObjectHolder {
     }
 
     /**
-     * After cross-dimension teleport, the original entity is removed and a new one is created
+     * After cross-dimension teleport, the original entity is removed and a new one is created.
+     * Use with waitUntil: first call {@link #allayRelinked} until it returns true,
+     * then the allay field will be updated.
      */
-    public void relinkAllayForWorld(ServerWorld world) {
-        var check = new Assert(context);
-        check.assertTrue(allay.isRemoved(), "Tried to relink a still existing allay");
+    public boolean allayRelinked(ServerWorld world) {
+        // Old allay first must have been removed
+        if (!allay.isRemoved()) {
+            return false;
+        }
 
-        allay = (AllayEntity) world.getEntity(allayUuid);
+        var found = (AllayEntity) world.getEntity(allayUuid);
 
-        if (allay == null)
-            allay = (AllayEntity) world.getEntityById(allayId);
+        if (found == null)
+            found = (AllayEntity) world.getEntityById(allayId);
 
-        check.assertTrue(allay != null, "Could not find allay after cross-dimension teleport");
+        if (found != null) {
+            allay = found;
+            return true;
+        }
+
+        return false;
     }
 }

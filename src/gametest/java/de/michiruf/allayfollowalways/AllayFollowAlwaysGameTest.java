@@ -3,7 +3,6 @@ package de.michiruf.allayfollowalways;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.testhelper.*;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import net.minecraft.entity.passive.AllayEntity;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import net.minecraft.world.World;
 //? if <=1.21.4 {
@@ -80,13 +79,14 @@ public class AllayFollowAlwaysGameTest {
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
                 })
-                // Force-load nether chunk so non-player entities get tracked in EntityIndex
-                .then(() -> nether.forceLoadChunk(0, 0))
-                .waitUntil(nether::areAllForcedChunksLoaded)
+                // TODO Should not be needed since the relink wait
+                //// Force-load nether chunk so non-player entities get tracked in EntityIndex
+                //.then(() -> nether.forceLoadChunk(0, 0))
+                //.waitUntil(nether::areAllForcedChunksLoaded)
                 // Teleport player
                 .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), nether.getWorld()))
                 // Relink
-                .then(() -> holder.relinkAllayForWorld(nether.getWorld()))
+                .waitUntil(() -> holder.allayRelinked(nether.getWorld()))
                 // Assert allay followed player to the Nether
                 .then(() -> {
                     check.assertTrue(
