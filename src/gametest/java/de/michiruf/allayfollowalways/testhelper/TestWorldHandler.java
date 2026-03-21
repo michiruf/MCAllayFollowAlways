@@ -59,9 +59,9 @@ public class TestWorldHandler {
                 return false;
             }
             //? if <1.21.5 {
-            /*if (!world.shouldTickEntity(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            /*if (!world.shouldTick(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
             *///? } else {
-            if (!world.shouldTickEntityAt(new BlockPos(pos.getStartX(), 0, pos.getStartZ()))) {
+            if (!world.canSpawnEntitiesAt(pos)) {
             //? }
                 return false;
             }
