@@ -79,6 +79,9 @@ public class AllayFollowAlwaysGameTest {
                     holder.createUniquePlayer();
                     holder.createAllayLinkedToPlayer();
                 })
+                // Force-load nether chunk so non-player entities get tracked in EntityIndex
+                .then(() -> nether.forceLoadChunk(0, 0))
+                .waitUntil(nether::areAllForcedChunksLoaded)
                 // Teleport player
                 .then(() -> VersionedPlayerTeleport.teleport(holder.player, new Vec3d(0, 64, 0), nether.getWorld()))
                 // Relink
