@@ -1,6 +1,7 @@
 package de.michiruf.allayfollowalways.testhelper;
 
 import com.mojang.authlib.GameProfile;
+import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -56,7 +57,9 @@ public class TestObjectHolder {
      */
     public boolean allayRelinked(ServerWorld world) {
         // Old allay first must have been removed
-        if (!allay.isRemoved()) {
+        // In some versions, the entity is moved directly without being recreated,
+        // so we also check if the allay is already in the target world
+        if (!allay.isRemoved() && EntityHelper.getWorld(allay) != world) {
             return false;
         }
 

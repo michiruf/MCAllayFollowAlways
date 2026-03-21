@@ -45,10 +45,6 @@ public class TeleportCrossDimensionsTest {
                 .then(() -> check.assertTrue(
                         EntityHelper.getWorld(holder.player).getRegistryKey() == World.NETHER,
                         "Player is not in the Nether. Player world: " + EntityHelper.getWorld(holder.player).getRegistryKey()))
-                // TODO Should not be needed since the relink wait
-                //// Force-load nether chunk so non-player entities get tracked in EntityIndex
-                //.then(() -> nether.forceLoadChunk(0, 0))
-                //.waitUntil(nether::areAllForcedChunksLoaded)
                 // Allay
                 .then(() -> VersionedFabricTeleport.teleport(holder.allay, new Vec3d(0, 0, 0), nether.getWorld()))
                 .waitUntil(() -> holder.allayRelinked(nether.getWorld()))
