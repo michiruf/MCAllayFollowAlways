@@ -1,14 +1,11 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-//? if >= 1.19.4 {
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-//? }
 
 public class VersionedPlayerTeleport {
 
-    //? if >= 1.19.4 {
     public static void teleport(ServerPlayerEntity player, Vec3d to, ServerWorld world) {
         //? if <1.21 {
         /*var target = new net.minecraft.world.TeleportTarget(
@@ -32,5 +29,4 @@ public class VersionedPlayerTeleport {
         player.teleport(world, to.x, to.y, to.z, java.util.Set.of(), player.getYaw(), player.getPitch(), false);
         //? }
     }
-    //? }
 }

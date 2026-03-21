@@ -1,7 +1,10 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-//? if >= 1.19.4 {
+//? if <1.19.3 {
+/*import net.minecraft.util.registry.RegistryKey;
+*///? } else {
 import net.minecraft.registry.RegistryKey;
+//? }
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
@@ -10,11 +13,8 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-//? }
 
 public class TestWorldHandler {
-
-    //? if >= 1.19.4 {
 
     private final ServerWorld world;
     private final List<ChunkPos> forcedChunks = new ArrayList<>();
@@ -92,6 +92,4 @@ public class TestWorldHandler {
         }
         forcedChunks.clear();
     }
-
-    //? }
 }

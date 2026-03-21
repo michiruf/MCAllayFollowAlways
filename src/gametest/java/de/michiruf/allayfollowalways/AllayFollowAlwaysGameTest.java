@@ -1,10 +1,8 @@
 package de.michiruf.allayfollowalways;
 
-//? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.helper.WorldComparator;
 import de.michiruf.allayfollowalways.testhelper.*;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.entity.passive.AllayEntity;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import net.minecraft.world.World;
@@ -15,14 +13,9 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 //? }
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.Vec3d;
-//? }
 
 @SuppressWarnings("unused")
 public class AllayFollowAlwaysGameTest {
-
-    // Since fabric has no fake player in versions until 1.19.4, we cannot test the teleport behavior
-    // We need the fake player, because mocked players are not registered properly
-    //? if >= 1.19.4 {
 
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
@@ -109,5 +102,4 @@ public class AllayFollowAlwaysGameTest {
                 .runSync();
     }
 
-    //? }
 }

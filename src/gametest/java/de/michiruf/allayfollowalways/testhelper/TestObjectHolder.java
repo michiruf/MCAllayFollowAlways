@@ -1,9 +1,7 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-//? if >= 1.19.4 {
 import com.mojang.authlib.GameProfile;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
@@ -14,11 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 import java.util.UUID;
-//? }
 
 public class TestObjectHolder {
-
-    //? if >= 1.19.4 {
 
     private final TestContext context;
     public FakePlayer player;
@@ -32,7 +27,7 @@ public class TestObjectHolder {
 
     public void createUniquePlayer() {
         var profile = new GameProfile(UUID.randomUUID(), "TestPlayer");
-        player = FakePlayer.get(context.getWorld(), profile);
+        player = new FakePlayer(context.getWorld(), profile);
         player.changeGameMode(GameMode.SURVIVAL);
         context.getWorld().onPlayerConnected(player);
     }
@@ -68,6 +63,4 @@ public class TestObjectHolder {
 
         check.assertTrue(allay != null, "Could not find allay after cross-dimension teleport");
     }
-
-    //? }
 }

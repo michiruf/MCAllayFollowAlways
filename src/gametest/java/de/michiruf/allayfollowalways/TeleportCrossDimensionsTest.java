@@ -1,6 +1,5 @@
 package de.michiruf.allayfollowalways;
 
-//? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestConfigHelper;
 import de.michiruf.allayfollowalways.testhelper.TestWorldHandler;
@@ -17,12 +16,10 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 //? }
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.Vec3d;
-//? }
 
 @SuppressWarnings("unused")
 public class TeleportCrossDimensionsTest {
 
-    //? if >= 1.19.4 {
     /*? if <1.20.5 { */
     /*@GameTest(templateName = "fabric-gametest-api-v1:empty", tickLimit = 100000)
      *//*? } elif <1.21.5 { */
@@ -64,5 +61,4 @@ public class TeleportCrossDimensionsTest {
                 .runSync();
     }
 
-    //? }
 }

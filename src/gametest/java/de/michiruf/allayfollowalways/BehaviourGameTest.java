@@ -1,13 +1,12 @@
 package de.michiruf.allayfollowalways;
 
-//? if >= 1.19.4 {
 import de.michiruf.allayfollowalways.testhelper.Assert;
 import de.michiruf.allayfollowalways.testhelper.TestConfigHelper;
 import de.michiruf.allayfollowalways.testhelper.TestExecutor;
 import de.michiruf.allayfollowalways.testhelper.TestObjectHolder;
 import de.michiruf.allayfollowalways.versioned.EntityHelper;
 import de.michiruf.allayfollowalways.versioned.VersionedFabricTeleport;
-import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.passive.AllayEntity;
 //? if <=1.21.4 {
@@ -18,18 +17,15 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-//? }
 
 @SuppressWarnings("unused")
 public class BehaviourGameTest {
-
-    //? if >= 1.19.4 {
 
     /**
      * Places a 5x4x5 pool of the given block at the target Y, with a stone floor.
      * Returns the center position inside the pool (for teleporting into).
      */
-    private Vec3d placePool(TestContext context, FakePlayer player, int yOffset,
+    private Vec3d placePool(TestContext context, ServerPlayerEntity player, int yOffset,
                             net.minecraft.block.Block fluidBlock) {
         var world = context.getWorld();
         var px = (int) player.getX();
@@ -233,5 +229,4 @@ public class BehaviourGameTest {
                 .runSync();
     }
 
-    //? }
 }
