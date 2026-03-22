@@ -118,6 +118,18 @@ that it is leashed to.
 `leashSlowDownDistanceEnd` defaults to `8`
 
 
+---
+Configure per-category logging. Each accepts `OFF`, `INFO`, or `DEBUG`.
+`logMod` controls mod lifecycle logging, defaults to `INFO`.
+`logTeleport` controls teleportation logging, defaults to `OFF`.
+`logLeash` controls leash behaviour logging, defaults to `OFF`.
+```
+/allayfollowalways logMod [OFF|INFO|DEBUG]
+/allayfollowalways logTeleport [OFF|INFO|DEBUG]
+/allayfollowalways logLeash [OFF|INFO|DEBUG]
+```
+
+
 ## Changelog
 
 Changelog per release cycle can be found [here](https://github.com/michiruf/MCAllayFollowAlways/blob/master/CHANGELOG.md).
