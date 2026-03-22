@@ -25,15 +25,15 @@ public class ModLogger {
     }
 
     public void mod(LogLevel level, String msg, Object... args) {
-        log(AllayFollowAlwaysMod.CONFIG::logModLevel, level, msg, args);
+        log(AllayFollowAlwaysMod.CONFIG::logMod, level, msg, args);
     }
 
     public void teleport(LogLevel level, String msg, Object... args) {
-        log(AllayFollowAlwaysMod.CONFIG::logTeleportLevel, level, msg, args);
+        log(AllayFollowAlwaysMod.CONFIG::logTeleport, level, msg, args);
     }
 
     public void leash(LogLevel level, String msg, Object... args) {
-        log(AllayFollowAlwaysMod.CONFIG::logLeashLevel, level, msg, args);
+        log(AllayFollowAlwaysMod.CONFIG::logLeash, level, msg, args);
     }
 
     public void warn(String msg, Object... args) {

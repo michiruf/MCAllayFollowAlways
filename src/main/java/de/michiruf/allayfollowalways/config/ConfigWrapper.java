@@ -184,30 +184,30 @@ public class ConfigWrapper {
         save();
     }
 
-    public LogLevel logModLevel() {
-        return config.logModLevel;
+    public LogLevel logMod() {
+        return config.logMod;
     }
 
-    public void logModLevel(LogLevel logModLevel) {
-        config.logModLevel = logModLevel;
+    public void logMod(LogLevel logMod) {
+        config.logMod = logMod;
         save();
     }
 
-    public LogLevel logTeleportLevel() {
-        return config.logTeleportLevel;
+    public LogLevel logTeleport() {
+        return config.logTeleport;
     }
 
-    public void logTeleportLevel(LogLevel logTeleportLevel) {
-        config.logTeleportLevel = logTeleportLevel;
+    public void logTeleport(LogLevel logTeleport) {
+        config.logTeleport = logTeleport;
         save();
     }
 
-    public LogLevel logLeashLevel() {
-        return config.logLeashLevel;
+    public LogLevel logLeash() {
+        return config.logLeash;
     }
 
-    public void logLeashLevel(LogLevel logLeashLevel) {
-        config.logLeashLevel = logLeashLevel;
+    public void logLeash(LogLevel logLeash) {
+        config.logLeash = logLeash;
         save();
     }
 }

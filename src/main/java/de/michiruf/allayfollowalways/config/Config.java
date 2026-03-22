@@ -32,7 +32,7 @@ public class Config {
     /*
      * Logging section
      */
-    public LogLevel logModLevel = LogLevel.INFO;
-    public LogLevel logTeleportLevel = LogLevel.OFF;
-    public LogLevel logLeashLevel = LogLevel.OFF;
+    public LogLevel logMod = LogLevel.INFO;
+    public LogLevel logTeleport = LogLevel.OFF;
+    public LogLevel logLeash = LogLevel.OFF;
 }
