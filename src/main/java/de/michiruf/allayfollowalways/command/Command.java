@@ -88,9 +88,9 @@ public class Command {
         registerConfigCommandEnum(afaNode, "logTeleportLevel", LogLevel.class,
                 AllayFollowAlwaysMod.CONFIG::logTeleportLevel,
                 AllayFollowAlwaysMod.CONFIG::logTeleportLevel);
-        registerConfigCommandEnum(afaNode, "logTickLevel", LogLevel.class,
-                AllayFollowAlwaysMod.CONFIG::logTickLevel,
-                AllayFollowAlwaysMod.CONFIG::logTickLevel);
+        registerConfigCommandEnum(afaNode, "logLeashLevel", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logLeashLevel,
+                AllayFollowAlwaysMod.CONFIG::logLeashLevel);
         registerConfigOptionsCommand(afaNode);
         dispatcher.getRoot().addChild(afaNode);
     }

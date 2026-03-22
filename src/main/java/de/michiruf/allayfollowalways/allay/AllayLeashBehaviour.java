@@ -69,7 +69,7 @@ public class AllayLeashBehaviour {
 
         // Calculate the slowness by the range percentage inverse
         var factor = 1 - Mth.clamp(r, 0, 1);
-        AllayFollowAlwaysMod.LOGGER.tick(LogLevel.DEBUG, "Leash slow-down for allay {}: distance={}, angle={}, factor={}",
+        AllayFollowAlwaysMod.LOGGER.leash(LogLevel.DEBUG, "Leash slow-down for allay {}: distance={}, angle={}, factor={}",
                 allay.getStringUUID(), String.format("%.2f", distance), String.format("%.1f", angle), String.format("%.2f", factor));
         return factor;
     }

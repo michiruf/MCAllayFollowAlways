@@ -202,12 +202,12 @@ public class ConfigWrapper {
         save();
     }
 
-    public LogLevel logTickLevel() {
-        return config.logTickLevel;
+    public LogLevel logLeashLevel() {
+        return config.logLeashLevel;
     }
 
-    public void logTickLevel(LogLevel logTickLevel) {
-        config.logTickLevel = logTickLevel;
+    public void logLeashLevel(LogLevel logLeashLevel) {
+        config.logLeashLevel = logLeashLevel;
         save();
     }
 }

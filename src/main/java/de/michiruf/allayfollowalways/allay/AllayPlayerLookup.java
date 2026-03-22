@@ -21,7 +21,7 @@ public class AllayPlayerLookup {
         if (player.isEmpty())
             player = getLikedPlayerGlobal(allay);
         if (player.isEmpty())
-            AllayFollowAlwaysMod.LOGGER.tick(LogLevel.DEBUG, "Allay {} has no liked player", allay.getStringUUID());
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} has no liked player", allay.getStringUUID());
         return player;
     }
 

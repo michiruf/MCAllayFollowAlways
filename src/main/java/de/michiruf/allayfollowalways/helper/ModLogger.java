@@ -32,8 +32,8 @@ public class ModLogger {
         log(AllayFollowAlwaysMod.CONFIG::logTeleportLevel, level, msg, args);
     }
 
-    public void tick(LogLevel level, String msg, Object... args) {
-        log(AllayFollowAlwaysMod.CONFIG::logTickLevel, level, msg, args);
+    public void leash(LogLevel level, String msg, Object... args) {
+        log(AllayFollowAlwaysMod.CONFIG::logLeashLevel, level, msg, args);
     }
 
     public void warn(String msg, Object... args) {

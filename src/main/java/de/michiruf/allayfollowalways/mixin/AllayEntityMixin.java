@@ -32,7 +32,7 @@ public abstract class AllayEntityMixin {
     private void shouldFollowLeash_setShouldFollow(CallbackInfoReturnable<Boolean> cir) {
         var allay = (Allay) (Object) this;
         var shouldFollow = AllayLeashBehaviour.shouldFollowLeash(allay);
-        AllayFollowAlwaysMod.LOGGER.tick(LogLevel.DEBUG, "Leash follow override for allay {}: {}", allay.getStringUUID(), shouldFollow);
+        AllayFollowAlwaysMod.LOGGER.leash(LogLevel.DEBUG, "Leash follow override for allay {}: {}", allay.getStringUUID(), shouldFollow);
         cir.setReturnValue(shouldFollow);
         // NOTE Is this cancel necessary in this case?
         cir.cancel();
@@ -65,7 +65,7 @@ public abstract class AllayEntityMixin {
         if (!(player.gameMode.isSurvival() || player.isCreative()))
             return;
 
-        AllayFollowAlwaysMod.LOGGER.tick(LogLevel.DEBUG, "Keeping chunks loaded for allay {}", allay.getStringUUID());
+        AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Keeping chunks loaded for allay {}", allay.getStringUUID());
         ChunkTicketHelper.keepChunksLoaded(allay);
     }
 }

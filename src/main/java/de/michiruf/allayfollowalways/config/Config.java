@@ -34,5 +34,5 @@ public class Config {
      */
     public LogLevel logModLevel = LogLevel.INFO;
     public LogLevel logTeleportLevel = LogLevel.OFF;
-    public LogLevel logTickLevel = LogLevel.OFF;
+    public LogLevel logLeashLevel = LogLevel.OFF;
 }
