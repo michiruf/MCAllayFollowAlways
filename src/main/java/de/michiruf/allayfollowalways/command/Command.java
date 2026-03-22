@@ -10,6 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
+import de.michiruf.allayfollowalways.config.LogLevel;
 import de.michiruf.allayfollowalways.helper.PermissionHelper;
 import de.michiruf.allayfollowalways.helper.MessageSender;
 import java.util.LinkedHashMap;
@@ -81,6 +82,15 @@ public class Command {
         registerConfigCommandFloat(afaNode, "leashSlowDownDegree",
                 AllayFollowAlwaysMod.CONFIG::leashSlowDownDegree,
                 AllayFollowAlwaysMod.CONFIG::leashSlowDownDegree);
+        registerConfigCommandEnum(afaNode, "logMod", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logMod,
+                AllayFollowAlwaysMod.CONFIG::logMod);
+        registerConfigCommandEnum(afaNode, "logTeleport", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logTeleport,
+                AllayFollowAlwaysMod.CONFIG::logTeleport);
+        registerConfigCommandEnum(afaNode, "logLeash", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logLeash,
+                AllayFollowAlwaysMod.CONFIG::logLeash);
         registerConfigOptionsCommand(afaNode);
         dispatcher.getRoot().addChild(afaNode);
     }

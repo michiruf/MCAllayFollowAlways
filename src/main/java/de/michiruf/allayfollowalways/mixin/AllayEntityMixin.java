@@ -1,6 +1,7 @@
 package de.michiruf.allayfollowalways.mixin;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
+import de.michiruf.allayfollowalways.config.LogLevel;
 import de.michiruf.allayfollowalways.allay.AllayLeashBehaviour;
 import de.michiruf.allayfollowalways.allay.AllayPlayerLookup;
 import de.michiruf.allayfollowalways.allay.AllayTeleportBehaviour;
@@ -31,6 +32,7 @@ public abstract class AllayEntityMixin {
     private void shouldFollowLeash_setShouldFollow(CallbackInfoReturnable<Boolean> cir) {
         var allay = (Allay) (Object) this;
         var shouldFollow = AllayLeashBehaviour.shouldFollowLeash(allay);
+        AllayFollowAlwaysMod.LOGGER.leash(LogLevel.DEBUG, "Leash follow override for allay {}: {}", allay.getStringUUID(), shouldFollow);
         cir.setReturnValue(shouldFollow);
         // NOTE Is this cancel necessary in this case?
         cir.cancel();
@@ -63,6 +65,7 @@ public abstract class AllayEntityMixin {
         if (!(player.gameMode.isSurvival() || player.isCreative()))
             return;
 
+        AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Keeping chunks loaded for allay {}", allay.getStringUUID());
         ChunkTicketHelper.keepChunksLoaded(allay);
     }
 }

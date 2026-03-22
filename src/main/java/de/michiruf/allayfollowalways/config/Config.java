@@ -28,4 +28,11 @@ public class Config {
     public double leashSlowDownDistanceStart = 6;
     public double leashSlowDownDistanceEnd = 8;
     public float leashSlowDownDegree = 90;
+
+    /*
+     * Logging section
+     */
+    public LogLevel logMod = LogLevel.INFO;
+    public LogLevel logTeleport = LogLevel.OFF;
+    public LogLevel logLeash = LogLevel.OFF;
 }

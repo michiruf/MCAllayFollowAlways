@@ -47,6 +47,7 @@ public class ConfigWrapper {
             mapper.toJson(config, writer);
             writer.flush();
             writer.close();
+            AllayFollowAlwaysMod.LOGGER.mod(LogLevel.DEBUG, "Config saved");
         } catch (IOException e) {
             AllayFollowAlwaysMod.LOGGER.error("Could not save json config file", e);
             throw new RuntimeException(e);
@@ -180,6 +181,33 @@ public class ConfigWrapper {
 
     public void leashSlowDownDegree(float leashSlowDownDegree) {
         config.leashSlowDownDegree = leashSlowDownDegree;
+        save();
+    }
+
+    public LogLevel logMod() {
+        return config.logMod;
+    }
+
+    public void logMod(LogLevel logMod) {
+        config.logMod = logMod;
+        save();
+    }
+
+    public LogLevel logTeleport() {
+        return config.logTeleport;
+    }
+
+    public void logTeleport(LogLevel logTeleport) {
+        config.logTeleport = logTeleport;
+        save();
+    }
+
+    public LogLevel logLeash() {
+        return config.logLeash;
+    }
+
+    public void logLeash(LogLevel logLeash) {
+        config.logLeash = logLeash;
         save();
     }
 }

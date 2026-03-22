@@ -1,8 +1,8 @@
 package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
+import de.michiruf.allayfollowalways.config.LogLevel;
 import de.michiruf.allayfollowalways.helper.WorldComparator;
-import de.michiruf.allayfollowalways.helper.EntityHelper;
 import de.michiruf.allayfollowalways.helper.Teleport;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -32,17 +32,24 @@ public class AllayTeleportBehaviour {
         if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown())
             allay.setPortalCooldown();
 
+        AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.INFO, "Teleporting allay {} to player {} at {}",
+                allay.getStringUUID(), player.getName().getString(), player.blockPosition());
+
         // Use fabrics teleport, since it should be capable of teleporting easily through dimensions
         Teleport.teleport(allay, player);
     }
 
     public static boolean canFollowPlayer(Allay allay) {
-        if (allay.isLeashed())
+        if (allay.isLeashed()) {
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} is leashed, not following", allay.getStringUUID());
             return false;
+        }
 
         var optionalNoteblock = allay.getBrain().getMemory(MemoryModuleType.LIKED_NOTEBLOCK_POSITION);
-        if (optionalNoteblock.isPresent())
+        if (optionalNoteblock.isPresent()) {
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} has a liked noteblock, not following", allay.getStringUUID());
             return false;
+        }
 
         return true;
     }
@@ -56,27 +63,41 @@ public class AllayTeleportBehaviour {
             return false;
 
         // Might do not follow if dancing
-        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && AllayCompatibility.isDancing(allay))
+        if (!AllayFollowAlwaysMod.CONFIG.teleportWhenDancing() && AllayCompatibility.isDancing(allay)) {
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} is dancing, not teleporting", allay.getStringUUID());
             return false;
+        }
 
         // Avoid teleporting into water
-        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater() && player.isInWater())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWater() && player.isInWater()) {
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Player {} is in water, not teleporting allay", player.getName().getString());
             return false;
+        }
 
         // Avoid teleporting into lava
-        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava() && player.isInLava())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoLava() && player.isInLava()) {
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Player {} is in lava, not teleporting allay", player.getName().getString());
             return false;
+        }
 
         // Avoid teleporting into walls
-        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls() && player.isInWall())
+        if (AllayFollowAlwaysMod.CONFIG.avoidTeleportingIntoWalls() && player.isInWall()) {
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Player {} is in a wall, not teleporting allay", player.getName().getString());
             return false;
+        }
 
         // If not in the same world, we want to teleport always
         if (!WorldComparator.equals(allay, player)) {
             // To avoid teleporting entities instantly out of the nether after pushing them in,
             // do not teleport when a portal cooldown is set
-            return !AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown()
-                    || !allay.isOnPortalCooldown();
+            if (AllayFollowAlwaysMod.CONFIG.considerEntityTeleportationCooldown() && allay.isOnPortalCooldown()) {
+                AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} has portal cooldown, not teleporting cross-dimension", allay.getStringUUID());
+                return false;
+            }
+
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} and player {} are in different dimensions, teleporting",
+                    allay.getStringUUID(), player.getName().getString());
+            return true;
         }
 
         // Check the teleportation distance

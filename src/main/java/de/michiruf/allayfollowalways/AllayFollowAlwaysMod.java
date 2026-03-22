@@ -1,14 +1,11 @@
 package de.michiruf.allayfollowalways;
 
 import de.michiruf.allayfollowalways.command.Command;
-import de.michiruf.allayfollowalways.config.Config;
 import de.michiruf.allayfollowalways.config.ConfigWrapper;
+import de.michiruf.allayfollowalways.config.LogLevel;
+import de.michiruf.allayfollowalways.helper.ModLogger;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -17,7 +14,7 @@ import java.io.IOException;
  */
 public class AllayFollowAlwaysMod implements ModInitializer {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger("AllayFollowAlways");
+    public static final ModLogger LOGGER = new ModLogger("AllayFollowAlways");
     public static ConfigWrapper CONFIG;
 
     static {
@@ -30,7 +27,7 @@ public class AllayFollowAlwaysMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("AllayFollowAlways is active");
+        LOGGER.mod(LogLevel.INFO, "AllayFollowAlways is active");
         CommandRegistrationCallback.EVENT.register((dispatcher, registry, environment) -> Command.registerCommands(dispatcher));
     }
 }

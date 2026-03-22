@@ -2,6 +2,7 @@ package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
+import de.michiruf.allayfollowalways.config.LogLevel;
 import de.michiruf.allayfollowalways.helper.MathHelper;
 import de.michiruf.allayfollowalways.helper.EntityHelper;
 import net.minecraft.server.level.ServerPlayer;
@@ -67,6 +68,9 @@ public class AllayLeashBehaviour {
         }
 
         // Calculate the slowness by the range percentage inverse
-        return 1 - Mth.clamp(r, 0, 1);
+        var factor = 1 - Mth.clamp(r, 0, 1);
+        AllayFollowAlwaysMod.LOGGER.leash(LogLevel.DEBUG, "Leash slow-down for allay {}: distance={}, angle={}, factor={}",
+                allay.getStringUUID(), String.format("%.2f", distance), String.format("%.1f", angle), String.format("%.2f", factor));
+        return factor;
     }
 }

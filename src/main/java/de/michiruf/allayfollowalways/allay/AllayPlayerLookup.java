@@ -1,6 +1,7 @@
 package de.michiruf.allayfollowalways.allay;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
+import de.michiruf.allayfollowalways.config.LogLevel;
 import de.michiruf.allayfollowalways.helper.EntityHelper;
 import java.util.Optional;
 import net.minecraft.server.level.ServerLevel;
@@ -19,6 +20,8 @@ public class AllayPlayerLookup {
         var player = getLikedPlayerForWorld(allay, EntityHelper.getLevel(allay));
         if (player.isEmpty())
             player = getLikedPlayerGlobal(allay);
+        if (player.isEmpty())
+            AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.DEBUG, "Allay {} has no liked player", allay.getStringUUID());
         return player;
     }
 
@@ -47,8 +50,11 @@ public class AllayPlayerLookup {
         }
         for (var world : worlds) {
             var player = getLikedPlayerForWorld(allay, world);
-            if (player.isPresent())
+            if (player.isPresent()) {
+                AllayFollowAlwaysMod.LOGGER.teleport(LogLevel.INFO, "Found liked player for allay {} in different dimension {}",
+                        allay.getStringUUID(), world.dimension());
                 return player;
+            }
         }
         return Optional.empty();
     }
