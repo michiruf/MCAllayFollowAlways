@@ -10,16 +10,15 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
-import de.michiruf.allayfollowalways.versioned.PermissionHelper;
-import de.michiruf.allayfollowalways.versioned.VersionedMessageSender;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-
+import de.michiruf.allayfollowalways.helper.PermissionHelper;
+import de.michiruf.allayfollowalways.helper.MessageSender;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 /**
  * @author Michael Ruf
@@ -29,13 +28,13 @@ public class Command {
 
     private static final Map<String, Supplier<?>> commands = new LinkedHashMap<>();
 
-    public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralCommandNode<ServerCommandSource> afaNode = CommandManager
+    public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralCommandNode<CommandSourceStack> afaNode = Commands
                 .literal("allayfollowalways")
                 .requires(PermissionHelper::hasPermission)
                 .executes(context -> {
-                    VersionedMessageSender.send(context, "Usage: /allayfollowalways OPTION [VALUE]");
-                    VersionedMessageSender.send(context, "Usage: /allayfollowalways options -> list all options");
+                    MessageSender.send(context, "Usage: /allayfollowalways OPTION [VALUE]");
+                    MessageSender.send(context, "Usage: /allayfollowalways options -> list all options");
                     return 1;
                 })
                 .build();
@@ -86,54 +85,54 @@ public class Command {
         dispatcher.getRoot().addChild(afaNode);
     }
 
-    private static void registerConfigOptionsCommand(LiteralCommandNode<ServerCommandSource> node) {
-        node.addChild(CommandManager
+    private static void registerConfigOptionsCommand(LiteralCommandNode<CommandSourceStack> node) {
+        node.addChild(Commands
                 .literal("options")
                 .executes(context -> {
-                    VersionedMessageSender.send(context, "OPTIONS FOR ALLAY FOLLOW ALWAYS");
-                    VersionedMessageSender.send(context, "=============================");
-                    commands.forEach((s, supplier) -> VersionedMessageSender.send(context, s + " -> " + supplier.get()));
+                    MessageSender.send(context, "OPTIONS FOR ALLAY FOLLOW ALWAYS");
+                    MessageSender.send(context, "=============================");
+                    commands.forEach((s, supplier) -> MessageSender.send(context, s + " -> " + supplier.get()));
                     return 1;
                 })
                 .build());
     }
 
-    private static void registerConfigCommandBool(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Boolean> getter, Consumer<Boolean> setter) {
+    private static void registerConfigCommandBool(LiteralCommandNode<CommandSourceStack> node, String name, Supplier<Boolean> getter, Consumer<Boolean> setter) {
         commands.put(name + " [bool]", getter);
         registerConfigCommand(node, name, getter, setter, BoolArgumentType.bool(), BoolArgumentType::getBool);
     }
 
-    private static void registerConfigCommandInt(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Integer> getter, Consumer<Integer> setter) {
+    private static void registerConfigCommandInt(LiteralCommandNode<CommandSourceStack> node, String name, Supplier<Integer> getter, Consumer<Integer> setter) {
         commands.put(name + " [int]", getter);
         registerConfigCommand(node, name, getter, setter, IntegerArgumentType.integer(), IntegerArgumentType::getInteger);
     }
 
-    private static void registerConfigCommandFloat(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Float> getter, Consumer<Float> setter) {
+    private static void registerConfigCommandFloat(LiteralCommandNode<CommandSourceStack> node, String name, Supplier<Float> getter, Consumer<Float> setter) {
         commands.put(name + " [float]", getter);
         registerConfigCommand(node, name, getter, setter, FloatArgumentType.floatArg(), FloatArgumentType::getFloat);
     }
 
-    private static void registerConfigCommandDouble(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<Double> getter, Consumer<Double> setter) {
+    private static void registerConfigCommandDouble(LiteralCommandNode<CommandSourceStack> node, String name, Supplier<Double> getter, Consumer<Double> setter) {
         commands.put(name + " [double]", getter);
         registerConfigCommand(node, name, getter, setter, DoubleArgumentType.doubleArg(), DoubleArgumentType::getDouble);
     }
 
-    private static <T extends Enum<T>> void registerConfigCommandEnum(LiteralCommandNode<ServerCommandSource> node, String name, Class<T> clazz, Supplier<T> getter, Consumer<T> setter) {
+    private static <T extends Enum<T>> void registerConfigCommandEnum(LiteralCommandNode<CommandSourceStack> node, String name, Class<T> clazz, Supplier<T> getter, Consumer<T> setter) {
         commands.put(name + " [enum " + clazz.getSimpleName() + "]", getter);
         EnumSubCommand.createAndRegister(node, name, getter, setter, clazz);
     }
 
-    private static <T> void registerConfigCommand(LiteralCommandNode<ServerCommandSource> node, String name, Supplier<T> getter, Consumer<T> setter, ArgumentType<T> type, BiFunction<CommandContext<ServerCommandSource>, String, T> valueExtractor) {
-        node.addChild(CommandManager
+    private static <T> void registerConfigCommand(LiteralCommandNode<CommandSourceStack> node, String name, Supplier<T> getter, Consumer<T> setter, ArgumentType<T> type, BiFunction<CommandContext<CommandSourceStack>, String, T> valueExtractor) {
+        node.addChild(Commands
                 .literal(name)
                 .executes(context -> {
-                    VersionedMessageSender.send(context, name + " is currently set to " + getter.get());
+                    MessageSender.send(context, name + " is currently set to " + getter.get());
                     return 1;
                 })
-                .then(CommandManager.argument(name, type)
+                .then(Commands.argument(name, type)
                         .executes(context -> {
                             setter.accept(valueExtractor.apply(context, name));
-                            VersionedMessageSender.send(context, name + " was set to " + getter.get());
+                            MessageSender.send(context, name + " was set to " + getter.get());
                             return 1;
                         }))
                 .build());

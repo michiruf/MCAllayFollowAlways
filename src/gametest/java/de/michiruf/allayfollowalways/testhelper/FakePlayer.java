@@ -1,7 +1,7 @@
 package de.michiruf.allayfollowalways.testhelper;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 
 /**
  * A FakePlayer that works across all versions.
@@ -10,24 +10,24 @@ import net.minecraft.server.world.ServerWorld;
  */
 public class FakePlayer
         //? if <1.19.4 {
-        /*extends net.minecraft.server.network.ServerPlayerEntity
+        /*extends net.minecraft.server.level.ServerPlayer
         *///? } else {
         extends net.fabricmc.fabric.api.entity.FakePlayer
         //? }
 {
 
     //? if <1.19.3 {
-    /*public FakePlayer(ServerWorld world, GameProfile profile) {
+    /*public FakePlayer(ServerLevel world, GameProfile profile) {
         super(world.getServer(), world, profile, null);
-        this.networkHandler = new FakeNetworkHandler(this);
+        this.connection = new FakeNetworkHandler(this);
     }
     *///? } elif <1.19.4 {
-    /*public FakePlayer(ServerWorld world, GameProfile profile) {
+    /*public FakePlayer(ServerLevel world, GameProfile profile) {
         super(world.getServer(), world, profile);
-        this.networkHandler = new FakeNetworkHandler(this);
+        this.connection = new FakeNetworkHandler(this);
     }
     *///? } else {
-    public FakePlayer(ServerWorld world, GameProfile profile) {
+    public FakePlayer(ServerLevel world, GameProfile profile) {
         super(world, profile);
     }
     //? }
@@ -38,55 +38,55 @@ public class FakePlayer
     public void tick() { }
 
     @Override
-    public void increaseStat(net.minecraft.stat.Stat<?> stat, int amount) { }
+    public void awardStat(net.minecraft.stats.Stat<?> stat, int amount) { }
 
     @Override
-    public void resetStat(net.minecraft.stat.Stat<?> stat) { }
+    public void resetStat(net.minecraft.stats.Stat<?> stat) { }
 
     @Override
-    public boolean isInvulnerableTo(net.minecraft.entity.damage.DamageSource damageSource) {
+    public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource damageSource) {
         return true;
     }
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public net.minecraft.scoreboard.Team getScoreboardTeam() {
+    public net.minecraft.world.scores.PlayerTeam getTeam() {
         return null;
     }
 
     @Override
-    public void sleep(net.minecraft.util.math.BlockPos pos) { }
+    public void startSleeping(net.minecraft.core.BlockPos pos) { }
 
     @Override
-    public boolean startRiding(net.minecraft.entity.Entity entity, boolean force) {
+    public boolean startRiding(net.minecraft.world.entity.Entity entity, boolean force) {
         return false;
     }
 
     @Override
-    public java.util.OptionalInt openHandledScreen(@org.jetbrains.annotations.Nullable net.minecraft.screen.NamedScreenHandlerFactory factory) {
+    public java.util.OptionalInt openMenu(@org.jetbrains.annotations.Nullable net.minecraft.world.MenuProvider factory) {
         return java.util.OptionalInt.empty();
     }
 
     @Override
-    public void openHorseInventory(net.minecraft.entity.passive.AbstractHorseEntity horse, net.minecraft.inventory.Inventory inventory) { }
+    public void openHorseInventory(net.minecraft.world.entity.animal.horse.AbstractHorse horse, net.minecraft.world.Container inventory) { }
 
-    private static class FakeNetworkHandler extends net.minecraft.server.network.ServerPlayNetworkHandler {
-        private static final net.minecraft.network.ClientConnection FAKE_CONNECTION = new FakeConnection();
+    private static class FakeNetworkHandler extends net.minecraft.server.network.ServerGamePacketListenerImpl {
+        private static final net.minecraft.network.Connection FAKE_CONNECTION = new FakeConnection();
 
-        public FakeNetworkHandler(net.minecraft.server.network.ServerPlayerEntity player) {
+        public FakeNetworkHandler(net.minecraft.server.level.ServerPlayer player) {
             super(player.getServer(), FAKE_CONNECTION, player);
         }
 
         @Override
-        public void sendPacket(net.minecraft.network.Packet<?> packet) { }
+        public void send(net.minecraft.network.protocol.Packet<?> packet) { }
 
-        private static class FakeConnection extends net.minecraft.network.ClientConnection {
+        private static class FakeConnection extends net.minecraft.network.Connection {
             private FakeConnection() {
-                super(net.minecraft.network.NetworkSide.CLIENTBOUND);
+                super(net.minecraft.network.protocol.PacketFlow.CLIENTBOUND);
             }
 
             @Override
-            public void setPacketListener(net.minecraft.network.listener.PacketListener listener) { }
+            public void setListener(net.minecraft.network.PacketListener listener) { }
         }
     }
     *///? }

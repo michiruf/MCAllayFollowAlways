@@ -34,7 +34,7 @@ fabricApi {
 dependencies {
     // Minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraftVersion}"
-    mappings "net.fabricmc:yarn:${minecraftVersionDefinition['mappings']}:v2"
+    mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${minecraftVersionDefinition['fabric']}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${minecraftVersionDefinition['fabricApi']}"
 
@@ -47,7 +47,6 @@ processResources {
     var replaceProperties = [
             version  : project.version,
             minecraft: minecraftVersion,
-            mappings : minecraftVersionDefinition['mappings'],
             fabric   : minecraftVersionDefinition['fabric'],
             fabricApi: minecraftVersionDefinition['fabricApi']
     ]

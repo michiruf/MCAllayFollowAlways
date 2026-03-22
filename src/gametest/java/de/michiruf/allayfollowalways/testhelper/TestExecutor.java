@@ -1,24 +1,23 @@
 package de.michiruf.allayfollowalways.testhelper;
 
-import net.minecraft.test.TestContext;
-
 import java.util.ArrayList;
 import java.util.function.Supplier;
+import net.minecraft.gametest.framework.GameTestHelper;
 
 public class TestExecutor {
 
     private static boolean isLocked = false;
     private boolean ownsLock = false;
 
-    private final TestContext context;
+    private final GameTestHelper context;
     private int defaultTickDelay;
     private final ArrayList<Step> entries = new ArrayList<>();
 
-    public TestExecutor(TestContext context) {
+    public TestExecutor(GameTestHelper context) {
         this(context, 1);
     }
 
-    public TestExecutor(TestContext context, int defaultTickDelay) {
+    public TestExecutor(GameTestHelper context, int defaultTickDelay) {
         this.context = context;
         this.defaultTickDelay = defaultTickDelay;
     }
@@ -75,7 +74,7 @@ public class TestExecutor {
     public void runSync() {
         synchronized (TestExecutor.class) {
             if (isLocked) {
-                context.waitAndRun(1, this::runSync);
+                context.runAfterDelay(1, this::runSync);
                 return;
             }
 
@@ -86,13 +85,13 @@ public class TestExecutor {
     }
 
     private interface Step {
-        void schedule(TestContext context, Runnable next, Runnable onError);
+        void schedule(GameTestHelper context, Runnable next, Runnable onError);
     }
 
     private record DelayedStep(Runnable runnable, int delay) implements Step {
         @Override
-        public void schedule(TestContext context, Runnable next, Runnable onError) {
-            context.waitAndRun(delay, () -> {
+        public void schedule(GameTestHelper context, Runnable next, Runnable onError) {
+            context.runAfterDelay(delay, () -> {
                 try {
                     runnable.run();
                 } catch (Throwable t) {
@@ -106,8 +105,8 @@ public class TestExecutor {
 
     private record WaitUntilStep(Supplier<Boolean> condition) implements Step {
         @Override
-        public void schedule(TestContext context, Runnable next, Runnable onError) {
-            context.waitAndRun(1, () -> {
+        public void schedule(GameTestHelper context, Runnable next, Runnable onError) {
+            context.runAfterDelay(1, () -> {
                 try {
                     if (condition.get()) {
                         next.run();

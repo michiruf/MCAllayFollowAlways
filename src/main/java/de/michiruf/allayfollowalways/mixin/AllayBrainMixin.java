@@ -1,7 +1,7 @@
 package de.michiruf.allayfollowalways.mixin;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
-import net.minecraft.entity.passive.AllayBrain;
+import net.minecraft.world.entity.animal.allay.AllayAi;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * @author Michael Ruf
  * @since 2022-11-29
  */
-@Mixin(AllayBrain.class)
+@Mixin(AllayAi.class)
 public class AllayBrainMixin {
 
     @ModifyConstant(method = "getLikedPlayer", constant = @Constant(doubleValue = 64.0))

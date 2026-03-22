@@ -1,8 +1,7 @@
 package de.michiruf.allayfollowalways.helper;
 
-import de.michiruf.allayfollowalways.versioned.EntityHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 /**
  * @author Michael Ruf
@@ -11,18 +10,18 @@ import net.minecraft.world.World;
 public class WorldComparator {
 
     public static boolean equals(Entity one, Entity two) {
-        return equals(EntityHelper.getWorld(one), EntityHelper.getWorld(two));
+        return equals(EntityHelper.getLevel(one), EntityHelper.getLevel(two));
     }
 
-    public static boolean equals(Entity one, World two) {
-        return equals(EntityHelper.getWorld(one), two);
+    public static boolean equals(Entity one, Level two) {
+        return equals(EntityHelper.getLevel(one), two);
     }
 
-    public static boolean equals(World one, Entity two) {
-        return equals(one, EntityHelper.getWorld(two));
+    public static boolean equals(Level one, Entity two) {
+        return equals(one, EntityHelper.getLevel(two));
     }
 
-    public static boolean equals(World one, World two) {
-        return one == two && one.getDimension().equals(two.getDimension());
+    public static boolean equals(Level one, Level two) {
+        return one == two && one.dimensionType().equals(two.dimensionType());
     }
 }

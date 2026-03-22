@@ -1,12 +1,11 @@
 package de.michiruf.allayfollowalways.command;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import de.michiruf.allayfollowalways.versioned.VersionedMessageSender;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-
+import de.michiruf.allayfollowalways.helper.MessageSender;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 /**
  * @author Michael Ruf
@@ -15,26 +14,26 @@ import java.util.function.Supplier;
 public class EnumSubCommand {
 
     public static <T extends Enum<T>> void createAndRegister(
-            LiteralCommandNode<ServerCommandSource> node,
+            LiteralCommandNode<CommandSourceStack> node,
             String name,
             Supplier<T> getter,
             Consumer<T> setter,
             Class<T> enumClass) {
         // Create the parameter command
-        var parameterCommand = CommandManager
+        var parameterCommand = Commands
                 .literal(name)
                 .executes(context -> {
-                    VersionedMessageSender.send(context, name + " is currently set to " + getter.get());
+                    MessageSender.send(context, name + " is currently set to " + getter.get());
                     return 1;
                 });
 
         // Create and add subcommands for enum values
         var enumValues = enumClass.getEnumConstants();
         for (var enumValue : enumValues) {
-            var enumCommand = CommandManager.literal(enumValue.name())
+            var enumCommand = Commands.literal(enumValue.name())
                     .executes(context -> {
                         setter.accept(Enum.valueOf(enumClass, enumValue.name()));
-                        VersionedMessageSender.send(context, name + " was set to " + getter.get());
+                        MessageSender.send(context, name + " was set to " + getter.get());
                         return 1;
                     });
             parameterCommand.then(enumCommand);
