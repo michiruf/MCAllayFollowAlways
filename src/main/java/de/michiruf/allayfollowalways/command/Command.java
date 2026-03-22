@@ -82,9 +82,15 @@ public class Command {
         registerConfigCommandFloat(afaNode, "leashSlowDownDegree",
                 AllayFollowAlwaysMod.CONFIG::leashSlowDownDegree,
                 AllayFollowAlwaysMod.CONFIG::leashSlowDownDegree);
-        registerConfigCommandEnum(afaNode, "logLevel", LogLevel.class,
-                AllayFollowAlwaysMod.CONFIG::logLevel,
-                AllayFollowAlwaysMod.CONFIG::logLevel);
+        registerConfigCommandEnum(afaNode, "logModLevel", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logModLevel,
+                AllayFollowAlwaysMod.CONFIG::logModLevel);
+        registerConfigCommandEnum(afaNode, "logTeleportLevel", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logTeleportLevel,
+                AllayFollowAlwaysMod.CONFIG::logTeleportLevel);
+        registerConfigCommandEnum(afaNode, "logTickLevel", LogLevel.class,
+                AllayFollowAlwaysMod.CONFIG::logTickLevel,
+                AllayFollowAlwaysMod.CONFIG::logTickLevel);
         registerConfigOptionsCommand(afaNode);
         dispatcher.getRoot().addChild(afaNode);
     }

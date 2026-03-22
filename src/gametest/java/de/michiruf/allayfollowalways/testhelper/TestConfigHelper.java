@@ -25,6 +25,8 @@ public class TestConfigHelper {
         AllayFollowAlwaysMod.CONFIG.leashSlowDownDistanceStart(6);
         AllayFollowAlwaysMod.CONFIG.leashSlowDownDistanceEnd(8);
         AllayFollowAlwaysMod.CONFIG.leashSlowDownDegree(90);
-        AllayFollowAlwaysMod.CONFIG.logLevel(LogLevel.INFO);
+        AllayFollowAlwaysMod.CONFIG.logModLevel(LogLevel.INFO);
+        AllayFollowAlwaysMod.CONFIG.logTeleportLevel(LogLevel.INFO);
+        AllayFollowAlwaysMod.CONFIG.logTickLevel(LogLevel.OFF);
     }
 }

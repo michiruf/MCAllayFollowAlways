@@ -30,7 +30,9 @@ public class Config {
     public float leashSlowDownDegree = 90;
 
     /*
-     * Misc section
+     * Logging section
      */
-    public LogLevel logLevel = LogLevel.OFF;
+    public LogLevel logModLevel = LogLevel.INFO;
+    public LogLevel logTeleportLevel = LogLevel.OFF;
+    public LogLevel logTickLevel = LogLevel.OFF;
 }
