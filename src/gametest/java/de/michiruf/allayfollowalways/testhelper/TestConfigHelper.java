@@ -2,6 +2,7 @@ package de.michiruf.allayfollowalways.testhelper;
 
 import de.michiruf.allayfollowalways.AllayFollowAlwaysMod;
 import de.michiruf.allayfollowalways.config.LeashMode;
+import de.michiruf.allayfollowalways.config.LogLevel;
 
 /**
  * Resets all config values to their defaults before a test,
@@ -24,5 +25,6 @@ public class TestConfigHelper {
         AllayFollowAlwaysMod.CONFIG.leashSlowDownDistanceStart(6);
         AllayFollowAlwaysMod.CONFIG.leashSlowDownDistanceEnd(8);
         AllayFollowAlwaysMod.CONFIG.leashSlowDownDegree(90);
+        AllayFollowAlwaysMod.CONFIG.logLevel(LogLevel.INFO);
     }
 }

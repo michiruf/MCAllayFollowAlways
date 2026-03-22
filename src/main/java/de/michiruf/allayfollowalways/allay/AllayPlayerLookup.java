@@ -19,6 +19,8 @@ public class AllayPlayerLookup {
         var player = getLikedPlayerForWorld(allay, EntityHelper.getLevel(allay));
         if (player.isEmpty())
             player = getLikedPlayerGlobal(allay);
+        if (player.isEmpty())
+            AllayFollowAlwaysMod.LOGGER.debug("Allay {} has no liked player", allay.getStringUUID());
         return player;
     }
 
@@ -47,8 +49,11 @@ public class AllayPlayerLookup {
         }
         for (var world : worlds) {
             var player = getLikedPlayerForWorld(allay, world);
-            if (player.isPresent())
+            if (player.isPresent()) {
+                AllayFollowAlwaysMod.LOGGER.debug("Found liked player for allay {} in different dimension {}",
+                        allay.getStringUUID(), world.dimension());
                 return player;
+            }
         }
         return Optional.empty();
     }
