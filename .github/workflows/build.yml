@@ -95,7 +95,7 @@ jobs:
 
       - name: Release on github
         if: success() # No git tag check, since action-gh-release fails if not valid
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             **/libs/allay-follow-always-*.jar
