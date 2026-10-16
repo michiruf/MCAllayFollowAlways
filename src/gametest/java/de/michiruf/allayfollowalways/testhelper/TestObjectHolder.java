@@ -33,7 +33,11 @@ public class TestObjectHolder {
     }
 
     public void createAllay() {
+        //? if <26.2 {
         allay = context.spawn(EntityType.ALLAY, new BlockPos(0, 1, 0));
+        //? } else {
+        /*allay = context.spawn(net.minecraft.world.entity.EntityTypes.ALLAY, new BlockPos(0, 1, 0));
+        *///? }
         allayUuid = allay.getUUID();
         allayId = allay.getId();
     }

@@ -28,7 +28,11 @@ public abstract class EntityMixin {
         if (!allay.isLeashed())
             return deltaMovement;
 
+        //? if <26.3 {
         allay.hurtMarked = true;
+        //? } else {
+        /*allay.syncVelocity = true;
+        *///? }
         return AllayLeashBehaviour.calculateLeashedVelocity(allay, deltaMovement);
     }
 }

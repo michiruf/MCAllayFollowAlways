@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 public class TestWorldHandler {
 
     private final ServerLevel world;
-    private final List<ChunkPos> forcedChunks = new ArrayList<>();
+    private final List<ForcedChunk> forcedChunks = new ArrayList<>();
 
     /**
      * @see Level#OVERWORLD
@@ -45,7 +45,7 @@ public class TestWorldHandler {
     public void forceLoadChunk(int chunkX, int chunkZ) {
         world.getChunk(chunkX, chunkZ);
         world.setChunkForced(chunkX, chunkZ, true);
-        forcedChunks.add(new ChunkPos(chunkX, chunkZ));
+        forcedChunks.add(new ForcedChunk(chunkX, chunkZ));
     }
 
     /**
@@ -53,8 +53,9 @@ public class TestWorldHandler {
      * meaning non-player entities in them will be tracked in the EntityIndex.
      */
     public boolean areAllForcedChunksLoaded() {
-        for (var pos : forcedChunks) {
-            if (!world.getChunkSource().hasChunk(pos.x, pos.z)) {
+        for (var chunk : forcedChunks) {
+            var pos = chunk.pos();
+            if (!world.getChunkSource().hasChunk(chunk.x(), chunk.z())) {
                 return false;
             }
 
@@ -82,9 +83,16 @@ public class TestWorldHandler {
     }
 
     public void cleanup() {
-        for (var pos : forcedChunks) {
-            world.setChunkForced(pos.x, pos.z, false);
+        for (var chunk : forcedChunks) {
+            world.setChunkForced(chunk.x(), chunk.z(), false);
         }
         forcedChunks.clear();
+    }
+
+    // ChunkPos fields are not accessible since 26.1, so the coordinates are kept separately
+    private record ForcedChunk(int x, int z) {
+        ChunkPos pos() {
+            return new ChunkPos(x, z);
+        }
     }
 }
