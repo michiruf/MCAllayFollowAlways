@@ -8,12 +8,16 @@ Fabric mod that makes Allays persistently follow the player who gave them an ite
 
 ## Build System
 
-Uses **Gradle + Fabric Loom + Stonecutter** for multi-version support across 24 Minecraft versions (1.19 through 1.21.11).
+Uses **Gradle + Fabric Loom + Stonecutter** for multi-version support across 29 Minecraft versions (1.19 through 26.3).
 
 - **Stonecutter** manages version branching — each MC version gets a Gradle subproject under `versions/{version}/`
 - Active version set in `stonecutter.gradle` (currently `1.21.11`), VCS version in `settings.gradle`
 - Version definitions (Java version, mappings, Fabric versions) live in `build.versions.gradle`
-- Java 17 for MC 1.19–1.20.4, Java 21 for MC 1.20.5+
+- Java 17 for MC 1.19–1.20.4, Java 21 for MC 1.20.5–1.21.11, Java 25 for MC 26.1+
+- Gradle itself must run on Java 25 (required by Loom); `gradle/gradle-daemon-jvm.properties` makes Gradle provision it automatically
+- MC 26.1+ is unobfuscated: `build.gradle` applies `net.fabricmc.fabric-loom` (no mappings, plain `implementation`) for 26.1+ and `net.fabricmc.fabric-loom-remap` (Mojang mappings, `modImplementation`) for older versions
+- `releaseJar` task builds the distributable jar for either variant (`remapJar` before 26.1, `jar` since)
+- Fabric API mod id: `fabric` for <26.1, `fabric-api` for 26.1+ (substituted into `fabric.mod.json` via `fabricApiModId`)
 
 ### Common Commands
 
@@ -80,10 +84,11 @@ src/main/java/de/michiruf/allayfollowalways/
 
 - **Unit tests**: JUnit Jupiter, under `src/test/`
 - **Game tests**: Fabric game test framework under `src/gametest/`, requires FakePlayer API (MC 1.19.4+)
-- CI runs all 24 versions in parallel via GitHub Actions
+- CI runs all 29 versions in parallel via GitHub Actions
 
 ## Adding a New Minecraft Version
 
 1. Add version entry to `build.versions.gradle` with java, mappings, fabric, fabricApi values
 2. Update versioned helper classes in `versioned/` if MC APIs changed
 3. Add version to CI matrices in `.github/workflows/build.yml` and `test.yml`
+4. Add version to the version lists in `.claude/skills/*/SKILL.md`
