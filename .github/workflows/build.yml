@@ -48,14 +48,18 @@ jobs:
         if: success()
         uses: actions/setup-java@v6.0.1
         with:
-          java-version: 21
+          # Gradle itself runs on 25 (see gradle/gradle-daemon-jvm.properties), older versions build with 17/21
+          java-version: |
+            17
+            21
+            25
           distribution: 'microsoft'
 
       - name: Setup gradle
         if: success()
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: 9.2.0
+          gradle-version: 9.8.1
 
       - name: Execute unit tests
         if: success()
@@ -67,7 +71,7 @@ jobs:
 
       - name: Build
         if: success()
-        run: gradle :${{ matrix.version }}:remapJar --configure-on-demand --configuration-cache
+        run: gradle :${{ matrix.version }}:releaseJar --configure-on-demand --configuration-cache
 
       - name: Upload artifact
         if: success()

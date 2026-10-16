@@ -1,7 +1,14 @@
 plugins {
     id 'java'
-    id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
+    // Minecraft is unobfuscated since 26.1, which requires the non-remapping loom plugin variant
+    id 'net.fabricmc.fabric-loom' version '1.19-SNAPSHOT' apply false
+    id 'net.fabricmc.fabric-loom-remap' version '1.19-SNAPSHOT' apply false
 }
+
+// Get version from Stonecutter instead of project property
+def minecraftVersion = stonecutter.current.version
+boolean obfuscated = stonecutter.eval(minecraftVersion, '<26.1')
+apply plugin: obfuscated ? 'net.fabricmc.fabric-loom-remap' : 'net.fabricmc.fabric-loom'
 
 apply from: rootProject.file('build.allprojects.gradle')
 apply from: rootProject.file('build.versions.gradle')
@@ -14,8 +21,6 @@ apply from: rootProject.file('build.versions.gradle')
 //    }
 //}
 
-// Get version from Stonecutter instead of project property
-def minecraftVersion = stonecutter.current.version
 def minecraftVersionDefinition = ext.minecraftVersionDefinitions[minecraftVersion]
 int targetJavaVersion = (int) minecraftVersionDefinition['java']
 base.archivesName = rootProject.name
@@ -34,9 +39,14 @@ fabricApi {
 dependencies {
     // Minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraftVersion}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${minecraftVersionDefinition['fabric']}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${minecraftVersionDefinition['fabricApi']}"
+    if (obfuscated) {
+        mappings loom.officialMojangMappings()
+        modImplementation "net.fabricmc:fabric-loader:${minecraftVersionDefinition['fabric']}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${minecraftVersionDefinition['fabricApi']}"
+    } else {
+        implementation "net.fabricmc:fabric-loader:${minecraftVersionDefinition['fabric']}"
+        implementation "net.fabricmc.fabric-api:fabric-api:${minecraftVersionDefinition['fabricApi']}"
+    }
 
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
@@ -48,7 +58,9 @@ processResources {
             version  : project.version,
             minecraft: minecraftVersion,
             fabric   : minecraftVersionDefinition['fabric'],
-            fabricApi: minecraftVersionDefinition['fabricApi']
+            fabricApi: minecraftVersionDefinition['fabricApi'],
+            // Fabric API dropped its 'fabric' mod id alias with 26.1, but versions for 1.19 - 1.19.1 do only know 'fabric'
+            fabricApiModId: stonecutter.eval(minecraftVersion, '>=26.1') ? 'fabric-api' : 'fabric'
     ]
     inputs.properties replaceProperties
     filteringCharset 'UTF-8'
@@ -86,4 +98,9 @@ test {
     testLogging {
         events 'passed'
     }
+}
+
+// Produces the distributable jar, regardless of whether the version needs remapping or not
+tasks.register('releaseJar') {
+    dependsOn obfuscated ? 'remapJar' : 'jar'
 }
